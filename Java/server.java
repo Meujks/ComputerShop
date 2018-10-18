@@ -61,6 +61,18 @@ public class Server {
 	private void whileRunning() throws IOException {
 		System.out.println("Client can begin shopping");
 		
+		while(true) {
+			try {
+				System.out.println(input.readObject());
+				
+				getAllProducts();
+			
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	private void closeServer() {
 		System.out.println("Closing Server..");
@@ -75,10 +87,9 @@ public class Server {
 		}
 		
 	}
-	public static void getAllProducts()
+	public void getAllProducts()
 	{
 		try{
-			
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
 			// Create a statement for query
 			Statement myStmt = conn.createStatement();
@@ -87,7 +98,10 @@ public class Server {
 			// print out the name from table
 			while(result.next())
 			{
-				System.out.println(result.getString("pName"));
+				System.out.print(result.getString("pName"));
+				
+				output.writeObject(result.getString("pName"));
+				output.flush();
 			}
 		}
 		catch(Exception exc) {
