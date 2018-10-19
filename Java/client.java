@@ -46,20 +46,20 @@ public class Client extends JFrame {
 	private Socket connection;
 			
 	public Client(String host) {
-		super("Client");
+		super("Client - PC Shop");
 		
 		serverIP = host;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 659, 421);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(169, 169, 169));
+		contentPane.setBackground(new Color(102, 205, 170));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JPanel panel = new JPanel();
+		panel.setForeground(new Color(128, 128, 128));
 		panel.setBackground(new Color(70, 130, 180));
-		panel.setBorder(new EtchedBorder(EtchedBorder.RAISED, new Color(255, 255, 255), new Color(255, 255, 255)));
 		
 		
 		DefaultListModel model = new DefaultListModel();
@@ -115,21 +115,22 @@ public class Client extends JFrame {
 						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblProductList)
 								.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(47)
+									.addGap(43)
+									.addComponent(lblProductList))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(49)
 									.addComponent(btnContinue)))
-							.addPreferredGap(ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, gl_contentPane.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_contentPane.createSequentialGroup()
-										.addComponent(lblShoppingCart)
-										.addGap(40))
-									.addComponent(shoppingList, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE))
-								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblShoppingCart)
+									.addGap(43))
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(btnCheckout)
-									.addGap(16)))))
+									.addGap(23))
+								.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -142,8 +143,8 @@ public class Client extends JFrame {
 						.addComponent(lblShoppingCart))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
-						.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE))
+						.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+						.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCheckout)
