@@ -24,6 +24,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -66,11 +67,43 @@ public class Client extends JFrame {
 		itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		itemList.setVisible(false);
 
-		
 		JLabel lblProductList = new JLabel("Pick a Product");
 		lblProductList.setVisible(false);
 		lblProductList.setFont(new Font("Yu Gothic", Font.BOLD, 16));
 		
+	
+		DefaultListModel shopModel = new DefaultListModel();
+		JList shoppingList = new JList(shopModel);
+		shoppingList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		shoppingList.setVisible(false);
+
+		
+		
+		JButton btnContinue = new JButton("Add to Cart");
+		btnContinue.setBackground(Color.WHITE);
+		btnContinue.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		btnContinue.setVisible(false);
+		
+		btnContinue.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {	
+				if(itemList.getSelectedIndex() != -1)
+				{
+					String element = (String)itemList.getSelectedValue();
+					shopModel.addElement(element);
+					JOptionPane.showMessageDialog(null, "Added to Cart");
+				}
+			}
+		});
+		
+		JLabel lblShoppingCart = new JLabel("Shopping Cart");
+		lblShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 16));
+		lblShoppingCart.setVisible(false);
+		
+		JButton btnCheckout = new JButton("Proceed to checkout");
+		btnCheckout.setBackground(Color.WHITE);
+		btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		btnCheckout.setVisible(false);
 
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -78,24 +111,68 @@ public class Client extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
-						.addComponent(lblProductList)
-						.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblProductList)
+								.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(47)
+									.addComponent(btnContinue)))
+							.addPreferredGap(ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(Alignment.TRAILING, gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(lblShoppingCart)
+										.addGap(40))
+									.addComponent(shoppingList, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE))
+								.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+									.addComponent(btnCheckout)
+									.addGap(16)))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-					.addComponent(lblProductList)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProductList)
+						.addComponent(lblShoppingCart))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-					.addGap(42))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE)
+						.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnCheckout)
+						.addComponent(btnContinue))
+					.addContainerGap())
 		);
 		
 		JButton btnShoppingCart = new JButton("Shopping Cart");
+		btnShoppingCart.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(shoppingList.isVisible())
+				{
+					
+					shoppingList.setVisible(false);
+					btnCheckout.setVisible(false);
+					lblShoppingCart.setVisible(false);
+
+				}
+				else
+				{
+					lblShoppingCart.setVisible(true);
+					shoppingList.setVisible(true);
+					btnCheckout.setVisible(true);
+				}
+		
+				
+			}
+		});
 		btnShoppingCart.setBackground(Color.WHITE);
 		btnShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		
@@ -132,6 +209,8 @@ public class Client extends JFrame {
 					String desktops[] = resultString.split("\\r?\\n");
 					lblProductList.setVisible(true);
 					itemList.setVisible(true);
+					btnContinue.setVisible(true);
+
 					// Display it in 
 					model.clear();
 					for(int i = 0 ; i< desktops.length;i++)
@@ -155,31 +234,28 @@ public class Client extends JFrame {
 		categoryMenu.add(mntmServer);
 		
 		JLabel icon = new JLabel("");
-		icon.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\sm_shopping.png"));
+		icon.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\MK.png"));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(icon)
-					.addGap(29)
+					.addGap(128)
 					.addComponent(btnProducts)
-					.addGap(48)
+					.addGap(33)
 					.addComponent(btnShoppingCart)
-					.addContainerGap(165, Short.MAX_VALUE))
+					.addContainerGap(174, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
+			gl_panel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnProducts)
-						.addComponent(btnShoppingCart))
-					.addContainerGap(4, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(icon)
-					.addContainerGap())
+						.addComponent(icon)
+						.addComponent(btnShoppingCart)
+						.addComponent(btnProducts))
+					.addContainerGap(12, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 
