@@ -22,6 +22,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
 
 public class Client extends JFrame {
 
@@ -44,6 +46,9 @@ public class Client extends JFrame {
 		JLabel response = new JLabel("Empty");
 		response.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		
+		JPopupMenu categoryMenu = new JPopupMenu();
+		categoryMenu.setBackground(Color.WHITE);
+		
 		JButton btnProducts = new JButton("Products");
 		btnProducts.addMouseListener(new MouseAdapter() {
 			@Override
@@ -51,8 +56,16 @@ public class Client extends JFrame {
 				try {
 					output.writeObject("Test Message");
 					output.flush();
-					
-					System.out.println((String)input.readObject());
+										
+					String productString = ((String)input.readObject());
+					System.out.println(productString);
+					String lines[] = productString.split("[\\r\\n]+");
+
+					categoryMenu.add(lines[0]);
+					categoryMenu.add(lines[1]);
+					categoryMenu.add(lines[2]);
+                    categoryMenu.show(btnProducts, btnProducts.getWidth()/btnProducts.getWidth(), btnProducts.getHeight());
+
 					
 					//response.setText((String)input.readObject());
 					} catch (IOException e) {
@@ -76,26 +89,29 @@ public class Client extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnProducts)
-							.addGap(79)
-							.addComponent(btnAddToCart))
+							.addGap(174)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(response)
+								.addComponent(btnAddToCart)))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(155)
-							.addComponent(response)))
+							.addContainerGap()
+							.addComponent(btnProducts)))
 					.addContainerGap(151, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
+					.addComponent(btnProducts)
+					.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
 					.addComponent(response)
-					.addPreferredGap(ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnProducts)
-						.addComponent(btnAddToCart))
+					.addGap(61)
+					.addComponent(btnAddToCart)
 					.addGap(51))
 		);
+		
+		addPopup(btnProducts, categoryMenu);
+
 		contentPane.setLayout(gl_contentPane);
 	}
 	 
@@ -148,5 +164,22 @@ public class Client extends JFrame {
 	private void connectToServer() throws IOException {
 		System.out.println("Attempting Connection..");
 		connection = new Socket(InetAddress.getByName(serverIP),5000);	
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
