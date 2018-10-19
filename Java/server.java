@@ -60,12 +60,16 @@ public class Server {
 	}
 	private void whileRunning() throws IOException {
 		System.out.println("Client can begin shopping");
-		
+		int request;
+
 		while(true) {
 			try {
-				System.out.println(input.readObject());
+				request = (int) input.readObject();
 				
-				getAllProducts();
+				switch (request) {
+	            case 1: getAllDesktops();
+	            break;
+				}	  
 			
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -87,24 +91,26 @@ public class Server {
 		}
 		
 	}
-	public void getAllProducts()
+	public void getAllDesktops()
 	{
 		try{
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
 			// Create a statement for query
 			Statement myStmt = conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("select * from Products");
-			// print out the name from table
-			String allProducts = "";
+			ResultSet result = myStmt.executeQuery("SELECT `Desktop`.`dType`, `Desktop`.`dCost`, `Desktop`.`dCost`, `Desktop`.`dQuantity`, `Products`.`pName` \r\n" + 
+					"FROM `Desktop`\r\n" + 
+					"INNER JOIN `Products` ON `Desktop`.`pid`=`Products`.`pid`;");
+
+			String send = "";
 			
 			while(result.next())
 			{				
-				allProducts += result.getString("pName") + "\n";
+				send += result.getString("pName") + " " + result.getString("dType") + " " + result.getString("dCost") + " " + result.getString("dQuantity") + "\n";
 			}
-			output.writeObject(allProducts);
+			output.writeObject(send);
 			output.flush();
-			System.out.println("All products have been sent");
+			System.out.println("All Desktops have been sent");
 		}
 		catch(Exception exc) {
 			   exc.printStackTrace();
