@@ -25,3 +25,9 @@ CREATE TABLE `Products` (
 
  INSERT INTO `Products`(`pName`,`pType`, `pCost`, `pQuantity`)
  VALUE("Desktop","Extreme", 550, 100);
+
+ INSERT INTO `Products`(`pName`,`pType`, `pCost`, `pQuantity`)
+ VALUE("Laptop","SlimBook", 700, 50);
+
+  INSERT INTO `Products`(`pName`,`pType`, `pCost`, `pQuantity`)
+ VALUE("Server","PowerStation", 1200, 10);
