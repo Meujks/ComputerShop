@@ -11,10 +11,16 @@ USE `ShopDB`;
 CREATE TABLE `Products` (
   `pid` INT NOT NULL UNIQUE AUTO_INCREMENT,
   `pName` VARCHAR(256) NOT NULL UNIQUE,
-  `pType` VARCHAR(256) NOT NULL UNIQUE,
-  `pCost` INT NOT NULL,
-  `pQuantity` INT NOT NULL,
   PRIMARY KEY (`pid`)
+);
+
+CREATE TABLE `Desktop` (
+  `did` INT NOT NULL UNIQUE AUTO_INCREMENT,
+  `pid` INT NOT NULL,
+  `dType` VARCHAR(256) NOT NULL UNIQUE,
+  `dCost` INT NOT NULL,
+  `dQuantity` INT NOT NULL,
+  PRIMARY KEY (`did`)
 );
 
 -- **********************************************
@@ -23,11 +29,17 @@ CREATE TABLE `Products` (
 -- *                                            *
 -- **********************************************
 
- INSERT INTO `Products`(`pName`,`pType`, `pCost`, `pQuantity`)
- VALUE("Desktop","Extreme", 550, 100);
+ INSERT INTO `Products`(`pName`)
+ VALUE("Desktop");
 
- INSERT INTO `Products`(`pName`,`pType`, `pCost`, `pQuantity`)
- VALUE("Laptop","SlimBook", 700, 50);
+ INSERT INTO `Products`(`pName`)
+ VALUE("Laptop"); 
+ 
+ INSERT INTO `Products`(`pName`)
+ VALUE("Server");
 
-  INSERT INTO `Products`(`pName`,`pType`, `pCost`, `pQuantity`)
- VALUE("Server","PowerStation", 1200, 10);
+ INSERT INTO `Desktop`(`pid`,`dType`,`dCost`,`dQuantity`)
+ VALUES(1,"Extreme",650,15);
+ 
+ INSERT INTO `Desktop`(`pid`,`dType`,`dCost`,`dQuantity`)
+ VALUES(1,"Ultimate",1000,10);
