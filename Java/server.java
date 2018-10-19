@@ -46,9 +46,9 @@ public class Server {
 		  
 	  }
 	private void waitForConnection() throws IOException{
-		System.out.println("Waiting For Connection..");
+		System.out.println("Server Waiting For Connection..");
 		connection = server.accept();
-		System.out.println("Connected to "+ connection.getInetAddress().getHostName());
+		System.out.println("Server Connected to "+ connection.getInetAddress().getHostName());
 
 	}
 	private void setupStreams() throws IOException {
@@ -96,13 +96,15 @@ public class Server {
 			// add result from query to result variable
 			ResultSet result = myStmt.executeQuery("select * from Products");
 			// print out the name from table
+			String allProducts = "";
+			
 			while(result.next())
-			{
-				System.out.print(result.getString("pName"));
-				
-				output.writeObject(result.getString("pName"));
-				output.flush();
+			{				
+				allProducts += result.getString("pName") + "\n";
 			}
+			output.writeObject(allProducts);
+			output.flush();
+			System.out.println("All products have been sent");
 		}
 		catch(Exception exc) {
 			   exc.printStackTrace();

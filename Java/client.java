@@ -21,6 +21,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Client extends JFrame {
 
@@ -28,7 +29,6 @@ public class Client extends JFrame {
 	private String serverIP;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
-	private JTextField userText;
 	private Socket connection;
 			
 	public Client(String host) {
@@ -49,24 +49,26 @@ public class Client extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				try {
-					output.writeObject("Hello");
+					output.writeObject("Test Message");
 					output.flush();
 					
-					try {
-						response.setText((String)input.readObject());
+					System.out.println((String)input.readObject());
+					
+					//response.setText((String)input.readObject());
+					} catch (IOException e) {
+					e.printStackTrace();
 					} catch (ClassNotFoundException e) {
+						
 						e.printStackTrace();
 					}
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 			}
 		});
 		btnProducts.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		btnProducts.setBackground(Color.WHITE);
+		
+		JButton btnAddToCart = new JButton("Add to Cart");
+		btnAddToCart.setBackground(Color.WHITE);
+		btnAddToCart.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -74,21 +76,25 @@ public class Client extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(154)
-							.addComponent(btnProducts))
+							.addContainerGap()
+							.addComponent(btnProducts)
+							.addGap(79)
+							.addComponent(btnAddToCart))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(171)
+							.addGap(155)
 							.addComponent(response)))
-					.addContainerGap(185, Short.MAX_VALUE))
+					.addContainerGap(151, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(76, Short.MAX_VALUE)
+					.addContainerGap()
 					.addComponent(response)
-					.addGap(59)
-					.addComponent(btnProducts)
-					.addGap(73))
+					.addPreferredGap(ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnProducts)
+						.addComponent(btnAddToCart))
+					.addGap(51))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

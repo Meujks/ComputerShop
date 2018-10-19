@@ -9,11 +9,11 @@
 # Monkey Testing shall be conducted by the developer regularly in order to find various issues during development. Monkey Testing shall
  also be done by a non developer during Usability Testing periods.
 
-# Usability Testing shall be conducted by a novice user who has no knowledge regarding the system, and shall be issued whenever a major 
+# Usability Testing shall be conducted by a user who has no knowledge regarding the system, and shall be issued whenever a major 
 update/functionality has been introduced.
 
 
 # Usability Testing sessions will proceed as follows:
 1. Tester is given the client with a working connection to the server and database. 
 2. The tester is given specific tasks which will be documented and timed by the developer. 
-3. Each testing session the previous tests will be iterated in order to compare and check times for 
+3. Each testing session the previous tests will be iterated in order to compare and check times for differences in time.
