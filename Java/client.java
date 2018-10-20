@@ -199,8 +199,15 @@ public class Client extends JFrame {
 					{
 						CustomPanel newPane = new CustomPanel(desktops[i]);	
 						panelContainer.add(newPane);
-						JButton addButton = new JButton("Add To Cart");
 						
+						JButton customizeButton = new JButton("Customize");
+						customizeButton.setBackground(Color.WHITE);
+						customizeButton.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+						newPane.add(customizeButton);
+						
+						JButton addButton = new JButton("Add To Cart");
+						addButton.setBackground(Color.WHITE);
+						addButton.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 						newPane.add(addButton);
 
 						addButton.addActionListener(new ActionListener() { 
@@ -237,9 +244,9 @@ public class Client extends JFrame {
 					.addComponent(icon)
 					.addGap(128)
 					.addComponent(btnProducts)
-					.addGap(33)
+					.addPreferredGap(ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
 					.addComponent(btnShoppingCart)
-					.addContainerGap(174, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -247,9 +254,9 @@ public class Client extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(icon)
-						.addComponent(btnShoppingCart)
-						.addComponent(btnProducts))
-					.addContainerGap(12, Short.MAX_VALUE))
+						.addComponent(btnProducts)
+						.addComponent(btnShoppingCart))
+					.addContainerGap(16, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 

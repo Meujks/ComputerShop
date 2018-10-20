@@ -98,15 +98,79 @@ public class Server {
 			// Create a statement for query
 			Statement myStmt = conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("SELECT `Desktop`.`dType`, `Desktop`.`dCost`, `Desktop`.`dCost`, `Desktop`.`dQuantity`, `Products`.`pName` \r\n" + 
-					"FROM `Desktop`\r\n" + 
-					"INNER JOIN `Products` ON `Desktop`.`pid`=`Products`.`pid`;");
+			ResultSet result = myStmt.executeQuery("SELECT \r\n" + 
+					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb') \r\n" + 
+					"AS 'GPU',\r\n" + 
+					"`Chassis`.`chassName` \r\n" + 
+					"AS 'Chassi',\r\n" + 
+					"CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz') \r\n" + 
+					"AS 'CPU',\r\n" + 
+					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz')\r\n" + 
+					"AS'RAM',\r\n" + 
+					"CONCAT(`Products`.`pName`,' ', `Products`.`pType`)\r\n" + 
+					"AS 'Product'\r\n" + 
+					"FROM `Products`\r\n" + 
+					"INNER JOIN `Desktop`\r\n" + 
+					"ON `Desktop`.`pid`=`Products`.`pid` \r\n" + 
+					"INNER JOIN `Graphics`\r\n" + 
+					"ON `Graphics`.`gid` = `Desktop`.`gid`\r\n" + 
+					"INNER JOIN `Processors` \r\n" + 
+					"ON `Processors`.`cid` = `Products`.`cid`\r\n" + 
+					"INNER JOIN `Chassis`\r\n" + 
+					"ON `Chassis`.`chassId` = `Desktop`.`chassId`\r\n" + 
+					"INNER JOIN `Memories`\r\n" + 
+					"ON `Memories`.`mid` = `Products`.`mid`;");
 
 			String send = "";
-			
 			while(result.next())
 			{				
-				send += result.getString("pName") + " " + result.getString("dType") + " " + result.getString("dCost") + " " + result.getString("dQuantity") + "\n";
+				send+= result.getString(5) + "\n";
+				
+			}
+			output.writeObject(send);
+			output.flush();
+			System.out.println("All Desktops have been sent");
+		}
+		catch(Exception exc) {
+			   exc.printStackTrace();
+
+		}
+	}
+	public void getAllDesktopsSpecific()
+	{
+		try{
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			// Create a statement for query
+			Statement myStmt = conn.createStatement();
+			// add result from query to result variable
+			ResultSet result = myStmt.executeQuery("SELECT \r\n" + 
+					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb') \r\n" + 
+					"AS 'GPU',\r\n" + 
+					"`Chassis`.`chassName` \r\n" + 
+					"AS 'Chassi',\r\n" + 
+					"CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz') \r\n" + 
+					"AS 'CPU',\r\n" + 
+					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz')\r\n" + 
+					"AS'RAM',\r\n" + 
+					"CONCAT(`Products`.`pName`,' ', `Products`.`pType`)\r\n" + 
+					"AS 'Product'\r\n" + 
+					"FROM `Products`\r\n" + 
+					"INNER JOIN `Desktop`\r\n" + 
+					"ON `Desktop`.`pid`=`Products`.`pid` \r\n" + 
+					"INNER JOIN `Graphics`\r\n" + 
+					"ON `Graphics`.`gid` = `Desktop`.`gid`\r\n" + 
+					"INNER JOIN `Processors` \r\n" + 
+					"ON `Processors`.`cid` = `Products`.`cid`\r\n" + 
+					"INNER JOIN `Chassis`\r\n" + 
+					"ON `Chassis`.`chassId` = `Desktop`.`chassId`\r\n" + 
+					"INNER JOIN `Memories`\r\n" + 
+					"ON `Memories`.`mid` = `Products`.`mid`;");
+
+			String send = "";
+			while(result.next())
+			{				
+				send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + " " + result.getString(4) + " " + result.getString(5)+ "\n";
+				
 			}
 			output.writeObject(send);
 			output.flush();

@@ -27,10 +27,10 @@ public class CustomPanel extends JPanel {
 			this.setBackground(Color.WHITE);
 		    this.setBorder(line);
 		    
-		    // Objects
+		    // Labels
 			this.nameOfProduct = name;
 			lblNameOfProduct = new JLabel(name);
-			lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 16));
+			lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 			this.add(lblNameOfProduct);
 			
 		}
