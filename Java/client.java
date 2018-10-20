@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -35,6 +36,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
@@ -198,11 +200,13 @@ public class Client extends JFrame {
 						CustomPanel newPane = new CustomPanel(desktops[i]);	
 						panelContainer.add(newPane);
 						JButton addButton = new JButton("Add To Cart");
-						newPane.add(addButton);
 						
+						newPane.add(addButton);
+
 						addButton.addActionListener(new ActionListener() { 
 							  public void actionPerformed(ActionEvent e) { 
 								  shopModel.addElement(newPane.addToCart());
+								  JOptionPane.showMessageDialog(null,"Added to your shopping cart");
 							  } 
 							} );
 					}
