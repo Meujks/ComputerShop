@@ -107,8 +107,7 @@ public class Server {
 					"AS 'CPU',\r\n" + 
 					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz')\r\n" + 
 					"AS'RAM',\r\n" + 
-					"CONCAT(`Products`.`pName`,' ', `Products`.`pType`)\r\n" + 
-					"AS 'Product'\r\n" + 
+					"`Products`.`pName`,`Products`.`pType`\r\n" +  
 					"FROM `Products`\r\n" + 
 					"INNER JOIN `Desktop`\r\n" + 
 					"ON `Desktop`.`pid`=`Products`.`pid` \r\n" + 
@@ -124,8 +123,8 @@ public class Server {
 			String send = "";
 			while(result.next())
 			{				
-				send+= result.getString(5) + "\n";
-				
+				send+= result.getString(5) + "," + result.getString(4)+ "," + result.getString(3) + "," + result.getString(6) + "," + result.getString(2) + "," + result.getString(1) +  "\n";
+
 			}
 			output.writeObject(send);
 			output.flush();

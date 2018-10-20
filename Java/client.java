@@ -42,6 +42,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JList;
 import javax.swing.ImageIcon;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import net.miginfocom.swing.MigLayout;
+import java.awt.FlowLayout;
 
 public class Client extends JFrame {
 
@@ -59,7 +63,7 @@ public class Client extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 659, 421);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(102, 205, 170));
+		contentPane.setBackground(new Color(175, 238, 238));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
@@ -87,7 +91,8 @@ public class Client extends JFrame {
 		btnCheckout.setVisible(false);
 		
 		JPanel panelContainer = new JPanel();
-		panelContainer.setBackground(new Color(102, 205, 170));
+		panelContainer.setBackground(new Color(175, 238, 238));
+		
 
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -102,8 +107,8 @@ public class Client extends JFrame {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(43)
 									.addComponent(lblProductList))
-								.addComponent(panelContainer, GroupLayout.PREFERRED_SIZE, 393, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+								.addComponent(panelContainer, GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+							.addGap(14)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(lblShoppingCart)
@@ -119,8 +124,8 @@ public class Client extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblShoppingCart)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
@@ -129,10 +134,14 @@ public class Client extends JFrame {
 							.addGap(82))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblProductList)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(panelContainer, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panelContainer, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
 							.addGap(33))))
 		);
+		panelContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panelContainer.add(scrollPane);
 		
 		JButton btnShoppingCart = new JButton("Shopping Cart");
 		btnShoppingCart.addMouseListener(new MouseAdapter() {
@@ -190,22 +199,23 @@ public class Client extends JFrame {
 					
 					// Store the saved string
 					String resultString = ((String)input.readObject());
+					
+					// Split each row
 					String desktops[] = resultString.split("\\r?\\n");
+					// Show label displaying title
 					lblProductList.setVisible(true);
 					
 					// Dynamically create a Jpanel for each product containing the appropriate information
 
 					for(int i = 0;i<desktops.length;i++)
 					{
-						CustomPanel newPane = new CustomPanel(desktops[i]);	
+						// for each iteration assign all variables from each row
+						String variables[] = desktops[i].split(",");
+						
+						CustomPanel newPane = new CustomPanel(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5]);	
 						panelContainer.add(newPane);
 						
-						JButton customizeButton = new JButton("Customize");
-						customizeButton.setBackground(Color.WHITE);
-						customizeButton.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-						newPane.add(customizeButton);
-						
-						JButton addButton = new JButton("Add To Cart");
+						JButton addButton = new JButton("Edit");
 						addButton.setBackground(Color.WHITE);
 						addButton.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 						newPane.add(addButton);
