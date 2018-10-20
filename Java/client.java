@@ -19,6 +19,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,6 +32,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
@@ -61,12 +65,6 @@ public class Client extends JFrame {
 		panel.setForeground(new Color(128, 128, 128));
 		panel.setBackground(new Color(70, 130, 180));
 		
-		
-		DefaultListModel model = new DefaultListModel();
-		JList itemList = new JList(model);
-		itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		itemList.setVisible(false);
-
 		JLabel lblProductList = new JLabel("Pick a Product");
 		lblProductList.setVisible(false);
 		lblProductList.setFont(new Font("Yu Gothic", Font.BOLD, 16));
@@ -76,25 +74,6 @@ public class Client extends JFrame {
 		JList shoppingList = new JList(shopModel);
 		shoppingList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		shoppingList.setVisible(false);
-
-		
-		
-		JButton btnContinue = new JButton("Add to Cart");
-		btnContinue.setBackground(Color.WHITE);
-		btnContinue.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnContinue.setVisible(false);
-		
-		btnContinue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent arg0) {	
-				if(itemList.getSelectedIndex() != -1)
-				{
-					String element = (String)itemList.getSelectedValue();
-					shopModel.addElement(element);
-					JOptionPane.showMessageDialog(null, "Added to Cart");
-				}
-			}
-		});
 		
 		JLabel lblShoppingCart = new JLabel("Shopping Cart");
 		lblShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 16));
@@ -104,6 +83,9 @@ public class Client extends JFrame {
 		btnCheckout.setBackground(Color.WHITE);
 		btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		btnCheckout.setVisible(false);
+		
+		JPanel panelContainer = new JPanel();
+		panelContainer.setBackground(new Color(102, 205, 170));
 
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -115,47 +97,46 @@ public class Client extends JFrame {
 						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(43)
 									.addComponent(lblProductList))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(49)
-									.addComponent(btnContinue)))
-							.addPreferredGap(ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
+								.addComponent(panelContainer, GroupLayout.PREFERRED_SIZE, 393, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(lblShoppingCart)
 									.addGap(43))
+								.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(btnCheckout)
-									.addGap(23))
-								.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE))))
+									.addGap(26)))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblProductList)
-						.addComponent(lblShoppingCart))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(itemList, GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-						.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 192, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnCheckout)
-						.addComponent(btnContinue))
-					.addContainerGap())
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(lblShoppingCart)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
+							.addComponent(btnCheckout)
+							.addGap(82))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblProductList)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(panelContainer, GroupLayout.PREFERRED_SIZE, 260, GroupLayout.PREFERRED_SIZE)
+							.addGap(33))))
 		);
 		
 		JButton btnShoppingCart = new JButton("Shopping Cart");
 		btnShoppingCart.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				
 				if(shoppingList.isVisible())
 				{
 					
@@ -209,15 +190,23 @@ public class Client extends JFrame {
 					String resultString = ((String)input.readObject());
 					String desktops[] = resultString.split("\\r?\\n");
 					lblProductList.setVisible(true);
-					itemList.setVisible(true);
-					btnContinue.setVisible(true);
+					
+					// Dynamically create a Jpanel for each product containing the appropriate information
 
-					// Display it in 
-					model.clear();
-					for(int i = 0 ; i< desktops.length;i++)
-					{						
-						model.addElement(desktops[i]);
+					for(int i = 0;i<desktops.length;i++)
+					{
+						CustomPanel newPane = new CustomPanel(desktops[i]);	
+						panelContainer.add(newPane);
+						JButton addButton = new JButton("Add To Cart");
+						newPane.add(addButton);
+						
+						addButton.addActionListener(new ActionListener() { 
+							  public void actionPerformed(ActionEvent e) { 
+								  shopModel.addElement(newPane.addToCart());
+							  } 
+							} );
 					}
+					
 					lblProductList.setText("All available Desktops");
 					
 				} catch (IOException | ClassNotFoundException e1) {
