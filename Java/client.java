@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.MenuElement;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
@@ -46,6 +47,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
+import javax.swing.JTabbedPane;
 
 public class Client extends JFrame {
 
@@ -59,17 +61,19 @@ public class Client extends JFrame {
 		super("Client - PC Shop");
 		
 		serverIP = host;
-		
+		boolean showingDesktop = false;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 659, 421);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(175, 238, 238));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(0, 102, 102));
+		contentPane.setBorder(new LineBorder(new Color(0, 102, 153), 1, true));
 		setContentPane(contentPane);
+		this.setVisible(true);
 		
 		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(new Color(0, 102, 153), 3, true));
 		panel.setForeground(new Color(128, 128, 128));
-		panel.setBackground(new Color(70, 130, 180));
+		panel.setBackground(new Color(0, 102, 153));
 		
 		JLabel lblProductList = new JLabel("Pick a Product");
 		lblProductList.setVisible(false);
@@ -78,22 +82,22 @@ public class Client extends JFrame {
 	
 		DefaultListModel shopModel = new DefaultListModel();
 		JList shoppingList = new JList(shopModel);
+		shoppingList.setBorder(new LineBorder(new Color(0, 102, 153), 1, true));
+		shoppingList.setBackground(new Color(240, 248, 255));
 		shoppingList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		shoppingList.setVisible(false);
+		shoppingList.setVisible(true);
 		
 		JLabel lblShoppingCart = new JLabel("Shopping Cart");
 		lblShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 16));
-		lblShoppingCart.setVisible(false);
+		lblShoppingCart.setVisible(true);
 		
 		JButton btnCheckout = new JButton("Proceed to checkout");
 		btnCheckout.setBackground(Color.WHITE);
 		btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnCheckout.setVisible(false);
+		btnCheckout.setVisible(true);
 		
 		JPanel panelContainer = new JPanel();
-		panelContainer.setBackground(new Color(175, 238, 238));
-		
-
+		panelContainer.setBackground(new Color(0, 102, 102));
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -104,19 +108,21 @@ public class Client extends JFrame {
 						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(panelContainer, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(43)
-									.addComponent(lblProductList))
-								.addComponent(panelContainer, GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
-							.addGap(14)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+									.addGap(134)
+									.addComponent(lblProductList)
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(lblShoppingCart)
-									.addGap(43))
-								.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnCheckout)))
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btnCheckout)
-									.addGap(26)))))
+									.addGap(16)
+									.addComponent(lblShoppingCart)))
+							.addGap(26)))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -124,19 +130,17 @@ public class Client extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProductList)
+						.addComponent(lblShoppingCart))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblShoppingCart)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
-							.addGap(10)
-							.addComponent(btnCheckout)
-							.addGap(82))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblProductList)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panelContainer, GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-							.addGap(33))))
+							.addComponent(shoppingList, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnCheckout))
+						.addComponent(panelContainer, GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		panelContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -167,37 +171,39 @@ public class Client extends JFrame {
 			}
 		});
 		btnShoppingCart.setBackground(Color.WHITE);
-		btnShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		btnShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		
 		JPopupMenu categoryMenu = new JPopupMenu();
 		categoryMenu.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		categoryMenu.setBackground(Color.WHITE);
-		
+
 		JButton btnProducts = new JButton("Browse Shop");
+		
 		btnProducts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 		
                     categoryMenu.show(btnProducts, btnProducts.getWidth()/btnProducts.getWidth(), btnProducts.getHeight());
+            		categoryMenu.setPopupSize(btnProducts.getWidth(),btnProducts.getHeight() * 4);
+
 			}
 		});
-		btnProducts.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+
+		btnProducts.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		btnProducts.setBackground(Color.WHITE);
 		
 		addPopup(btnProducts, categoryMenu);
 		
-		JMenuItem mntmDesktop = new JMenuItem("Desktop");
+		JMenuItem mntmDesktop = new JMenuItem("Desktops");
 		mntmDesktop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				try {
-					
 					// Send request for All desktops
 					output.writeObject(1);
 					output.flush();
 					
-					
-					// Store the saved string
+					// Store the saved string 
 					String resultString = ((String)input.readObject());
 					
 					// Split each row
@@ -205,8 +211,11 @@ public class Client extends JFrame {
 					// Show label displaying title
 					lblProductList.setVisible(true);
 					
-					// Dynamically create a Jpanel for each product containing the appropriate information
+					// Dynamically create a JPanel for each product containing the appropriate information
 
+					// Clear panelContainer before adding components
+					panelContainer.removeAll();
+					panelContainer.revalidate();
 					for(int i = 0;i<desktops.length;i++)
 					{
 						// for each iteration assign all variables from each row
@@ -215,15 +224,66 @@ public class Client extends JFrame {
 						CustomPanel newPane = new CustomPanel(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5]);	
 						panelContainer.add(newPane);
 						
-						JButton addButton = new JButton("Edit");
-						addButton.setBackground(Color.WHITE);
-						addButton.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-						newPane.add(addButton);
+						JButton customizeBtn = new JButton("Customize");
+						customizeBtn.setBackground(Color.WHITE);
+						customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+						newPane.add(customizeBtn);
 
-						addButton.addActionListener(new ActionListener() { 
+						customizeBtn.addActionListener(new ActionListener() { 
 							  public void actionPerformed(ActionEvent e) { 
-								  shopModel.addElement(newPane.addToCart());
-								  JOptionPane.showMessageDialog(null,"Added to your shopping cart");
+								  
+								  // Remove all desktops apart from the selected from the panel
+								  for (Component cp : panelContainer.getComponents() ){
+									  if(cp != customizeBtn.getParent())
+								        cp.setVisible(false);
+								 }
+								  
+								  // hide the customize button
+								  customizeBtn.setVisible(false);
+									try {
+										output.writeObject(2);
+										output.flush();
+										String GPU = ((String)input.readObject());
+
+										output.writeObject(3);
+										output.flush();
+										String CPU = ((String)input.readObject());
+										
+										output.writeObject(4);
+										output.flush();
+										String RAM = ((String)input.readObject());
+										
+										output.writeObject(5);
+										output.flush();
+										String Chassi = ((String)input.readObject());	
+										
+										String graphics[] = GPU.split("\\r?\\n");
+										String processors[] = CPU.split("\\r?\\n");
+										String memories[] = RAM.split("\\r?\\n");
+										String cases[] = Chassi.split("\\r?\\n");
+										
+										ComponentPanel compPanel = new ComponentPanel(graphics,processors,memories,cases,variables[0],variables[1],variables[2],variables[3],variables[4],variables[5]);	
+										panelContainer.add(compPanel);
+										
+										JButton changeBtn = new JButton("Change");
+										changeBtn.setBackground(Color.WHITE);
+										changeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+										compPanel.add(changeBtn);
+
+										changeBtn.addActionListener(new ActionListener() { 
+											  public void actionPerformed(ActionEvent e) { 
+												  newPane.updateLabel();
+												 int itemIndex = compPanel.getSelectedIndex();
+												 String itemValue = compPanel.getSelectedElement();
+												 newPane.updateEvent(itemIndex, itemValue);
+												
+											  }
+										  }
+										);
+									} catch (IOException | ClassNotFoundException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
 							  } 
 							} );
 					}
@@ -238,10 +298,10 @@ public class Client extends JFrame {
 		});
 		categoryMenu.add(mntmDesktop);
 		
-		JMenuItem mntmLaptop = new JMenuItem("Laptop");
+		JMenuItem mntmLaptop = new JMenuItem("Laptops");
 		categoryMenu.add(mntmLaptop);
 		
-		JMenuItem mntmServer = new JMenuItem("Server");
+		JMenuItem mntmServer = new JMenuItem("Servers");
 		categoryMenu.add(mntmServer);
 		
 		JLabel icon = new JLabel("");
@@ -252,21 +312,21 @@ public class Client extends JFrame {
 				.addGroup(gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(icon)
-					.addGap(128)
+					.addPreferredGap(ComponentPlacement.RELATED, 283, Short.MAX_VALUE)
 					.addComponent(btnProducts)
-					.addPreferredGap(ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(btnShoppingCart)
-					.addContainerGap())
+					.addGap(22))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(icon)
-						.addComponent(btnProducts)
-						.addComponent(btnShoppingCart))
-					.addContainerGap(16, Short.MAX_VALUE))
+						.addComponent(btnShoppingCart)
+						.addComponent(btnProducts))
+					.addContainerGap(8, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
 
@@ -339,5 +399,10 @@ public class Client extends JFrame {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+	}
+	public void getComponenets(String GPU, String CPU,String RAM,String Chassi)
+	{
+	
+	
 	}
 }
