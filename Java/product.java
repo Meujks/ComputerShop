@@ -5,13 +5,15 @@ public abstract class Product {
 	private String ram;
 	private String cpu;
 	private String type;
+	private int cost;
 	
-	public Product(String name,String ram,String cpu,String type)
+	public Product(String name,String ram,String cpu,String type,int cost)
 	{
 		this.setName(name);
 		this.setRam(ram);
 		this.setCpu(cpu);
 		this.setType(type);
+		this.setCost(cost);
 	}
 	public String getName() {
 		return name;
@@ -36,6 +38,12 @@ public abstract class Product {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public int getCost() {
+		return cost;
+	}
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 
 }

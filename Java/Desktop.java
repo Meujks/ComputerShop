@@ -2,12 +2,12 @@
 public class Desktop extends Product {
 	
 	private String chassi;
-	private String gfx;
+	private String gpu;
 	
-	public Desktop(String name,String ram,String cpu,String type, String chassi, String gfx){      
-		super(name, ram, cpu, type);
-		this.chassi = chassi;
-		this.gfx = gfx;
+	public Desktop(String name,String ram,String cpu,String type, String chassi, String gpu,int cost){      
+		super(name, ram, cpu, type,cost);
+		this.setChassi(chassi);
+		this.setGpu(gpu);
 	}
 	
 	public String getChassi() {
@@ -16,10 +16,13 @@ public class Desktop extends Product {
 	public void setChassi(String chassi) {
 		this.chassi = chassi;
 	}
-	public String getGfx() {
-		return gfx;
+
+	public String getGpu() {
+		return gpu;
 	}
-	public void setGfx(String gfx) {
-		this.gfx = gfx;
+
+	public void setGpu(String gpu) {
+		this.gpu = gpu;
 	}
+
 }
