@@ -23,12 +23,15 @@ public class CustomPanel extends JPanel {
 		private JLabel lblMemoryOfProduct;
 		private JLabel lblGfxOfProduct;
 		private JLabel lblChassiOfProduct;
+		private JLabel lblCostOfProduct;
+
 		private String nameOfProduct;
 		private String gpuOfProduct;
 		private String cpuOfProduct;
 		private String ramOfProduct;
 		private String chassiOfProduct;
 		private String typeOfProduct;
+		private String costOfProduct;
 
 		public CustomPanel(String name, String memory, String cpu, String type,String chassi, String gpu)
 		{
@@ -49,31 +52,22 @@ public class CustomPanel extends JPanel {
 		    this.ramOfProduct = memory;
 		    this.chassiOfProduct = chassi;
 		    this.typeOfProduct = type;
-
+		    
 			lblCPUOfProduct = new JLabel("- CPU: " + cpu);
 			lblMemoryOfProduct = new JLabel("- RAM: " + memory);
 			lblGfxOfProduct = new JLabel("- GFX: " + gpu);
 			lblNameOfProduct = new JLabel("- " + name + " " +type);
 			lblChassiOfProduct = new JLabel("- Chassi: " + chassi);
-			
-			lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-			
-			JButton cartBtn = new JButton("Add To Cart");
-			cartBtn.setBackground(Color.WHITE);
-			cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+			lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct);
 
-			cartBtn.addActionListener(new ActionListener() { 
-				  public void actionPerformed(ActionEvent e) { 
-					 Desktop computer = new Desktop(name, ramOfProduct,cpuOfProduct,typeOfProduct,chassiOfProduct, gpuOfProduct);
-				  }
-			  }
-			);
+			lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
+			
 			this.add(lblNameOfProduct);
 			this.add(lblCPUOfProduct);
 			this.add(lblGfxOfProduct);
 			this.add(lblMemoryOfProduct);
 			this.add(lblChassiOfProduct);
-			this.add(cartBtn);
+			this.add(lblCostOfProduct);
 			
 		}
 		public String addToCart()
@@ -106,4 +100,14 @@ public class CustomPanel extends JPanel {
 			}
 		}
 		
-}
+		public Desktop getDesktop()
+		{
+			return new Desktop(this.nameOfProduct,this.ramOfProduct,this.cpuOfProduct,this.typeOfProduct,this.chassiOfProduct,this.gpuOfProduct);
+		}
+		public int getCostOfDesktop()
+		{
+			int totalCost = 800;
+			return totalCost;
+		}
+}	 
+
