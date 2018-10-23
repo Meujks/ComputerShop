@@ -107,21 +107,21 @@ public class Server {
 			Statement myStmt = conn.createStatement();
 			// add result from query to result variable
 			ResultSet result = myStmt.executeQuery("SELECT \r\n" + 
-					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb') \r\n" + 
+					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb ',`Graphics`.`gCost`,'€')\r\n" + 
 					"AS 'GPU',\r\n" + 
-					"`Chassis`.`chassName` \r\n" + 
-					"AS 'Chassi',\r\n" + 
-					"CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz') \r\n" + 
+					"CONCAT(`Chassis`.`chassName`,' ',`Chassis`.`chassCost`,'€')\r\n" + 
+					"AS 'Chassi', \r\n" + 
+					"CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz ',`Processors`.`cCost`,'€')\r\n" + 
 					"AS 'CPU',\r\n" + 
-					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz')\r\n" + 
+					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz ',`Memories`.`mCost`,'€')\r\n" + 
 					"AS'RAM',\r\n" + 
-					"`Products`.`pName`,`Products`.`pType`\r\n" +  
+					"`Products`.`pName`,`Products`.`pType`\r\n" + 
 					"FROM `Products`\r\n" + 
 					"INNER JOIN `Desktop`\r\n" + 
-					"ON `Desktop`.`pid`=`Products`.`pid` \r\n" + 
+					"ON `Desktop`.`pid`=`Products`.`pid`\r\n" + 
 					"INNER JOIN `Graphics`\r\n" + 
 					"ON `Graphics`.`gid` = `Desktop`.`gid`\r\n" + 
-					"INNER JOIN `Processors` \r\n" + 
+					"INNER JOIN `Processors`\r\n" + 
 					"ON `Processors`.`cid` = `Products`.`cid`\r\n" + 
 					"INNER JOIN `Chassis`\r\n" + 
 					"ON `Chassis`.`chassId` = `Desktop`.`chassId`\r\n" + 
@@ -136,7 +136,7 @@ public class Server {
 			}
 			output.writeObject(send);
 			output.flush();
-			System.out.println("All Desktops have been sent");
+			System.out.println("Server Sending to Client -> " + send);
 		}
 		catch(Exception exc) {
 			   exc.printStackTrace();
@@ -150,16 +150,16 @@ public class Server {
 		// Create a statement for query
 		Statement myStmt = conn.createStatement();
 		// add result from query to result variable
-		ResultSet result = myStmt.executeQuery("SELECT `Chassis`.`chassName` FROM `Chassis`;");
+		ResultSet result = myStmt.executeQuery("SELECT `Chassis`.`chassName`, `Chassis`.`chassCost` FROM `Chassis`;");
 		String send = "";
 		while(result.next())
 		{				
-			send+= result.getString(1) + "\n";
+			send+= result.getString(1) + " " + result.getString(2)+"€" + "\n";
 
 		}
 		output.writeObject(send);
 		output.flush();
-		System.out.println("All Memories have been sent");
+		System.out.println("Server Sending to Client -> " + send);
 	} catch(Exception exc) {
 		   exc.printStackTrace();
 		   }
@@ -171,16 +171,16 @@ public class Server {
 		// Create a statement for query
 		Statement myStmt = conn.createStatement();
 		// add result from query to result variable
-		ResultSet result = myStmt.executeQuery("SELECT `Memories`.`mName`, `Memories`.`mClassification`, `Memories`.`mSize`, `Memories`.`mSpeed` FROM `Memories`;");
+		ResultSet result = myStmt.executeQuery("SELECT `Memories`.`mName`, `Memories`.`mClassification`, `Memories`.`mSize`, `Memories`.`mSpeed`, `Memories`.`mCost` FROM `Memories`;");
 		String send = "";
 		while(result.next())
 		{				
-			send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + "Gb " + result.getString(4) + "Mhz\n";
+			send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + "Gb " + result.getString(4) + "Mhz " + result.getString(5) +"€"+ "\n";
 
 		}
 		output.writeObject(send);
 		output.flush();
-		System.out.println("All Memories have been sent");
+		System.out.println("Server Sending to Client -> " + send);
 	} catch(Exception exc) {
 		   exc.printStackTrace();
 		   }
@@ -192,16 +192,16 @@ public class Server {
 		// Create a statement for query
 		Statement myStmt = conn.createStatement();
 		// add result from query to result variable
-		ResultSet result = myStmt.executeQuery("SELECT `Processors`.`cManufacturer`, `Processors`.`cName`, `Processors`.`cCores`, `Processors`.`cSpeed` FROM processors;");
+		ResultSet result = myStmt.executeQuery("SELECT `Processors`.`cManufacturer`, `Processors`.`cName`, `Processors`.`cCores`, `Processors`.`cSpeed`, `Processors`.`cCost` FROM `Processors`;");
 		String send = "";
 		while(result.next())
 		{				
-			send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + " " + result.getString(4) + "Mhz\n";
+			send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + " " + result.getString(4) + "Mhz " + result.getString(5) +"€"+ "\n";
 
 		}
 		output.writeObject(send);
 		output.flush();
-		System.out.println("All CPU's have been sent");
+		System.out.println("Server Sending to Client -> " + send);
 	} catch(Exception exc) {
 		   exc.printStackTrace();
 		   }
@@ -213,16 +213,16 @@ public class Server {
 			// Create a statement for query
 			Statement myStmt = conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("SELECT `Graphics`.`gManufacturer`,`Graphics`.`gName`,`Graphics`.`gMemory` FROM `Graphics`;");
+			ResultSet result = myStmt.executeQuery("SELECT `Graphics`.`gManufacturer`,`Graphics`.`gName`,`Graphics`.`gMemory`, `Graphics`.`gCost` FROM `Graphics`;");
 			String send = "";
 			while(result.next())
 			{				
-				send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + "Gb\n";
+				send+= result.getString(1) + " " + result.getString(2)+ " " + result.getString(3) + "Gb " + result.getString(4) + "€" + "\n";
 
 			}
 			output.writeObject(send);
 			output.flush();
-			System.out.println("All GPU's have been sent");
+			System.out.println("Server Sending to Client -> " + send);
 		}
 		catch(Exception exc) {
 			   exc.printStackTrace();

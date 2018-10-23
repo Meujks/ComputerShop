@@ -1,11 +1,11 @@
 SELECT 
-CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb')
+CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb ',`Graphics`.`gCost`,'€')
 AS 'GPU',
-`Chassis`.`chassName`
+CONCAT(`Chassis`.`chassName`,' ',`Chassis`.`chassCost`,'€')
 AS 'Chassi', 
-CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz')
+CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz ',`Processors`.`cCost`,'€')
 AS 'CPU',
-CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz')
+CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz ',`Memories`.`mCost`,'€')
 AS'RAM',
 `Products`.`pName`,`Products`.`pType`
 FROM `Products`
