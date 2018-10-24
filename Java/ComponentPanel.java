@@ -110,7 +110,9 @@ public class ComponentPanel extends JPanel {
 			}
 			
 		}
+		
 		public String getSelectedElement() {
+			
 			return selectedElement;
 		}
 		public void setSelectedElement(String selectedElement) {

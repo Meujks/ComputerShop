@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -238,14 +240,9 @@ public class Client extends JFrame {
 					{
 						// for each iteration assign all variables from each row
 						String variables[] = desktops[i].split(",");
-						
-						CustomPanel newPane = new CustomPanel(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5]);	
+						Desktop desktop = new Desktop(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],Integer.valueOf(variables[6]));
+						CustomPanel newPane = new CustomPanel(desktop);	
 						panelContainer.add(newPane);
-						
-						JButton customizeBtn = new JButton("Customize");
-						customizeBtn.setBackground(Color.WHITE);
-						customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-						newPane.add(customizeBtn);
 						
 						JButton cartBtn = new JButton("Add To Cart");
 						cartBtn.setBackground(Color.WHITE);
@@ -253,14 +250,18 @@ public class Client extends JFrame {
 						newPane.add(cartBtn);
 						cartBtn.addActionListener(new ActionListener() { 
 							  public void actionPerformed(ActionEvent e) { 
-								  Desktop desktop = newPane.getDesktop();
-								  shopModel.addElement(desktop);
-								  totalCost += newPane.getCostOfDesktop();
+								  shopModel.addElement(String.valueOf(desktop));
+								  totalCost += desktop.getCost();
 								  lblCostValue.setText(String.valueOf(totalCost)+"€");
 							  }
 
 						  }
 						);
+						
+						JButton customizeBtn = new JButton("Customize");
+						customizeBtn.setBackground(Color.WHITE);
+						customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+						newPane.add(customizeBtn);
 
 						customizeBtn.addActionListener(new ActionListener() { 
 							  public void actionPerformed(ActionEvent e) { 
@@ -296,6 +297,7 @@ public class Client extends JFrame {
 										String processors[] = CPU.split("\\r?\\n");
 										String memories[] = RAM.split("\\r?\\n");
 										String cases[] = Chassi.split("\\r?\\n");
+										// retrieve the cost of all items
 										
 										// Create the component tabel with appropriate values
 										ComponentPanel compPanel = new ComponentPanel(graphics,processors,memories,cases,variables[0],variables[1],variables[2],variables[3],variables[4],variables[5]);	
@@ -317,6 +319,8 @@ public class Client extends JFrame {
 												 String itemValue = compPanel.getSelectedElement();
 												 // Update the configuration by passing the necessary values
 												 newPane.updateEvent(itemIndex, itemValue);
+												 
+												 
 												 
 											  }
 										  }
@@ -372,7 +376,7 @@ public class Client extends JFrame {
 
 		contentPane.setLayout(gl_contentPane);
 	}
-	 
+
 	public void startClient()
 	  {
 		  try {
