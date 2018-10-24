@@ -102,13 +102,11 @@ public class ComponentPanel extends JPanel {
 			{
 				model.addElement(arr[i]);
 			
-				System.out.println(arr[i]);
 				if(arr[i].equals(currentItem))
 				{
 					list.setSelectedIndex(i);
 				}
 			}
-			
 		}
 		
 		public String getSelectedElement() {

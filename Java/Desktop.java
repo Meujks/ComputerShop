@@ -24,5 +24,8 @@ public class Desktop extends Product {
 	public void setGpu(String gpu) {
 		this.gpu = gpu;
 	}
-
+	public String toStringSpec()
+	{
+		return (this.gpu + " " + this.chassi);
+	} 
 }

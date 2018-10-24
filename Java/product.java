@@ -7,6 +7,9 @@ public abstract class Product {
 	private String type;
 	private int cost;
 	
+	public abstract String toStringSpec();
+
+	
 	public Product(String name,String ram,String cpu,String type,int cost)
 	{
 		this.setName(name);
@@ -44,6 +47,11 @@ public abstract class Product {
 	}
 	public void setCost(int cost) {
 		this.cost = cost;
+	}
+		
+	public String toString()
+	{
+		return (this.name + " " + this.type + " " + this.cpu + " " + this.ram +" " + this.cost) + " " + toStringSpec();
 	}
 
 }
