@@ -107,7 +107,7 @@ public class Server {
 			Statement myStmt = conn.createStatement();
 			// add result from query to result variable
 			ResultSet result = myStmt.executeQuery("SELECT \r\n" + 
-					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb - ', `Graphics`.`gCost`,'€')\r\n" + 
+					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb - ',`Graphics`.`gCost`,'€')\r\n" + 
 					"AS 'GPU',\r\n" + 
 					"CONCAT(`Chassis`.`chassName`,' - ',`Chassis`.`chassCost`,'€')\r\n" + 
 					"AS 'Chassi', \r\n" + 
@@ -117,8 +117,10 @@ public class Server {
 					"AS'RAM',\r\n" + 
 					"`Products`.`pName`,`Products`.`pType`,\r\n" + 
 					"CONCAT(`Memories`.`mCost` + `Processors`.`cCost` + `Graphics`.`gCost`+ `Chassis`.`chassCost`) \r\n" + 
-					"AS 'Cost'\r\n" + 
-					"FROM `Products`\r\n" + 
+					"AS 'Cost',\r\n" + 
+					"`Chassis`.`chassImage`\r\n" + 
+					"AS 'path'\r\n" + 
+					"FROM `Products`	\r\n" + 
 					"INNER JOIN `Desktop`\r\n" + 
 					"ON `Desktop`.`pid`=`Products`.`pid`\r\n" + 
 					"INNER JOIN `Graphics`\r\n" + 
@@ -133,7 +135,7 @@ public class Server {
 			String send = "";
 			while(result.next())
 			{				
-				send+= result.getString(5) + "," + result.getString(4)+ "," + result.getString(3) + "," + result.getString(6) + "," + result.getString(2) + "," + result.getString(1) + "," + result.getString(7) + "\n";
+				send+= result.getString(5) + "," + result.getString(4)+ "," + result.getString(3) + "," + result.getString(6) + "," + result.getString(2) + "," + result.getString(1) + "," + result.getString(7) +"," + result.getString(8) + "\n";
 
 			}
 			output.writeObject(send);

@@ -109,19 +109,19 @@ public class Client extends JFrame {
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1458, Short.MAX_VALUE)
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1348, Short.MAX_VALUE)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(mainScrollPane, GroupLayout.PREFERRED_SIZE, 1328, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 1328, Short.MAX_VALUE)
+					.addContainerGap())
 				.addComponent(shopPanel, GroupLayout.DEFAULT_SIZE, 1348, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addGap(8)
-					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+					.addComponent(mainScrollPane, GroupLayout.PREFERRED_SIZE, 559, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(shopPanel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
 		);
@@ -295,7 +295,7 @@ public class Client extends JFrame {
 					{
 						// for each iteration assign all variables from each row
 						String variables[] = desktops[i].split(",");
-						Desktop desktop = new Desktop(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],Integer.valueOf(variables[6]));
+						Desktop desktop = new Desktop(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],Integer.valueOf(variables[6]),variables[7]);
 						CustomPanel newPane = new CustomPanel(desktop);	
 						panelContainer.add(newPane);
 						
@@ -388,6 +388,7 @@ public class Client extends JFrame {
 												 // Store index and name of component being changed
 												 int itemIndex = compPanel.getSelectedIndex();
 												 String itemValue = compPanel.getSelectedElement();
+												 
 												 // Update the configuration by passing the necessary values
 												 newPane.updateEvent(itemIndex, itemValue);
 											  }

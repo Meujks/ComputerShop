@@ -50,6 +50,7 @@ CREATE TABLE `Chassis` (
   `chassName` VARCHAR(256) NOT NULL UNIQUE,
   `chassWeight` INT NOT NULL,
   `chassCost` INT NOT NULL,
+  `chassImage` VARCHAR(256) UNIQUE,
   PRIMARY KEY (`chassId`)
 );
 
@@ -88,12 +89,12 @@ VALUES("i7 6200k","Intel","Quad Core",3400,350);
 
 
 -- CHASSI FOR DESKTOP
-INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`)
-VALUES("Obsidian",20,80);
-INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`)
-VALUES("Eclipse",8,40);
-INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`)
-VALUES("H500",11,45);
+INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`,`chassImage`)
+VALUES("Obsidian",20,80,"/Images/obsidian.png");
+INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`,`chassImage`)
+VALUES("Eclipse",8,40,"/Images/eclipse.png");
+INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`,`chassImage`)
+VALUES("H500",11,45,"/Images/h500.png");
 -- GRAPHIC CARDS
 INSERT INTO `Graphics`(`gName`,`gManufacturer`,`gMemory`,`gCost`)
 VALUES("GTX 1080Ti","Nvidia",8192,900);

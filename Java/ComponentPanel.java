@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -28,15 +29,16 @@ public class ComponentPanel extends JPanel {
 	
 		public ComponentPanel(String GPU[],String CPU[],String RAM[],String Chassi[], String currentName, String currentMemory, String currentCpu, String currentType,String currentChassi, String currentGpu)
 		{
-			LineBorder line = new LineBorder(Color.BLACK, 1, true);
+		    Border roundedBorder = new LineBorder(new Color(47, 79, 79), 3, true);
+
 			this.setPreferredSize(new Dimension(500,200));
 			this.setBackground(new Color(245, 245, 245));
+			this.setForeground(new Color(51, 102, 102));
 			this.setAlignmentX(Component.LEFT_ALIGNMENT );
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-			this.setBackground(Color.WHITE);
-			this.setBorder(line);
-			
-			
+			this.setBorder(roundedBorder);
+			this.setBackground(new Color(0, 204, 153));
+		    
 			// Objects	
 			
 			String currentCPU = currentCpu;

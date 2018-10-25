@@ -1,14 +1,18 @@
 SELECT 
-CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb ',`Graphics`.`gCost`,'€')
+CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb -',`Graphics`.`gCost`,'€')
 AS 'GPU',
-CONCAT(`Chassis`.`chassName`,' ',`Chassis`.`chassCost`,'€')
+CONCAT(`Chassis`.`chassName`,' - ',`Chassis`.`chassCost`,'€')
 AS 'Chassi', 
-CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz ',`Processors`.`cCost`,'€')
+CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz - ',`Processors`.`cCost`,'€')
 AS 'CPU',
-CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz ',`Memories`.`mCost`,'€')
+CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz - ',`Memories`.`mCost`,'€')
 AS'RAM',
-`Products`.`pName`,`Products`.`pType`
-FROM `Products`
+`Products`.`pName`,`Products`.`pType`,
+CONCAT(`Memories`.`mCost` + `Processors`.`cCost` + `Graphics`.`gCost`+ `Chassis`.`chassCost`) 
+AS 'Cost',
+`Chassis`.`chassImage`
+AS 'path'
+FROM `Products`	
 INNER JOIN `Desktop`
 ON `Desktop`.`pid`=`Products`.`pid`
 INNER JOIN `Graphics`
