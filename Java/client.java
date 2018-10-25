@@ -49,6 +49,8 @@ import javax.swing.JList;
 import javax.swing.ImageIcon;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
+
 import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
 import javax.swing.JTabbedPane;
@@ -87,9 +89,9 @@ public class Client extends JFrame {
 		
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 102, 153), 3, true));
-		panel.setForeground(new Color(128, 128, 128));
-		panel.setBackground(new Color(0, 102, 153));
+		panel.setBorder(new LineBorder(new Color(47, 79, 79), 3, true));
+		panel.setForeground(new Color(51, 102, 102));
+		panel.setBackground(new Color(51, 102, 102));
 		
 		JLabel icon = new JLabel("");
 		icon.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\MK.png"));
@@ -98,6 +100,7 @@ public class Client extends JFrame {
 		DefaultListModel shopModel = new DefaultListModel();
 		
 		JPanel shopPanel = new JPanel();
+		shopPanel.setBorder(new LineBorder(new Color(0, 102, 102), 3, true));
 		shopPanel.setBackground(new Color(0, 204, 153));
 		
 		JScrollPane mainScrollPane = new JScrollPane();
@@ -106,25 +109,21 @@ public class Client extends JFrame {
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1364, Short.MAX_VALUE)
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1458, Short.MAX_VALUE)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 1344, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(shopPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addContainerGap())
+					.addComponent(mainScrollPane, GroupLayout.PREFERRED_SIZE, 1328, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addComponent(shopPanel, GroupLayout.DEFAULT_SIZE, 1348, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 					.addGap(8)
-					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(shopPanel, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addComponent(shopPanel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
 		);
 		
 		JPanel panelContainer = new JPanel();
@@ -137,6 +136,20 @@ public class Client extends JFrame {
 		btnCheckout.setBackground(Color.WHITE);
 		btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		btnCheckout.setVisible(true);
+
+		
+		btnCheckout.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  panelContainer.removeAll();
+				  panelContainer.revalidate();
+				  
+				  PaymentPanel payPanel = new PaymentPanel();
+				  panelContainer.add(payPanel);
+			
+				  
+			  }
+		  }
+		);
 		
 		JLabel lblShoppingCart = new JLabel("");
 		lblShoppingCart.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\cart.png"));
@@ -150,6 +163,10 @@ public class Client extends JFrame {
 		lblCostValue.setFont(new Font("Yu Gothic", Font.BOLD, 16));
 		
 		JScrollPane tableScrollPane = new JScrollPane();
+		
+		JButton btnRemoveItem = new JButton("Remove Item");
+		btnRemoveItem.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		btnRemoveItem.setBackground(new Color(255, 255, 255));
 			
 		
 		GroupLayout gl_shopPanel = new GroupLayout(shopPanel);
@@ -159,11 +176,14 @@ public class Client extends JFrame {
 					.addContainerGap()
 					.addComponent(lblShoppingCart, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 					.addGap(33)
-					.addComponent(tableScrollPane, GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
+					.addComponent(tableScrollPane, GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(shopCost)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblCostValue)
+					.addGroup(gl_shopPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_shopPanel.createSequentialGroup()
+							.addComponent(shopCost)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lblCostValue))
+						.addComponent(btnRemoveItem))
 					.addGap(341)
 					.addComponent(btnCheckout, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
 					.addGap(137))
@@ -172,18 +192,23 @@ public class Client extends JFrame {
 			gl_shopPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_shopPanel.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_shopPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_shopPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_shopPanel.createSequentialGroup()
 							.addGroup(gl_shopPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblShoppingCart, GroupLayout.PREFERRED_SIZE, 70, Short.MAX_VALUE)
-								.addGroup(gl_shopPanel.createParallelGroup(Alignment.BASELINE)
-									.addComponent(shopCost)
-									.addComponent(lblCostValue)
-									.addComponent(tableScrollPane, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(lblShoppingCart, GroupLayout.PREFERRED_SIZE, 75, Short.MAX_VALUE)
+								.addGroup(gl_shopPanel.createSequentialGroup()
+									.addGroup(gl_shopPanel.createParallelGroup(Alignment.BASELINE)
+										.addComponent(shopCost)
+										.addComponent(lblCostValue))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnRemoveItem)))
 							.addGap(6))
-						.addGroup(Alignment.TRAILING, gl_shopPanel.createSequentialGroup()
+						.addGroup(gl_shopPanel.createSequentialGroup()
 							.addComponent(btnCheckout, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-							.addGap(24))))
+							.addGap(24))
+						.addGroup(gl_shopPanel.createSequentialGroup()
+							.addComponent(tableScrollPane, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())))
 		);
 		
 		shopTable = new JTable(){
@@ -201,6 +226,27 @@ public class Client extends JFrame {
 				"Product", "Type", "Cost", "Description"
 			}
 		));
+		
+		btnRemoveItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				  DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
+				  int costOfItem = Integer.parseInt(tableModel.getValueAt(shopTable.getSelectedRow(), 2).toString());
+				  
+
+				  String oldCost = lblCostValue.getText();
+				  oldCost = oldCost.substring(0, oldCost.length() - 1);
+				  
+				  int newCost = (Integer.parseInt(oldCost) - costOfItem); 
+				  totalCost = newCost;
+				  System.out.println(newCost);
+				  lblCostValue.setText(String.valueOf(newCost)+"€");
+				  
+				  tableModel.removeRow(shopTable.getSelectedRow());
+
+			}
+		});
+		
 		shopPanel.setLayout(gl_shopPanel);
 		
 		JPopupMenu categoryMenu = new JPopupMenu();
@@ -253,10 +299,19 @@ public class Client extends JFrame {
 						CustomPanel newPane = new CustomPanel(desktop);	
 						panelContainer.add(newPane);
 						
+						// Button Panel
+						JPanel btnPanel = new JPanel();
+						btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+						btnPanel.setBackground(new Color(0, 204, 153));
+						LayoutManager layout = new FlowLayout();
+						btnPanel.setLayout(layout);
+						
+						newPane.add(btnPanel);
+						
 						JButton cartBtn = new JButton("Add To Cart");
 						cartBtn.setBackground(Color.WHITE);
 						cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));	
-						newPane.add(cartBtn);
+						btnPanel.add(cartBtn);
 						cartBtn.addActionListener(new ActionListener() { 
 							  public void actionPerformed(ActionEvent e) { 
 								  
@@ -277,14 +332,14 @@ public class Client extends JFrame {
 						JButton customizeBtn = new JButton("Customize");
 						customizeBtn.setBackground(Color.WHITE);
 						customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-						newPane.add(customizeBtn);
+						btnPanel.add(customizeBtn);
 
 						customizeBtn.addActionListener(new ActionListener() { 
 							  public void actionPerformed(ActionEvent e) { 
 								  
 								  // Remove all desktops apart from the selected from the panel
 								  for (Component cp : panelContainer.getComponents() ){
-									  if(cp != customizeBtn.getParent())
+									  if(cp != customizeBtn.getParent().getParent())
 								        cp.setVisible(false);
 								 }
 								  

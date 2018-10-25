@@ -119,4 +119,15 @@ VALUE("Desktop",3,3,"Soldier");
 INSERT INTO `Desktop`(`pid`,`gid`,`chassId`)
 VALUES(3,3,3);
 
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Desktop",1,3,"Casual");
+INSERT INTO `Desktop`(`pid`,`gid`,`chassId`)
+VALUES(4,2,3);
+
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Desktop",3,1,"Hades");
+INSERT INTO `Desktop`(`pid`,`gid`,`chassId`)
+VALUES(5,1,2);
+
+
 
