@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -69,14 +70,57 @@ public class PaymentPanel extends JPanel {
 		shopBtn = new JButton("Continue Shopping");
 		shopBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		shopBtn.setBackground(new Color(255, 255, 255));
-
+		
+		
+		//mkhardwareproject@gmail.com
 		
 	    // GridContstraints
 	    GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.insets = new Insets(10, 10, 10, 10);
-        
+		
 		// Events
+      	
+        // Create Email Object which sends a email to recipent
+        confirmBtn.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				    //Check if all fields are filled
+				  String choice = (String) optionList.getSelectedItem();
+
+				  switch (choice) {
+				      case "Credit Card":
+						  if(!creditFieldisEmpty())
+						  {
+							  // Format card String so entire credit card number isn't sent
+							  String cardString = cardField.getText();
+							  cardString = cardString.substring(0, Math.min(cardString.length(), 4)); 
+							  
+							  // Create an emailSend object which creates an email and sends it to the user.
+							  EmailSend emailObject = new EmailSend(emailField.getText(), nameField.getText(), lastNameField.getText(), holderField.getText(), cardString, "You forgot to order anything");
+							  JOptionPane.showMessageDialog(null,"Success, an email has been sent to: " + emailField.getText() + " Containing order details");
+						  }
+						  else
+						  {
+							  JOptionPane.showMessageDialog(null,"Missing input on all fields, please fill in information for every field.");
+						  }
+						
+				      break;
+				  case "Cash":
+				
+				      break;
+				  case "Bank Transfer":
+				
+				      break;
+				  default:
+				      break;
+			  }
+		  }
+
+			private boolean creditFieldisEmpty() {
+				return (emailField.getText().isEmpty() && nameField.getText().isEmpty() && lastNameField.getText().isEmpty() && holderField.getText().isEmpty() && cardField.getText().isEmpty() && cvcField.getText().isEmpty());
+			}
+        }
+		);
 		optionList.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				 
