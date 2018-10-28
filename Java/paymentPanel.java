@@ -19,19 +19,20 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class PaymentPanel extends JPanel {
-	private JTextField nameField, lastNameField,emailField, holderField, cardField, cvcField;
-    private JLabel nameLabel,lastNameLabel,emailLabel, method, holderLabel,cardLabel,cvcLabel;
+	private JTextField nameField, lastNameField,emailField, addressField, postalField, holderField, cardField, cvcField;
+    private JLabel nameLabel,lastNameLabel,emailLabel,addressLabel,postalLabel, method, holderLabel,cardLabel,cvcLabel;
     private JComboBox optionList;
     private String [] options;
     private JPanel contentPanel;
-    private JButton confirmBtn, shopBtn;
+    private String items;
+    GridBagConstraints gc;
     
-	public PaymentPanel()
+	public PaymentPanel(String itemsFromCart)
 	{
 
-		JPanel contentPanel = new JPanel();
 		
-		contentPanel.setPreferredSize(new Dimension(800,400));
+		JPanel contentPanel = new JPanel();
+		contentPanel.setPreferredSize(new Dimension(900,600));
 		contentPanel.setBackground(new Color(0, 204, 153));
 	    Border roundedBorder = new LineBorder(new Color(47, 79, 79), 6, true);
 	    contentPanel.setLayout(new GridBagLayout());
@@ -39,8 +40,11 @@ public class PaymentPanel extends JPanel {
 		this.setBackground(new Color(0, 204, 153));
 
         this.add(contentPanel);
-	    // Textfields and labels 
+	    // Textfields and labels
+        
+        this.items = itemsFromCart;
 	    
+		System.out.println(items);
 	    nameField = new JTextField(30);
 	    nameLabel = new JLabel("Name:");
 	    nameLabel.setFont(new Font("Yu Gothic", Font.BOLD, 12));
@@ -53,78 +57,35 @@ public class PaymentPanel extends JPanel {
 	    emailLabel = new JLabel("Email:");
 	    emailLabel.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 	    
+	    addressField = new JTextField(30);
+	    addressLabel = new JLabel("Address:");
+	    addressLabel.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+	    
+	    postalField = new JTextField(30);
+	    postalLabel = new JLabel("Postal Code:");
+	    postalLabel.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+	    
 	    method = new JLabel("Choose a payment method:");
 		method.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		
 		// Combobox
 	    options = new String[] { "Credit Card", "Cash", "Bank Transfer" };
-	    optionList = new JComboBox(options);
-	    optionList.setSelectedIndex(0);
-		optionList.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		
-		// Buttons
-		confirmBtn = new JButton("Confirm");
-		confirmBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		confirmBtn.setBackground(new Color(255, 255, 255));
-		
-		shopBtn = new JButton("Continue Shopping");
-		shopBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		shopBtn.setBackground(new Color(255, 255, 255));
-		
+	    setOptionList(new JComboBox(options));
+	    getOptionList().setSelectedIndex(0);
+		getOptionList().setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		
 		//mkhardwareproject@gmail.com
 		
 	    // GridContstraints
-	    GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        gc.insets = new Insets(10, 10, 10, 10);
+	    this.gc = new GridBagConstraints();
+        this.gc.fill = GridBagConstraints.HORIZONTAL;
+        this.gc.insets = new Insets(10, 10, 10, 10);
 		
 		// Events
-      	
-        // Create Email Object which sends a email to recipent
-        confirmBtn.addActionListener(new ActionListener() { 
-			  public void actionPerformed(ActionEvent e) { 
-				    //Check if all fields are filled
-				  String choice = (String) optionList.getSelectedItem();
-
-				  switch (choice) {
-				      case "Credit Card":
-						  if(!creditFieldisEmpty())
-						  {
-							  // Format card String so entire credit card number isn't sent
-							  String cardString = cardField.getText();
-							  cardString = cardString.substring(0, Math.min(cardString.length(), 4)); 
-							  
-							  // Create an emailSend object which creates an email and sends it to the user.
-							  EmailSend emailObject = new EmailSend(emailField.getText(), nameField.getText(), lastNameField.getText(), holderField.getText(), cardString, "You forgot to order anything");
-							  JOptionPane.showMessageDialog(null,"Success, an email has been sent to: " + emailField.getText() + " Containing order details");
-						  }
-						  else
-						  {
-							  JOptionPane.showMessageDialog(null,"Missing input on all fields, please fill in information for every field.");
-						  }
-						
-				      break;
-				  case "Cash":
-				
-				      break;
-				  case "Bank Transfer":
-				
-				      break;
-				  default:
-				      break;
-			  }
-		  }
-
-			private boolean creditFieldisEmpty() {
-				return (emailField.getText().isEmpty() && nameField.getText().isEmpty() && lastNameField.getText().isEmpty() && holderField.getText().isEmpty() && cardField.getText().isEmpty() && cvcField.getText().isEmpty());
-			}
-        }
-		);
-		optionList.addActionListener(new ActionListener() { 
+		getOptionList().addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				 
-				  String choice = (String) optionList.getSelectedItem();
+				  String choice = (String) getOptionList().getSelectedItem();
 				  
 	                switch (choice) {
 	                    case "Credit Card":
@@ -142,29 +103,29 @@ public class PaymentPanel extends JPanel {
 	                		
 	                    	//Holder
 	                		gc.gridx = 0;
-	                		gc.gridy = 4;
+	                		gc.gridy = 6;
 	                		contentPanel.add(holderLabel,gc);
 
 	                		gc.gridx = 1;
-	                		gc.gridy = 4;
+	                		gc.gridy = 6;
 	                		contentPanel.add(holderField,gc);
 	                		
 	                		// Credit Card
 	                		gc.gridx = 0;
-	                		gc.gridy = 5;
+	                		gc.gridy = 7;
 	                		contentPanel.add(cardLabel,gc);
 	                		
 	                		gc.gridx = 1;
-	                		gc.gridy = 5;
+	                		gc.gridy = 7;
 	                		contentPanel.add(cardField,gc);
 	                		
 	                		// CVC
 	                		gc.gridx = 0;
-	                		gc.gridy = 6;
+	                		gc.gridy = 8;
 	                		contentPanel.add(cvcLabel,gc);
 	                		
 	                		gc.gridx = 1;
-	                		gc.gridy = 6;
+	                		gc.gridy = 8;
 	                		contentPanel.add(cvcField,gc);	                  
 	                									
 	                        break;
@@ -209,24 +170,67 @@ public class PaymentPanel extends JPanel {
   		gc.gridy = 2;
   		contentPanel.add(emailField,gc);
   		
+  		// Address
+  		gc.gridx = 0;
+  		gc.gridy = 3;
+  		contentPanel.add(addressLabel,gc);
+  		
+  		gc.gridx = 1;
+  		gc.gridy = 3;
+  		contentPanel.add(addressField,gc);
+  		
+  		// Postal Code
+  		gc.gridx = 0;
+  		gc.gridy = 4;
+  		contentPanel.add(postalLabel,gc);
+  		
+  		gc.gridx = 1;
+  		gc.gridy = 4;
+  		contentPanel.add(postalField,gc);
+  		
   		// Method
 		gc.gridx = 0;
-  		gc.gridy = 3;
+  		gc.gridy = 5;
   		contentPanel.add(method, gc);
   		
   		// ComboBox
   		gc.gridx = 1;
-  		gc.gridy = 3;
-  		contentPanel.add(optionList, gc);
-		
-		gc.gridx = 0;
-		gc.gridy = 7;
-		contentPanel.add(shopBtn,gc);
-		
-		gc.gridx = 1;
-		gc.gridy = 7;
-		contentPanel.add(confirmBtn,gc);
+  		gc.gridy = 5;
+  		contentPanel.add(getOptionList(), gc);
 
+	}
+	public boolean creditFieldisEmpty() {
+		return (addressField.getText().isEmpty() 
+				&& postalField.getText().isEmpty() 
+				&& emailField.getText().isEmpty() 
+				&& nameField.getText().isEmpty() 
+				&& lastNameField.getText().isEmpty() 
+				&& holderField.getText().isEmpty() 
+				&& cardField.getText().isEmpty() 
+				&& cvcField.getText().isEmpty());
+	}
+	public String[] getAllFieldsCreditCard()
+	{
+		String[] stringToReturn = {
+				this.nameField.getText(), 
+				this.lastNameField.getText(),
+				this.emailField.getText(), 
+				this.addressField.getText(), 
+				this.postalField.getText(),
+				this.holderField.getText(),
+				this.cardField.getText(),
+				this.items};
+		
+		return stringToReturn;
+	}
+	public JComboBox getOptionList() {
+		return optionList;
+	}
+	public void setOptionList(JComboBox optionList) {
+		this.optionList = optionList;
+	}
+	public GridBagConstraints getGc(){
+		return this.gc;
 	}
 
 

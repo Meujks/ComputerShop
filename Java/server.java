@@ -59,32 +59,48 @@ public class Server {
 		
 	}
 	private void whileRunning() throws IOException {
+		
 		System.out.println("Client can begin shopping");
-		int request;
+		Object request;
+		
+		while(true) 
+		{
+			try {	
+				request = input.readObject();
+				if (request instanceof Integer) {
+					
+					switch ((int)request) {
+		            case 1: getAllDesktops();
+		            break;
+		            case 2: getAllGPU();
+		            break;
+		            case 3: getAllCPU();
+		            break;
+		            case 4: getAllRAM();
+		            break;
+		            case 5: getAllChassis();
+		            break;
+		            }	
+				}
+				else if(request instanceof String[]) {
+					sendOrder ((String[])request);
 
-		while(true) {
-			try {
-				request = (int) input.readObject();
-				
-				switch (request) {
-	            case 1: getAllDesktops();
-	            break;
-	            case 2: getAllGPU();
-	            break;
-	            case 3: getAllCPU();
-	            break;
-	            case 4: getAllRAM();
-	            break;
-	            case 5: getAllChassis();
-	            break;
-				}	  
+				}
 			
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
+		}
+	private void sendOrder(String[] values) {
 		
+		  // Create an emailSend object which creates an email and sends it to the user.
+		String cardString = values[6];
+		  
+		cardString = cardString.substring(0, Math.min(cardString.length(), 4)); 
+		EmailSend emailObject = new EmailSend(values[0], values[1], values[2], values[3], values[4], values[5], cardString, values[7]);
+	
 	}
 	private void closeServer() {
 		System.out.println("Closing Server..");

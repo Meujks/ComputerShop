@@ -23,6 +23,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
@@ -49,6 +50,7 @@ import javax.swing.JList;
 import javax.swing.ImageIcon;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 
 import net.miginfocom.swing.MigLayout;
@@ -68,6 +70,8 @@ public class Client extends JFrame {
 	private int totalCost;
 	private JTable shopTable;
 			
+    private JButton confirmBtn, shopBtn;
+
 	public Client(String host) {
 		super("Client - PC Shop");
 		
@@ -143,16 +147,95 @@ public class Client extends JFrame {
 				  panelContainer.removeAll();
 				  panelContainer.revalidate();
 				  
-				  PaymentPanel payPanel = new PaymentPanel();
-				  panelContainer.add(payPanel);
+				  // Fetch all items from the last row of the table which holds a tostring of each object
+				  String itemsFromTable="";
+				 
+				  DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
+				  //For each row
+				  for(int i = 0;i<tableModel.getRowCount();i++)
+				  {
+					  itemsFromTable += tableModel.getValueAt(i, 3).toString() + "\n";
+				  }
 			
+				  // send items to paymentPanel
+				  PaymentPanel payPanel = new PaymentPanel(itemsFromTable);
+				  panelContainer.add(payPanel);
+				  
+					// Button Panel
+					JPanel btnPanel = new JPanel();
+					btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+					btnPanel.setBackground(new Color(10, 204, 153));
+					LayoutManager layout = new FlowLayout();
+					btnPanel.setLayout(layout);
+					payPanel.add(btnPanel);
+					
+					// Buttons
+					confirmBtn = new JButton("Confirm");
+					confirmBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+					confirmBtn.setBackground(new Color(255, 255, 255));
+					
+					shopBtn = new JButton("Continue Shopping");
+					shopBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+					shopBtn.setBackground(new Color(255, 255, 255));
+			        
+					btnPanel.add(shopBtn);
+					
+					btnPanel.add(confirmBtn);
+					
+			        // Create Email Object which sends a email to recipent
+			        confirmBtn.addActionListener(new ActionListener() { 
+						  public void actionPerformed(ActionEvent e) { 
+							    //Check if all fields are filled
+							  String choice = (String) payPanel.getOptionList().getSelectedItem();
+
+							  switch (choice) {
+							      case "Credit Card":
+							    	  
+									  if(!payPanel.creditFieldisEmpty())
+									  {									
+											try {
+												String values[] = payPanel.getAllFieldsCreditCard();
+												for(int i = 0;i<values.length;i++)
+												{
+													System.out.println(i + " "+  values[i]);
+												}
+												output.writeObject(values);	
+												output.flush();
+												JOptionPane.showMessageDialog(null,"Success, an email has been sent containing order details");
+											} catch (IOException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
+									  }
+									  else
+									  {
+										  JOptionPane.showMessageDialog(null,"Missing input on all fields, please fill in information for every field.");
+									  }
+									
+							      break;
+							  case "Cash":
+							
+							      break;
+							  case "Bank Transfer":
+							
+							      break;
+							  default:
+							      break;
+						  }
+					  }
+
+			        }
+					);
 				  
 			  }
 		  }
 		);
 		
 		JLabel lblShoppingCart = new JLabel("");
-		lblShoppingCart.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\cart.png"));
+		
+		// update label for image
+	    ImageIcon newImg = new ImageIcon(getClass().getResource("/Images/cart.png"));			
+		lblShoppingCart.setIcon(newImg);
 		lblShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 16));
 		lblShoppingCart.setVisible(true);
 		
