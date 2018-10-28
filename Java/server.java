@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -83,7 +84,11 @@ public class Server {
 		            }	
 				}
 				else if(request instanceof String[]) {
-					sendOrder ((String[])request);
+					sendOrder((String[])request);
+
+				}
+				else if(request instanceof String) {
+					getOrder((String)request);
 
 				}
 			
@@ -93,6 +98,49 @@ public class Server {
 			
 		}
 		}
+	
+	private void getOrder(String orderId) {
+		try{
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			// Create a statement for query
+			Statement myStmt = conn.createStatement();
+			// add result from query to result variable
+			ResultSet result = myStmt.executeQuery("SELECT * FROM `ordertable` WHERE `ordertable`.`oid` = '"+orderId+"';");
+			String send = "";
+			while(result.next())
+			{				
+				send+= result.getString(1)+ "," + result.getString(2)+ "," + result.getString(3)+ "," + result.getString(4)+ "," + result.getString(5) + "\n";
+
+			}
+			output.writeObject(send);
+			output.flush();
+			System.out.println("Server Sending to Client -> " + send);
+		} catch(Exception exc) {
+			   exc.printStackTrace();
+			   }
+		
+	}
+	private void insertOrder(String orderId, String fName, String lName, String email, String items)	{
+		
+		try{
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			// Create a statement for query
+			String oName = fName + " " + lName;
+			// add result from query to result variable
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO `OrderTable`(oid,oCustomerName,oCustomerEmail,oItems,oStatus) VALUE (?,?,?,?,?);");
+			pstmt.setString(1, orderId );
+			pstmt.setString(2, oName);
+			pstmt.setString(3, email);
+			pstmt.setString(4, items);
+			pstmt.setString(5,"Assembling");
+			
+			pstmt.executeUpdate();
+			
+		} catch(Exception exc) {
+			   exc.printStackTrace();
+			   }
+		
+	}
 	private void sendOrder(String[] values) {
 		
 		  // Create an emailSend object which creates an email and sends it to the user.
@@ -100,6 +148,8 @@ public class Server {
 		  
 		cardString = cardString.substring(0, Math.min(cardString.length(), 4)); 
 		EmailSend emailObject = new EmailSend(values[0], values[1], values[2], values[3], values[4], values[5], cardString, values[7]);
+		String orderId = emailObject.getOrderID();
+		insertOrder(orderId,values[0],values[1],values[2],values[7]);
 	
 	}
 	private void closeServer() {

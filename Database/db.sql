@@ -64,6 +64,15 @@ CREATE TABLE `Graphics` (
   PRIMARY KEY (`gid`)
 );
 
+CREATE TABLE `OrderTable`(
+  `oid` VARCHAR(256) NOT NULL UNIQUE,
+  `oCustomerName` VARCHAR(256) NOT NULL,
+  `oCustomerEmail`VARCHAR(256) NOT NULL,
+  `oItems` VARCHAR(256) NOT NULL,
+  `oStatus` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`oid`)
+);
+
 -- **********************************************
 -- *                                            *
 -- *                 Values                     *

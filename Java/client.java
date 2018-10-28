@@ -70,8 +70,6 @@ public class Client extends JFrame {
 	private int totalCost;
 	private JTable shopTable;
 			
-    private JButton confirmBtn, shopBtn;
-
 	public Client(String host) {
 		super("Client - PC Shop");
 		
@@ -99,7 +97,6 @@ public class Client extends JFrame {
 		
 		JLabel icon = new JLabel("");
 		icon.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\MK.png"));
-		GroupLayout gl_panel = new GroupLayout(panel);
 		
 		DefaultListModel shopModel = new DefaultListModel();
 		
@@ -115,8 +112,8 @@ public class Client extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1348, Short.MAX_VALUE)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 1328, Short.MAX_VALUE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(mainScrollPane, GroupLayout.PREFERRED_SIZE, 1328, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 				.addComponent(shopPanel, GroupLayout.DEFAULT_SIZE, 1348, Short.MAX_VALUE)
 		);
@@ -124,8 +121,8 @@ public class Client extends JFrame {
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-					.addComponent(mainScrollPane, GroupLayout.PREFERRED_SIZE, 559, GroupLayout.PREFERRED_SIZE)
+					.addGap(8)
+					.addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(shopPanel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
 		);
@@ -160,30 +157,9 @@ public class Client extends JFrame {
 				  // send items to paymentPanel
 				  PaymentPanel payPanel = new PaymentPanel(itemsFromTable);
 				  panelContainer.add(payPanel);
-				  
-					// Button Panel
-					JPanel btnPanel = new JPanel();
-					btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-					btnPanel.setBackground(new Color(10, 204, 153));
-					LayoutManager layout = new FlowLayout();
-					btnPanel.setLayout(layout);
-					payPanel.add(btnPanel);
-					
-					// Buttons
-					confirmBtn = new JButton("Confirm");
-					confirmBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-					confirmBtn.setBackground(new Color(255, 255, 255));
-					
-					shopBtn = new JButton("Continue Shopping");
-					shopBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-					shopBtn.setBackground(new Color(255, 255, 255));
-			        
-					btnPanel.add(shopBtn);
-					
-					btnPanel.add(confirmBtn);
 					
 			        // Create Email Object which sends a email to recipent
-			        confirmBtn.addActionListener(new ActionListener() { 
+			        payPanel.getConfirmBtn().addActionListener(new ActionListener() { 
 						  public void actionPerformed(ActionEvent e) { 
 							    //Check if all fields are filled
 							  String choice = (String) payPanel.getOptionList().getSelectedItem();
@@ -501,28 +477,87 @@ public class Client extends JFrame {
 		JMenuItem mntmServer = new JMenuItem("Servers");
 		categoryMenu.add(mntmServer);
 		
+		JButton btnViewOrders = new JButton("View Orders");
+		btnViewOrders.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+				panelContainer.removeAll();
+				panelContainer.revalidate();
+				
+				ViewPanel viewPanel = new ViewPanel();
+				panelContainer.add(viewPanel);
+				
+				// Button Panel
+				JPanel viewBtnPanel = new JPanel();	
+				viewBtnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+				viewBtnPanel.setBackground(new Color(10, 204, 153));
+				LayoutManager layout = new FlowLayout();
+				viewBtnPanel.setLayout(layout);
+				
+				viewPanel.add(viewBtnPanel);
+				
+				// Buttons
+				
+		      viewPanel.getSearchButton().addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+					try {
+						output.writeObject(viewPanel.getSearchField());
+						output.flush();
+						String result = ((String)input.readObject());
+						String variables[] = result.split(",");
+
+						Object[] row = {variables[0], variables[1], variables[2], variables[3],variables[4]};
+						DefaultTableModel tableModel = (DefaultTableModel) viewPanel.getOrderTable().getModel();
+						while(tableModel.getRowCount() > 0)
+						{
+						    tableModel.removeRow(0);
+						}
+						tableModel.addRow(row);
+						
+						System.out.println("SVARET ÄR HÄR " + result);
+					} catch (IOException | ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+			  }
+			  });
+
+				viewPanel.getCancelBtn().addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseReleased(MouseEvent arg0) {
+						  DefaultTableModel tableModel = (DefaultTableModel) viewPanel.getOrderTable().getModel();
+
+						  tableModel.removeRow(viewPanel.getOrderTable().getSelectedRow());
+					}
+				});
+
+			}
+		});
 		
-		
-		
-		// Layout
+		btnViewOrders.setBackground(Color.WHITE);
+		btnViewOrders.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
+					.addGap(10)
 					.addComponent(icon)
-					.addGap(18)
+					.addGap(29)
 					.addComponent(btnProducts)
-					.addGap(30)
-					.addContainerGap(287, Short.MAX_VALUE))
+					.addGap(28)
+					.addComponent(btnViewOrders)
+					.addContainerGap(999, Short.MAX_VALUE))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(icon)
-					.addContainerGap())
+					.addGap(14)
+					.addComponent(icon))
 				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-					.addComponent(btnProducts, GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
+					.addComponent(btnProducts, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnViewOrders, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE))
 		);
 		panel.setLayout(gl_panel);
 

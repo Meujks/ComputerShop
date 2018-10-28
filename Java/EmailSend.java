@@ -12,9 +12,10 @@ public class EmailSend {
 	private String subject;
 	private String orderID;
 	private String messageText;
+	private String address, postalCode;
 	private boolean sessionDebug;
 
-	public EmailSend(String userEmail,String userName,String userLastName,String holder, String userCredit,String userItems)
+	public EmailSend(String userName,String userLastName, String userEmail,String userAddress, String userPostalCode,String holder, String userCredit,String userItems)
 	{
 		try {
             host ="smtp.gmail.com" ;
@@ -23,10 +24,11 @@ public class EmailSend {
             to = userEmail;
             from = "mkhardwareproject@gmail.com";
             subject = "Order Confirmation - MK Hardware";
+            address = userAddress;
+            postalCode = userPostalCode;
             orderID = generateOrderID();
-            messageText = "Order ID: "+ orderID + "\n" + "Name: " + userName + " " + userLastName + "\nAccount Holder:" + holder + "\nCredit Card Starting with [XXXX]: " + userCredit + "\nItems: " + userItems;
+            messageText = "Order ID: "+ orderID + "\n" + "Name: " + userName + " " + userLastName +"\nAddress: " + userAddress + ", " + userPostalCode + "\nAccount Holder:" + holder + "\nCredit Card Starting with [XXXX]: " + userCredit + "\nItems:\n" + userItems;
             sessionDebug = false;
-            
             Properties props = System.getProperties();
 
             props.put("mail.smtp.starttls.enable", "true");
@@ -56,13 +58,13 @@ public class EmailSend {
 		}
 	
 	public String generateOrderID() {
-	    byte[] array = new byte[7]; // length is bounded by 7
+	    byte[] array = new byte[10];
 	    new Random().nextBytes(array);
 	    String generatedString = new String(array, Charset.forName("UTF-8"));
 	 return generatedString;
 	}
-	public String getOrderID()
-	{
+	
+	public String getOrderID(){
 		return this.orderID;
 	}
 }

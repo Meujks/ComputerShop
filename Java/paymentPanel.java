@@ -26,25 +26,25 @@ public class PaymentPanel extends JPanel {
     private JPanel contentPanel;
     private String items;
     GridBagConstraints gc;
+    private JButton confirmBtn;
     
 	public PaymentPanel(String itemsFromCart)
 	{
 
 		
 		JPanel contentPanel = new JPanel();
-		contentPanel.setPreferredSize(new Dimension(900,600));
+		contentPanel.setPreferredSize(new Dimension(700,500));
 		contentPanel.setBackground(new Color(0, 204, 153));
 	    Border roundedBorder = new LineBorder(new Color(47, 79, 79), 6, true);
 	    contentPanel.setLayout(new GridBagLayout());
 	    this.setBorder(roundedBorder);
 		this.setBackground(new Color(0, 204, 153));
-
+		
         this.add(contentPanel);
 	    // Textfields and labels
         
         this.items = itemsFromCart;
 	    
-		System.out.println(items);
 	    nameField = new JTextField(30);
 	    nameLabel = new JLabel("Name:");
 	    nameLabel.setFont(new Font("Yu Gothic", Font.BOLD, 12));
@@ -73,6 +73,13 @@ public class PaymentPanel extends JPanel {
 	    setOptionList(new JComboBox(options));
 	    getOptionList().setSelectedIndex(0);
 		getOptionList().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		
+		
+		// Buttons
+		setConfirmBtn(new JButton("Confirm"));
+		getConfirmBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		getConfirmBtn().setBackground(new Color(255, 255, 255));
+		
 		
 		//mkhardwareproject@gmail.com
 		
@@ -197,6 +204,11 @@ public class PaymentPanel extends JPanel {
   		gc.gridx = 1;
   		gc.gridy = 5;
   		contentPanel.add(getOptionList(), gc);
+  		
+  		// Confirm
+  		gc.gridx = 1;
+  		gc.gridy = 9;
+  		contentPanel.add(getConfirmBtn(), gc);
 
 	}
 	public boolean creditFieldisEmpty() {
@@ -231,6 +243,12 @@ public class PaymentPanel extends JPanel {
 	}
 	public GridBagConstraints getGc(){
 		return this.gc;
+	}
+	public JButton getConfirmBtn() {
+		return confirmBtn;
+	}
+	public void setConfirmBtn(JButton confirmBtn) {
+		this.confirmBtn = confirmBtn;
 	}
 
 
