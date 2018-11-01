@@ -81,6 +81,10 @@ public class Server {
 		            break;
 		            case 5: getAllChassis();
 		            break;
+		            case 6: getAllLaptops();
+		            break;
+		            case 7: getAllLaptopChassis();
+		            break;
 		            }	
 				}
 				else if(request instanceof String[]) {
@@ -99,6 +103,59 @@ public class Server {
 		}
 		}
 	
+	private void getAllLaptopChassis() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void getAllLaptops() {
+		try{
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			// Create a statement for query
+			Statement myStmt = conn.createStatement();
+			// add result from query to result variable
+			ResultSet result = myStmt.executeQuery("SELECT \r\n" + 
+					"`Products`.`pName`,`Products`.`pType`,\r\n" + 
+					"CONCAT(`laptopChassis`.`lChassName`,' - ',`laptopChassis`.`lChassCost`,'€')\r\n" + 
+					"AS 'Chassi', \r\n" + 
+					"CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb - ',`Graphics`.`gCost`,'€')\r\n" + 
+					"AS 'GPU',\r\n" + 
+					"CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz - ',`Processors`.`cCost`,'€')\r\n" + 
+					"AS 'CPU',\r\n" + 
+					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz - ',`Memories`.`mCost`,'€')\r\n" + 
+					"AS'RAM',\r\n" + 
+					"CONCAT(`Memories`.`mCost` + `Processors`.`cCost` + `Graphics`.`gCost`+ `laptopChassis`.`lChassCost`) \r\n" + 
+					"AS 'Cost',\r\n" + 
+					"`laptopChassis`.`lChassImage`\r\n" + 
+					"AS 'path',\r\n" + 
+					"`Laptop`.`inches`\r\n" + 
+					"FROM `Products`	\r\n" + 
+					"INNER JOIN `Laptop`\r\n" + 
+					"ON `Laptop`.`pid`=`Products`.`pid`\r\n" + 
+					"INNER JOIN `Graphics`\r\n" + 
+					"ON `Graphics`.`gid` = `Laptop`.`gid`\r\n" + 
+					"INNER JOIN `Processors`\r\n" + 
+					"ON `Processors`.`cid` = `Products`.`cid`\r\n" + 
+					"INNER JOIN `laptopChassis`\r\n" + 
+					"ON `laptopChassis`.`lChassId` = `Laptop`.`lChassId`\r\n" + 
+					"INNER JOIN `Memories`\r\n" + 
+					"ON `Memories`.`mid` = `Products`.`mid`;");
+
+			String send = "";
+			while(result.next())
+			{				
+				send+= result.getString(1) + "," + result.getString(2)+ "," + result.getString(3) + "," + result.getString(4) + "," + result.getString(5) + "," + result.getString(6) + "," + result.getString(7) +"," + result.getString(8) + "," + result.getString(9) + "\n";
+
+			}
+			output.writeObject(send);
+			output.flush();
+			System.out.println("Server Sending to Client -> " + send);
+		}
+		catch(Exception exc) {
+			   exc.printStackTrace();
+
+		}
+		
+	}
 	private void getOrder(String orderId) {
 		try{
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");

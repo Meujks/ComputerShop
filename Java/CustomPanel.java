@@ -35,6 +35,10 @@ public class CustomPanel extends JPanel {
 		private JPanel btnPanel;
 		private JLabel picLabel;
 		
+		private JLabel lblmGpuOfLaptop;
+		private JLabel lblInchesOfLaptop;
+		private JLabel lblChassiOfLaptop;
+		
 		private String nameOfProduct;
 		private String gpuOfProduct;
 		private String cpuOfProduct;
@@ -44,9 +48,65 @@ public class CustomPanel extends JPanel {
 		private int costOfProduct;
 		private String pathOfImage;
 		private Desktop desktop;
+		private Laptop laptop;
+		
 		BufferedImage myPicture;
+		
+		private String inchesOfLaptop;
+		private String mGpuOfLaptop;
+		private String lChassiOfLaptop;
 
 		
+		public CustomPanel(Laptop laptop)
+		{
+			this.laptop = laptop;
+		    Border roundedBorder = new LineBorder(new Color(47, 79, 79), 3, true);
+
+		    this.setPreferredSize(new Dimension(300,350));
+			this.setBackground(new Color(245, 245, 245));
+			this.setForeground(new Color(51, 102, 102));
+			this.setBorder(roundedBorder);
+
+			this.setAlignmentX(Component.LEFT_ALIGNMENT);
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			this.setBackground(new Color(0, 204, 153));
+			
+			
+			// Labels
+			
+		    this.nameOfProduct = laptop.getName();
+		    this.cpuOfProduct = laptop.getCpu();
+		    this.ramOfProduct = laptop.getRam();
+		    this.inchesOfLaptop = laptop.getInches();
+		    this.mGpuOfLaptop = laptop.getMgpu();
+		    this.typeOfProduct = laptop.getType();
+		    this.costOfProduct = laptop.getCost();
+		    this.pathOfImage = laptop.getPathOfImage();
+		    this.lChassiOfLaptop = laptop.getlChassi();
+		    
+		    ImageIcon img = new ImageIcon(getClass().getResource(this.pathOfImage));	
+		    picLabel = new JLabel(img);
+			lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
+			lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
+			lblmGpuOfLaptop = new JLabel("- mGPU: " + this.mGpuOfLaptop);
+			lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
+			lblInchesOfLaptop = new JLabel("- Inches: " + this.inchesOfLaptop );
+			lblChassiOfLaptop = new JLabel("- Case: " + this.lChassiOfLaptop );
+			lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
+
+			lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
+
+			this.add(picLabel);
+			this.add(lblNameOfProduct);
+			this.add(lblCPUOfProduct);
+			this.add(lblmGpuOfLaptop);
+			this.add(lblMemoryOfProduct);
+			this.add(lblInchesOfLaptop);
+			this.add(lblChassiOfLaptop);
+			this.add(lblCostOfProduct);
+				 
+		}
 		public CustomPanel(Desktop computer)
 		{
 			//String name, String memory, String cpu, String type,String chassi, String gpu
@@ -63,10 +123,6 @@ public class CustomPanel extends JPanel {
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 			this.setBackground(new Color(0, 204, 153));
-				
-				
-
-		
 			
 		    // Labels
 			
@@ -107,12 +163,12 @@ public class CustomPanel extends JPanel {
 		public JPanel getBtnPanel() {
 			return this.btnPanel;
 		}
-		public void updateLabel()
+		public void updateLabelDesktop()
 		{
 			this.desktop.setType("Custom");
 			this.lblNameOfProduct.setText(this.desktop.getName() + " " + this.desktop.getType());
 		}
-		public void updateEvent(int itemIndex,String itemValue) {
+		public void updateEventDesktop(int itemIndex,String itemValue) {
 			
 			String costOfItem = formatString(itemValue);
 			// Change desktop image path
@@ -125,27 +181,52 @@ public class CustomPanel extends JPanel {
 			switch(itemIndex) {
 			case 0: 
 				String costOfOldCpu = formatString(this.desktop.getCpu());
-				calculateCost(costOfItem,costOfOldCpu);
+				calculateCostDesktop(costOfItem,costOfOldCpu);
 				this.desktop.setCpu(itemValue);
 				this.lblCPUOfProduct.setText("- CPU: " + this.desktop.getCpu());
 				break;
 			case 1: 
 				String costOfOldGpu = formatString(this.desktop.getGpu());
-				calculateCost(costOfItem,costOfOldGpu);
+				calculateCostDesktop(costOfItem,costOfOldGpu);
 				this.desktop.setGpu(itemValue);
 				this.lblGpuOfProduct.setText("- GPU: " + this.desktop.getGpu());
 				break;
 			case 2:
 				String costOfOldRam = formatString(this.desktop.getRam());
-				calculateCost(costOfItem,costOfOldRam);
+				calculateCostDesktop(costOfItem,costOfOldRam);
 				this.desktop.setRam(itemValue);
 				this.lblMemoryOfProduct.setText("- RAM: " + this.desktop.getRam());
 				break;
 			case 3: 
 				String costOfOldChassi = formatString(this.desktop.getChassi());
-				calculateCost(costOfItem,costOfOldChassi);
+				calculateCostDesktop(costOfItem,costOfOldChassi);
 				this.desktop.setChassi(itemValue);
 				this.lblChassiOfProduct.setText("- Chassi: " + this.desktop.getChassi());
+				break;
+			}
+		}
+public void updateEventLaptop(int itemIndex,String itemValue) {
+			
+			String costOfItem = formatString(itemValue);
+			
+			switch(itemIndex) {
+			case 0: 
+				String costOfOldCpu = formatString(this.laptop.getCpu());
+				calculateCostLaptop(costOfItem,costOfOldCpu);
+				this.laptop.setCpu(itemValue);
+				this.lblCPUOfProduct.setText("- CPU: " + this.laptop.getCpu());
+				break;
+			case 1: 
+				String costOfOldGpu = formatString(this.laptop.getMgpu());
+				calculateCostLaptop(costOfItem,costOfOldGpu);
+				this.laptop.setMgpu(itemValue);
+				this.lblGpuOfProduct.setText("- GPU: " + this.laptop.getMgpu());
+				break;
+			case 2:
+				String costOfOldRam = formatString(this.laptop.getRam());
+				calculateCostLaptop(costOfItem,costOfOldRam);
+				this.laptop.setRam(itemValue);
+				this.lblMemoryOfProduct.setText("- RAM: " + this.laptop.getRam());
 				break;
 			}
 		}
@@ -154,10 +235,15 @@ public class CustomPanel extends JPanel {
 			formatString = formatString.replaceAll("\\s+","");
 			return formatString;
 		}
-		public void calculateCost(String costOfNewItem, String costOfOldItem)
+		public void calculateCostDesktop(String costOfNewItem, String costOfOldItem)
 		{
 			this.desktop.setCost(this.desktop.getCost() + (Integer.parseInt(costOfNewItem) - Integer.parseInt(costOfOldItem)));
 			this.lblCostOfProduct.setText("- Cost: " + this.desktop.getCost() + "€");	
+		}
+		public void calculateCostLaptop(String costOfNewItem, String costOfOldItem)
+		{
+			this.laptop.setCost(this.laptop.getCost() + (Integer.parseInt(costOfNewItem) - Integer.parseInt(costOfOldItem)));
+			this.lblCostOfProduct.setText("- Cost: " + this.laptop.getCost() + "€");	
 		}
 }	 
 

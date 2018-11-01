@@ -141,6 +141,7 @@ public class Client extends JFrame {
 		
 		btnCheckout.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
+				 
 				  panelContainer.removeAll();
 				  panelContainer.revalidate();
 				  
@@ -443,13 +444,13 @@ public class Client extends JFrame {
 										changeBtn.addActionListener(new ActionListener() { 
 											  public void actionPerformed(ActionEvent e) { 
 												 // Update the name of component to Custom
-												 newPane.updateLabel();
+												 newPane.updateLabelDesktop();
 												 // Store index and name of component being changed
 												 int itemIndex = compPanel.getSelectedIndex();
 												 String itemValue = compPanel.getSelectedElement();
 												 
 												 // Update the configuration by passing the necessary values
-												 newPane.updateEvent(itemIndex, itemValue);
+												 newPane.updateEventDesktop(itemIndex, itemValue);
 											  }
 										  }
 										);
@@ -472,6 +473,134 @@ public class Client extends JFrame {
 		categoryMenu.add(mntmDesktop);
 		
 		JMenuItem mntmLaptop = new JMenuItem("Laptops");
+		mntmLaptop.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+				try {
+					output.writeObject(6);
+					output.flush();
+					// Store the saved string 
+					String resultString = ((String)input.readObject());
+					// Split each row
+					String desktops[] = resultString.split("\\r?\\n");					
+					// Dynamically create a JPanel for each product containing the appropriate information
+					// Clear panelContainer before adding components
+					panelContainer.removeAll();
+					panelContainer.revalidate();
+					
+					for(int i = 0;i<desktops.length;i++)
+					{
+						// for each iteration assign all variables from each row
+						String variables[] = desktops[i].split(",");
+						Laptop laptop = new Laptop(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],Integer.valueOf(variables[6]),variables[7],variables[8]);
+
+						CustomPanel newPane = new CustomPanel(laptop);	
+						panelContainer.add(newPane);
+						
+						// Button Panel
+						JPanel btnPanel = new JPanel();
+						btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+						btnPanel.setBackground(new Color(0, 204, 153));
+						LayoutManager layout = new FlowLayout();
+						btnPanel.setLayout(layout);
+						
+						newPane.add(btnPanel);
+						
+						JButton cartBtn = new JButton("Add To Cart");
+						cartBtn.setBackground(Color.WHITE);
+						cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));	
+						btnPanel.add(cartBtn);
+						cartBtn.addActionListener(new ActionListener() { 
+							  public void actionPerformed(ActionEvent e) { 
+								  
+								  
+								  Object[] row = { laptop.getName(), laptop.getType(), laptop.getCost(), laptop.toString() };
+
+								  DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
+								  
+								  tableModel.addRow(row);
+
+								  totalCost += laptop.getCost();
+								  lblCostValue.setText(String.valueOf(totalCost)+"€");
+							  }
+
+						  }
+						);
+						
+						JButton customizeBtn = new JButton("Customize");
+						customizeBtn.setBackground(Color.WHITE);
+						customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+						btnPanel.add(customizeBtn);
+
+						customizeBtn.addActionListener(new ActionListener() { 
+							  public void actionPerformed(ActionEvent e) { 
+								  
+								  // Remove all desktops apart from the selected from the panel
+								  for (Component cp : panelContainer.getComponents() ){
+									  if(cp != customizeBtn.getParent().getParent())
+								        cp.setVisible(false);
+								 }
+								  
+								  // hide the customize button
+								  customizeBtn.setVisible(false);
+									try {
+										// Fetch all components from the database, store them into appropriate strings
+										output.writeObject(2);
+										output.flush();
+										String GPU = ((String)input.readObject());
+
+										output.writeObject(3);
+										output.flush();
+										String CPU = ((String)input.readObject());
+										
+										output.writeObject(4);
+										output.flush();
+										String RAM = ((String)input.readObject());
+										
+										// Cut the strings and separate on each row
+										String graphics[] = GPU.split("\\r?\\n");
+										String processors[] = CPU.split("\\r?\\n");
+										String memories[] = RAM.split("\\r?\\n");
+										// retrieve the cost of all items
+										// Create the component tabel with appropriate values
+										ComponentPanel compPanel = new ComponentPanel(graphics,processors,memories,variables[0],variables[5],variables[4],variables[1],variables[3]);	
+										panelContainer.add(compPanel);
+										
+										//Create a button for changing values between compPanel and CustomPanel
+										JButton changeBtn = new JButton("Change");
+										changeBtn.setBackground(Color.WHITE);
+										changeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+										compPanel.add(changeBtn);
+										
+										// Get the selected value from compPanel and add it to the current configuration on the custom panel
+										changeBtn.addActionListener(new ActionListener() { 
+											  public void actionPerformed(ActionEvent e) { 
+												 // Update the name of component to Custom
+												 // Store index and name of component being changed
+												 int itemIndex = compPanel.getSelectedIndex();
+												 String itemValue = compPanel.getSelectedElement();
+												 
+												 // Update the configuration by passing the necessary values
+												 newPane.updateEventLaptop(itemIndex, itemValue);
+											  }
+										  }
+										);
+								
+									} catch (IOException | ClassNotFoundException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+							  } 
+							} );
+					}
+					
+				} catch (IOException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		categoryMenu.add(mntmLaptop);
 		
 		JMenuItem mntmServer = new JMenuItem("Servers");
@@ -505,18 +634,22 @@ public class Client extends JFrame {
 						output.writeObject(viewPanel.getSearchField());
 						output.flush();
 						String result = ((String)input.readObject());
-						String variables[] = result.split(",");
-
-						Object[] row = {variables[0], variables[1], variables[2], variables[3],variables[4]};
-						DefaultTableModel tableModel = (DefaultTableModel) viewPanel.getOrderTable().getModel();
-						while(tableModel.getRowCount() > 0)
-						{
-						    tableModel.removeRow(0);
-						}
-						tableModel.addRow(row);
 						
-						System.out.println("SVARET ÄR HÄR " + result);
-					} catch (IOException | ClassNotFoundException e1) {
+						if(result.length() > 0)
+						{						
+							String variables[] = result.split(",");
+							Object[] row = {variables[0], variables[1], variables[2], variables[3],variables[4]};
+							DefaultTableModel tableModel = (DefaultTableModel) viewPanel.getOrderTable().getModel();
+	
+							while(tableModel.getRowCount() > 0)
+							{
+							    tableModel.removeRow(0);
+							}
+							tableModel.addRow(row);
+							
+						}
+					} 
+						catch (IOException | ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
@@ -528,8 +661,35 @@ public class Client extends JFrame {
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
 						  DefaultTableModel tableModel = (DefaultTableModel) viewPanel.getOrderTable().getModel();
+		
+						  
+						  // Send request for server to remove
+						  try {
+							output.writeObject(1);
+							output.flush();
 
-						  tableModel.removeRow(viewPanel.getOrderTable().getSelectedRow());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						  						  
+						  // receive response
+						  String response = "";
+						  
+						  
+						  // compare status
+						  
+						  if(response != "")
+						  {
+							  tableModel.removeRow(viewPanel.getOrderTable().getSelectedRow());
+							  JOptionPane.showMessageDialog(null, "Order has been canceled, a full payback has been issued \n"
+							  		+ "For any inconvenience please message us at mkhardwareproject@gmail.com");
+						  }
+						  else {
+							  JOptionPane.showMessageDialog(null, "Unable to cancel due to the fact that the order has already been sent from warehouse \n"
+							  		+ "For any inconvenience please message us at mkhardwareproject@gmail.com");
+						  }
+
 					}
 				});
 

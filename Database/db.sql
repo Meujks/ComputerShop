@@ -25,6 +25,15 @@ CREATE TABLE `Desktop` (
   PRIMARY KEY (`did`)
 );
 
+
+CREATE TABLE `Laptop` (
+  `lid` INT NOT NULL UNIQUE AUTO_INCREMENT,
+  `pid` INT NOT NULL,
+  `gid` INT NOT NULL,
+  `lChassId` INT NOT NULL,
+  `inches` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`lid`)
+);
 CREATE TABLE `Memories` (
   `mid` INT NOT NULL UNIQUE AUTO_INCREMENT,
   `mName` VARCHAR(256) NOT NULL,
@@ -53,6 +62,16 @@ CREATE TABLE `Chassis` (
   `chassImage` VARCHAR(256) UNIQUE,
   PRIMARY KEY (`chassId`)
 );
+
+CREATE TABLE `laptopChassis` (
+  `lChassId` INT NOT NULL UNIQUE AUTO_INCREMENT,
+  `lChassName` VARCHAR(256) NOT NULL UNIQUE,
+  `lChassWeight` INT NOT NULL,
+  `lChassCost` INT NOT NULL,
+  `lChassImage` VARCHAR(256) UNIQUE,
+  PRIMARY KEY (`lChassId`)
+);
+
 
 CREATE TABLE `Graphics` (
   `gid` INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -104,6 +123,19 @@ INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`,`chassImage`)
 VALUES("Eclipse",8,40,"/Images/eclipse.png");
 INSERT INTO `Chassis`(`chassName`,`chassWeight`,`chassCost`,`chassImage`)
 VALUES("H500",11,45,"/Images/h500.png");
+
+-- CHASSIS FOR LAPTOPS
+INSERT INTO `laptopChassis`(`lChassName`,`lChassWeight`,`lChassCost`,`lChassImage`)
+VALUES("Chromebook",3,25,"/Images/chromebook.png");
+
+INSERT INTO `laptopChassis`(`lChassName`,`lChassWeight`,`lChassCost`,`lChassImage`)
+VALUES("ZenBook",2,35,"/Images/zenbook.png");
+
+INSERT INTO `laptopChassis`(`lChassName`,`lChassWeight`,`lChassCost`,`lChassImage`)
+VALUES("IdeaPad",1,45,"/Images/ideapad.png");
+
+
+
 -- GRAPHIC CARDS
 INSERT INTO `Graphics`(`gName`,`gManufacturer`,`gMemory`,`gCost`)
 VALUES("GTX 1080Ti","Nvidia",8192,900);
@@ -139,5 +171,18 @@ VALUE("Desktop",3,1,"Hades");
 INSERT INTO `Desktop`(`pid`,`gid`,`chassId`)
 VALUES(5,1,2);
 
+-- Laptops
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Laptop",1,1,"Chromebook");
+INSERT INTO `Laptop`(`pid`,`gid`,`lChassId`,`Inches`)
+VALUES(6,1,1,"15,6");
 
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Laptop",2,2,"Zenbook");
+INSERT INTO `Laptop`(`pid`,`gid`,`lChassId`,`Inches`)
+VALUES(7,2,2,"14");
 
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Laptop",3,3,"IdeaPad");
+INSERT INTO `Laptop`(`pid`,`gid`,`lChassId`,`Inches`)
+VALUES(8,3,3,"11,5");
