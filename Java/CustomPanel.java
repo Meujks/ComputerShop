@@ -35,10 +35,6 @@ public class CustomPanel extends JPanel {
 		private JPanel btnPanel;
 		private JLabel picLabel;
 		
-		private JLabel lblmGpuOfLaptop;
-		private JLabel lblInchesOfLaptop;
-		private JLabel lblChassiOfLaptop;
-		
 		private String nameOfProduct;
 		private String gpuOfProduct;
 		private String cpuOfProduct;
@@ -47,16 +43,84 @@ public class CustomPanel extends JPanel {
 		private String typeOfProduct;
 		private int costOfProduct;
 		private String pathOfImage;
+		
+		
+		// Products
 		private Desktop desktop;
 		private Laptop laptop;
+		private ComponentServer server;
 		
-		BufferedImage myPicture;
+		BufferedImage myPicture;		
+		
+		// Laptop
+		
+		private JLabel lblmGpuOfLaptop;
+		private JLabel lblInchesOfLaptop;
+		private JLabel lblChassiOfLaptop;
 		
 		private String inchesOfLaptop;
 		private String mGpuOfLaptop;
 		private String lChassiOfLaptop;
 
+		// Server
+		private JLabel lblScalabilityOfServer;
+		private JLabel lblFormFactorOfServer;
+		private JLabel lblChassiOfServer;
 		
+		private String formFactorOfServer;
+		private String scalabilityOfServer;
+		private String chassiOfServer;
+
+		public CustomPanel(ComponentServer server)
+		{
+			this.server = server;
+		    Border roundedBorder = new LineBorder(new Color(47, 79, 79), 3, true);
+
+		    this.setPreferredSize(new Dimension(300,350));
+			this.setBackground(new Color(245, 245, 245));
+			this.setForeground(new Color(51, 102, 102));
+			this.setBorder(roundedBorder);
+
+			this.setAlignmentX(Component.LEFT_ALIGNMENT);
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			this.setBackground(new Color(0, 204, 153));
+			
+			
+			// Labels
+			
+		    this.nameOfProduct = server.getName();
+		    this.cpuOfProduct = server.getCpu();
+		    this.ramOfProduct = server.getRam();
+		    this.formFactorOfServer = server.getFormFactor();
+		    this.scalabilityOfServer = server.getScalability();
+		    this.typeOfProduct = server.getType();
+		    this.costOfProduct = server.getCost();
+		    this.pathOfImage = server.getPathOfImage();
+		    this.chassiOfServer = server.getChassi();
+		    
+		    ImageIcon img = new ImageIcon(getClass().getResource(this.pathOfImage));	
+		    picLabel = new JLabel(img);
+			lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
+			lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
+			lblFormFactorOfServer = new JLabel("- Form Factor: " + this.formFactorOfServer);
+			lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
+			lblScalabilityOfServer = new JLabel("- Scalability: " + this.scalabilityOfServer );
+			lblChassiOfServer = new JLabel("- Case: " + this.chassiOfServer );
+			lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
+
+			lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
+
+			this.add(picLabel);
+			this.add(lblNameOfProduct);
+			this.add(lblCPUOfProduct);
+			this.add(lblFormFactorOfServer);
+			this.add(lblMemoryOfProduct);
+			this.add(lblScalabilityOfServer);
+			this.add(lblChassiOfServer);
+			this.add(lblCostOfProduct);
+				 
+		}
 		public CustomPanel(Laptop laptop)
 		{
 			this.laptop = laptop;
@@ -156,9 +220,17 @@ public class CustomPanel extends JPanel {
 			this.add(lblCostOfProduct);
 			
 		}
-		public String addToCart()
+		public String addToCartDesktop()
 		{
 			return this.desktop.getName() + " " + this.desktop.getType();
+		}
+		public String addToCartLaptop()
+		{
+			return this.laptop.getName() + " " + this.laptop.getType();
+		}
+		public String addToCartServer()
+		{
+			return this.server.getName() + " " + this.server.getType();
 		}
 		public JPanel getBtnPanel() {
 			return this.btnPanel;
@@ -205,7 +277,7 @@ public class CustomPanel extends JPanel {
 				break;
 			}
 		}
-public void updateEventLaptop(int itemIndex,String itemValue) {
+		public void updateEventLaptop(int itemIndex,String itemValue) {
 			
 			String costOfItem = formatString(itemValue);
 			
@@ -215,18 +287,45 @@ public void updateEventLaptop(int itemIndex,String itemValue) {
 				calculateCostLaptop(costOfItem,costOfOldCpu);
 				this.laptop.setCpu(itemValue);
 				this.lblCPUOfProduct.setText("- CPU: " + this.laptop.getCpu());
+				this.laptop.setType("Custom");
 				break;
 			case 1: 
 				String costOfOldGpu = formatString(this.laptop.getMgpu());
 				calculateCostLaptop(costOfItem,costOfOldGpu);
 				this.laptop.setMgpu(itemValue);
-				this.lblGpuOfProduct.setText("- GPU: " + this.laptop.getMgpu());
+				this.lblmGpuOfLaptop.setText("- GPU: " + this.laptop.getMgpu());
+				this.laptop.setType("Custom");
+
 				break;
 			case 2:
 				String costOfOldRam = formatString(this.laptop.getRam());
 				calculateCostLaptop(costOfItem,costOfOldRam);
 				this.laptop.setRam(itemValue);
 				this.lblMemoryOfProduct.setText("- RAM: " + this.laptop.getRam());
+				this.laptop.setType("Custom");
+
+				break;
+			}
+		}
+		public void updateEventServer(int itemIndex,String itemValue) {
+	
+			String costOfItem = formatString(itemValue);
+			
+			switch(itemIndex) {
+			case 0: 
+				String costOfOldCpu = formatString(this.server.getCpu());
+				calculateCostServer(costOfItem,costOfOldCpu);
+				this.server.setCpu(itemValue);
+				this.lblCPUOfProduct.setText("- CPU: " + this.server.getCpu());
+				this.server.setType("Custom");
+				break;
+			case 1:
+				String costOfOldRam = formatString(this.server.getRam());
+				calculateCostServer(costOfItem,costOfOldRam);
+				this.server.setRam(itemValue);
+				this.lblMemoryOfProduct.setText("- RAM: " + this.server.getRam());
+				this.server.setType("Custom");
+		
 				break;
 			}
 		}
@@ -244,6 +343,11 @@ public void updateEventLaptop(int itemIndex,String itemValue) {
 		{
 			this.laptop.setCost(this.laptop.getCost() + (Integer.parseInt(costOfNewItem) - Integer.parseInt(costOfOldItem)));
 			this.lblCostOfProduct.setText("- Cost: " + this.laptop.getCost() + "€");	
+		}
+		public void calculateCostServer(String costOfNewItem, String costOfOldItem)
+		{
+			this.server.setCost(this.server.getCost() + (Integer.parseInt(costOfNewItem) - Integer.parseInt(costOfOldItem)));
+			this.lblCostOfProduct.setText("- Cost: " + this.server.getCost() + "€");	
 		}
 }	 
 

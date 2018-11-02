@@ -34,6 +34,14 @@ CREATE TABLE `Laptop` (
   `inches` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`lid`)
 );
+CREATE TABLE `Server` (
+  `sid` INT NOT NULL UNIQUE AUTO_INCREMENT,
+  `pid` INT NOT NULL,
+  `sFormFactor` VARCHAR(256) NOT NULL,
+  `sScalability` VARCHAR(256) NOT NULL,
+  `sChassId` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`sid`)
+);
 CREATE TABLE `Memories` (
   `mid` INT NOT NULL UNIQUE AUTO_INCREMENT,
   `mName` VARCHAR(256) NOT NULL,
@@ -72,6 +80,15 @@ CREATE TABLE `laptopChassis` (
   PRIMARY KEY (`lChassId`)
 );
 
+
+CREATE TABLE `serverChassis` (
+  `sChassId` INT NOT NULL UNIQUE AUTO_INCREMENT,
+  `sChassName` VARCHAR(256) NOT NULL UNIQUE,
+  `sChassWeight` INT NOT NULL,
+  `sChassCost` INT NOT NULL,
+  `sChassImage` VARCHAR(256) UNIQUE,
+  PRIMARY KEY (`sChassId`)
+);
 
 CREATE TABLE `Graphics` (
   `gid` INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -134,7 +151,15 @@ VALUES("ZenBook",2,35,"/Images/zenbook.png");
 INSERT INTO `laptopChassis`(`lChassName`,`lChassWeight`,`lChassCost`,`lChassImage`)
 VALUES("IdeaPad",1,45,"/Images/ideapad.png");
 
+-- CHASSIS FOR SERVERS
+INSERT INTO `serverChassis`(`sChassName`,`sChassWeight`,`sChassCost`,`sChassImage`)
+VALUES("Primergy",8,25,"/Images/primergy.png");
 
+INSERT INTO `serverChassis`(`sChassName`,`sChassWeight`,`sChassCost`,`sChassImage`)
+VALUES("ProLiant",11,22,"/Images/proliant.png");
+
+INSERT INTO `serverChassis`(`sChassName`,`sChassWeight`,`sChassCost`,`sChassImage`)
+VALUES("Thinkserver",7,16,"/Images/thinkserver.png");
 
 -- GRAPHIC CARDS
 INSERT INTO `Graphics`(`gName`,`gManufacturer`,`gMemory`,`gCost`)
@@ -186,3 +211,19 @@ INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
 VALUE("Laptop",3,3,"IdeaPad");
 INSERT INTO `Laptop`(`pid`,`gid`,`lChassId`,`Inches`)
 VALUES(8,3,3,"11,5");
+
+-- Servers
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Server",2,2,"Primergy");
+INSERT INTO `Server`(`pid`,`sFormFactor`,`sScalability`,`sChassId`)
+VALUES(9,"Tower - 2U","2-Way",1);
+
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Server",1,1,"ProLiant");
+INSERT INTO `Server`(`pid`,`sFormFactor`,`sScalability`,`sChassId`)
+VALUES(10,"Tower - 5U","2-Way",2);
+
+INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
+VALUE("Server",3,3,"ThinkServer");
+INSERT INTO `Server`(`pid`,`sFormFactor`,`sScalability`,`sChassId`)
+VALUES(11,"Tower - 4U","1-Way",3);

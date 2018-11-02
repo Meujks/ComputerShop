@@ -83,7 +83,7 @@ public class Server {
 		            break;
 		            case 6: getAllLaptops();
 		            break;
-		            case 7: getAllLaptopChassis();
+		            case 7: getAllServers();
 		            break;
 		            }	
 				}
@@ -103,8 +103,49 @@ public class Server {
 		}
 		}
 	
-	private void getAllLaptopChassis() {
-		// TODO Auto-generated method stub
+	private void getAllServers() {
+		try{
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			// Create a statement for query
+			Statement myStmt = conn.createStatement();
+			// add result from query to result variable
+			ResultSet result = myStmt.executeQuery("SELECT \r\n" + 
+					"`Products`.`pName`, `Products`.`pType`,\r\n" + 
+					"`Server`.`sFormFactor`,`Server`.`sScalability`,\r\n" + 
+					"CONCAT(`serverChassis`.`sChassName`,' - ',`serverChassis`.`sChassCost`,'€')\r\n" + 
+					"AS 'Chassi', \r\n" + 
+					"CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz - ',`Processors`.`cCost`,'€')\r\n" + 
+					"AS 'CPU',\r\n" + 
+					"CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz - ',`Memories`.`mCost`,'€')\r\n" + 
+					"AS'RAM',\r\n" + 
+					"CONCAT(`Memories`.`mCost` + `Processors`.`cCost` + `serverChassis`.`sChassCost`) \r\n" + 
+					"AS 'Cost',\r\n" + 
+					"`serverChassis`.`sChassImage`\r\n" + 
+					"AS 'path'\r\n" + 
+					"FROM `Products`	\r\n" + 
+					"INNER JOIN `Server`\r\n" + 
+					"ON `Server`.`pid`=`Products`.`pid`\r\n" + 
+					"INNER JOIN `Processors`\r\n" + 
+					"ON `Processors`.`cid` = `Products`.`cid`\r\n" + 
+					"INNER JOIN `serverChassis`\r\n" + 
+					"ON `serverChassis`.`sChassId` = `Server`.`sChassId`\r\n" + 
+					"INNER JOIN `Memories`\r\n" + 
+					"ON `Memories`.`mid` = `Products`.`mid`;");
+
+			String send = "";
+			while(result.next())
+			{				
+				send+= result.getString(1) + "," + result.getString(2)+ "," + result.getString(3) + "," + result.getString(4) + "," + result.getString(5) + "," + result.getString(6) + "," + result.getString(7) +"," + result.getString(8) + "," +result.getString(9) + "\n";
+
+			}
+			output.writeObject(send);
+			output.flush();
+			System.out.println("Server Sending to Client -> " + send);
+		}
+		catch(Exception exc) {
+			   exc.printStackTrace();
+
+		}
 		
 	}
 	private void getAllLaptops() {

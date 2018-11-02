@@ -52,3 +52,28 @@ INNER JOIN `laptopChassis`
 ON `laptopChassis`.`lChassId` = `Laptop`.`lChassId`
 INNER JOIN `Memories`
 ON `Memories`.`mid` = `Products`.`mid`;
+
+-- SERVER
+
+SELECT 
+`Products`.`pName`, `Products`.`pType`,
+`Server`.`sFormFactor`,`Server`.`sScalability`,
+CONCAT(`serverChassis`.`sChassName`,' - ',`serverChassis`.`sChassCost`,'€')
+AS 'Chassi', 
+CONCAT(`Processors`.`cManufacturer`,' ',`Processors`.`cName`,' ',`Processors`.`cCores`,' ',`Processors`.`cSpeed`,'Mhz - ',`Processors`.`cCost`,'€')
+AS 'CPU',
+CONCAT(`Memories`.`mName`,' ',`Memories`.`mClassification`,' ',`Memories`.`mSize`,'Gb ',`Memories`.`mSpeed`,'Mhz - ',`Memories`.`mCost`,'€')
+AS'RAM',
+CONCAT(`Memories`.`mCost` + `Processors`.`cCost` + `serverChassis`.`sChassCost`) 
+AS 'Cost',
+`serverChassis`.`sChassImage`
+AS 'path'
+FROM `Products`	
+INNER JOIN `Server`
+ON `Server`.`pid`=`Products`.`pid`
+INNER JOIN `Processors`
+ON `Processors`.`cid` = `Products`.`cid`
+INNER JOIN `serverChassis`
+ON `serverChassis`.`sChassId` = `Server`.`sChassId`
+INNER JOIN `Memories`
+ON `Memories`.`mid` = `Products`.`mid`;

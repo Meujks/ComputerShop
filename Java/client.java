@@ -483,16 +483,16 @@ public class Client extends JFrame {
 					// Store the saved string 
 					String resultString = ((String)input.readObject());
 					// Split each row
-					String desktops[] = resultString.split("\\r?\\n");					
+					String laptops[] = resultString.split("\\r?\\n");					
 					// Dynamically create a JPanel for each product containing the appropriate information
 					// Clear panelContainer before adding components
 					panelContainer.removeAll();
 					panelContainer.revalidate();
 					
-					for(int i = 0;i<desktops.length;i++)
+					for(int i = 0;i<laptops.length;i++)
 					{
 						// for each iteration assign all variables from each row
-						String variables[] = desktops[i].split(",");
+						String variables[] = laptops[i].split(",");
 						Laptop laptop = new Laptop(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],Integer.valueOf(variables[6]),variables[7],variables[8]);
 
 						CustomPanel newPane = new CustomPanel(laptop);	
@@ -515,7 +515,7 @@ public class Client extends JFrame {
 							  public void actionPerformed(ActionEvent e) { 
 								  
 								  
-								  Object[] row = { laptop.getName(), laptop.getType(), laptop.getCost(), laptop.toString() };
+								  Object[] row = { laptop.getName(), laptop.getType(), laptop.getCost(), laptop.getName() + " " + laptop.getType() + " " + laptop.getCost() + " €" };
 
 								  DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
 								  
@@ -604,6 +604,135 @@ public class Client extends JFrame {
 		categoryMenu.add(mntmLaptop);
 		
 		JMenuItem mntmServer = new JMenuItem("Servers");
+		mntmServer.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				
+				try {
+					output.writeObject(7);
+					output.flush();
+					// Store the saved string 
+					String resultString = ((String)input.readObject());
+					// Split each row
+					String servers[] = resultString.split("\\r?\\n");					
+					// Dynamically create a JPanel for each product containing the appropriate information
+					// Clear panelContainer before adding components
+					panelContainer.removeAll();
+					panelContainer.revalidate();
+					
+					for(int i = 0;i<servers.length;i++)
+					{
+						// for each iteration assign all variables from each row
+						String variables[] = servers[i].split(",");
+						ComponentServer server = new ComponentServer(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],variables[6],Integer.valueOf(variables[7]),variables[8]);
+
+						CustomPanel newPane = new CustomPanel(server);	
+						panelContainer.add(newPane);
+						
+						// Button Panel
+						JPanel btnPanel = new JPanel();
+						btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+						btnPanel.setBackground(new Color(0, 204, 153));
+						LayoutManager layout = new FlowLayout();
+						btnPanel.setLayout(layout);
+						
+						newPane.add(btnPanel);
+						
+						JButton cartBtn = new JButton("Add To Cart");
+						cartBtn.setBackground(Color.WHITE);
+						cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));	
+						btnPanel.add(cartBtn);
+						cartBtn.addActionListener(new ActionListener() { 
+							  public void actionPerformed(ActionEvent e) { 
+								  
+								  
+								  Object[] row = { server.getName(), server.getType(), server.getCost(), server.getName() + " " + server.getType() + " " + server.getCost() + " €" };
+
+								  DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
+								  
+								  tableModel.addRow(row);
+
+								  totalCost += server.getCost();
+								  lblCostValue.setText(String.valueOf(totalCost)+"€");
+							  }
+
+						  }
+						);
+						
+						JButton customizeBtn = new JButton("Customize");
+						customizeBtn.setBackground(Color.WHITE);
+						customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+						btnPanel.add(customizeBtn);
+
+						customizeBtn.addActionListener(new ActionListener() { 
+							  public void actionPerformed(ActionEvent e) { 
+								  
+								  // Remove all desktops apart from the selected from the panel
+								  for (Component cp : panelContainer.getComponents() ){
+									  if(cp != customizeBtn.getParent().getParent())
+								        cp.setVisible(false);
+								 }
+								  
+								  // hide the customize button
+								  customizeBtn.setVisible(false);
+									try {
+										// Fetch all components from the database, store them into appropriate strings
+
+										output.writeObject(3);
+										output.flush();
+										String CPU = ((String)input.readObject());
+										
+										output.writeObject(4);
+										output.flush();
+										String RAM = ((String)input.readObject());
+										
+										// Cut the strings and separate on each row
+										String processors[] = CPU.split("\\r?\\n");
+										String memories[] = RAM.split("\\r?\\n");
+										// retrieve the cost of all items
+										// Create the component tabel with appropriate values
+										for(int i = 0;i<variables.length;i++)
+										{
+											System.out.println(i + " " + variables[i]);
+										}
+										ComponentPanel compPanel = new ComponentPanel(processors,memories,variables[0],variables[6],variables[5]);	
+										panelContainer.add(compPanel);
+										
+										//Create a button for changing values between compPanel and CustomPanel
+										JButton changeBtn = new JButton("Change");
+										changeBtn.setBackground(Color.WHITE);
+										changeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+										compPanel.add(changeBtn);
+										
+										// Get the selected value from compPanel and add it to the current configuration on the custom panel
+										changeBtn.addActionListener(new ActionListener() { 
+											  public void actionPerformed(ActionEvent e) { 
+												 // Update the name of component to Custom
+												 // Store index and name of component being changed
+												 int itemIndex = compPanel.getSelectedIndex();
+												 String itemValue = compPanel.getSelectedElement();
+												 
+												 // Update the configuration by passing the necessary values
+												 newPane.updateEventServer(itemIndex, itemValue);
+											  }
+										  }
+										);
+								
+									} catch (IOException | ClassNotFoundException e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									}
+							  } 
+							} );
+					}
+					
+				} catch (IOException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		categoryMenu.add(mntmServer);
 		
 		JButton btnViewOrders = new JButton("View Orders");
