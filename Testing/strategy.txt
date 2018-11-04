@@ -17,3 +17,28 @@ update/functionality has been introduced.
 1. Tester is given the client with a working connection to the server and database. 
 2. The tester is given specific tasks which will be documented and timed by the developer. 
 3. Each testing session the previous tests will be iterated in order to compare and check times for differences in time.
+
+#######################################################################################
+
+Task One:
+1. Add one desktop, two laptops and one server to the shopping cart.
+2. Add one more desktop which has a GTX 1080Ti Graphics Card.
+3. Remove one of the laptops from the shopping cart.
+4. Remove the most expensive desktop.
+5. Pay with Credit card, have the email field being "mkhardwareproject@gmail.com"
+6. View your order on the application. 
+7. Cancel the order.
+
+Task Two:
+1. Buy the most expensive Laptop possible.
+2. Buy the cheapest Server possible.
+3. Buy a desktop which costs more than 1200 euros.
+
+Task three:
+1. Try to break the application.
+2. Try to remove an order which isn't yours.
+
+Questions:
+1. What made you confused?
+2. What changes to the navigation would you like?
+3. What did 
