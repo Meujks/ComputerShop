@@ -1,0 +1,36 @@
+####################################################################################################################################
+# Tester: Melinda Age 23, Not so experienced with computers or shopping online.
+
+1. Time: 03:31 Seconds Goal: 4 minutes
+
+2. Time: 01:02 Goal: 2 minutes
+
+3. 
+* Added an enourmous amount of items to the cart, program did not crash.
+If the project was to be taken further it should contain a limit or a stock number of the store so there is a limit.
+
+* Failed to find another order
+
+Questions:
+1. Change button in Customization should change component automatically
+2. Should be a home button, Contact information should also be shown somewhere
+3. Home button, Contact information.
+
+
+####################################################################################################################################
+# Tester: Fredrik Age 22, Experienced with computers and shopping online.
+
+1. Time: 02:12 Seconds Goal: 4 minutes
+
+2. Time: 00:45 Goal: 2 minutes
+
+3. 
+* Tried to overflow the max Integer value for Cost. However it is displayed as a string with maximum chars at 2,147,483,647 (Felt way to tedious).
+
+* Failed to find another order
+
+Questions:
+1. Multiple Desktops should scroll downwards not to the side.
+2. Was fine.
+3. Contact information.
+4. Noted that when searching for order, SQL injections might be possible.
