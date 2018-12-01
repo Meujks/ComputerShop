@@ -1,3 +1,27 @@
+##############################################################################################################################
+Task One:
+1. Add one desktop, two laptops and one server to the shopping cart.
+2. Add one more desktop which has a GTX 1080Ti Graphics Card.
+3. Remove one of the laptops from the shopping cart.
+4. Remove the most expensive desktop.
+5. Pay with Credit card, have the email field being "mkhardwareproject@gmail.com"
+6. View your order on the application. 
+7. Cancel the order.
+
+Task Two:
+1. Buy the most expensive Laptop possible.
+2. Buy the cheapest Server possible.
+3. Buy a desktop which costs more than 1200 euros.
+
+Task three:
+1. Try to break the application.
+2. Try to remove an order which isn't yours.
+
+Questions:
+1. What made you confused?
+2. What changes to the navigation would you like?
+3. What was missing?
+
 ####################################################################################################################################
 # Tester: Melinda Age 23, Not so experienced with computers or shopping online.
 
@@ -13,7 +37,9 @@ If the project was to be taken further it should contain a limit or a stock numb
 
 Questions:
 1. Change button in Customization should change component automatically
-2. Should be a home button, Contact information should also be shown somewhere
+2. Should be a home button, Contact
+
+ information should also be shown somewhere
 3. Home button, Contact information.
 
 
