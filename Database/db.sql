@@ -227,3 +227,5 @@ INSERT INTO `Products`(`pName`,`mid`,`cid`,`pType`)
 VALUE("Server",3,3,"ThinkServer");
 INSERT INTO `Server`(`pid`,`sFormFactor`,`sScalability`,`sChassId`)
 VALUES(11,"Tower - 4U","1-Way",3);
+
+ALTER TABLE `ordertable` CHANGE `oItems` `oItems` LONGTEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;

@@ -1,65 +1,44 @@
 
-public abstract class Product {
-	
-	private String name;
-	private String ram;
-	private String cpu;
-	private String type;
-	private int cost;
-	String pathOfImage;
-	
-	public abstract String toStringSpec();
+public class Laptop extends Product {
 
-	
-	public Product(String name,String ram,String cpu,String type,int cost,String path)
-	{
-		this.setName(name);
-		this.setRam(ram);
-		this.setCpu(cpu);
-		this.setType(type);
-		this.setCost(cost);
-		this.setPathOfImage(path);
+	private String inches;
+	private String mgpu;
+	private String lChassi;
+
+	public Laptop(String name, String type, String lChassi, String mgpu, String cpu, String ram, int cost, String path,
+			String inches) {
+		super(name, ram, cpu, type, cost, path);
+		this.setInches(inches);
+		this.setMgpu(mgpu);
+		this.setlChassi(lChassi);
 	}
-	public String getName() {
-		return name;
+
+	public String getInches() {
+		return inches;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setInches(String inches) {
+		this.inches = inches;
 	}
-	public String getRam() {
-		return ram;
+
+	public String getMgpu() {
+		return mgpu;
 	}
-	public void setRam(String ram) {
-		this.ram = ram;
+
+	public void setMgpu(String mgpu) {
+		this.mgpu = mgpu;
 	}
-	public String getCpu() {
-		return cpu;
+
+	public String toStringSpec() {
+		return (this.mgpu + " " + this.inches);
 	}
-	public void setCpu(String cpu) {
-		this.cpu = cpu;
+
+	public String getlChassi() {
+		return lChassi;
 	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public int getCost() {
-		return cost;
-	}
-	public void setCost(int cost) {
-		this.cost = cost;
-	}
-	public String getPathOfImage() {
-		return this.pathOfImage;
-	}
-	public void setPathOfImage(String path) {
-		this.pathOfImage = path;
-	}
-		
-	public String toString()
-	{
-		return (this.name + " " + this.type + " " + this.cpu + " " + this.ram +" " + this.cost) + " " + toStringSpec();
+
+	public void setlChassi(String lChassi) {
+		this.lChassi = lChassi;
 	}
 
 }

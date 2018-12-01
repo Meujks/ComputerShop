@@ -80,7 +80,7 @@ public class Client extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(100, 100, 1366, 768);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(0, 102, 102));
+		contentPane.setBackground(new Color(128,203,196));
 		contentPane.setPreferredSize(new Dimension(400, 300));
 
 		contentPane.setBorder(new LineBorder(new Color(0, 102, 153), 1, true));
@@ -91,9 +91,10 @@ public class Client extends JFrame {
 		
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(47, 79, 79), 3, true));
-		panel.setForeground(new Color(51, 102, 102));
-		panel.setBackground(new Color(51, 102, 102));
+		panel.setBorder(new LineBorder(new Color(79,154,148), 3, true));
+		panel.setForeground(new Color(79,154,148));
+		
+		panel.setBackground(new Color(79,154,148));
 		
 		JLabel icon = new JLabel("");
 		icon.setIcon(new ImageIcon("C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\MK.png"));
@@ -101,8 +102,8 @@ public class Client extends JFrame {
 		DefaultListModel shopModel = new DefaultListModel();
 		
 		JPanel shopPanel = new JPanel();
-		shopPanel.setBorder(new LineBorder(new Color(0, 102, 102), 3, true));
-		shopPanel.setBackground(new Color(0, 204, 153));
+		shopPanel.setBorder(new LineBorder(new Color(79,154,148), 3, true));
+		shopPanel.setBackground(new Color(79,154,148));
 		
 		JScrollPane mainScrollPane = new JScrollPane();
 		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -130,7 +131,7 @@ public class Client extends JFrame {
 		JPanel panelContainer = new JPanel();
 		panelContainer.setBorder(null);
 		mainScrollPane.setViewportView(panelContainer);
-		panelContainer.setBackground(new Color(0, 102, 102));
+		panelContainer.setBackground(new Color(128,203,196));
 		panelContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnCheckout = new JButton("Proceed to checkout");
@@ -138,13 +139,13 @@ public class Client extends JFrame {
 		btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		btnCheckout.setVisible(true);
 
-		
 		btnCheckout.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				 
 				  panelContainer.removeAll();
 				  panelContainer.revalidate();
-				  
+				  panelContainer.updateUI();
+
 				  // Fetch all items from the last row of the table which holds a tostring of each object
 				  String itemsFromTable="";
 				 
@@ -163,7 +164,7 @@ public class Client extends JFrame {
 			        payPanel.getConfirmBtn().addActionListener(new ActionListener() { 
 						  public void actionPerformed(ActionEvent e) { 
 							    //Check if all fields are filled
-							  String choice = (String) payPanel.getOptionList().getSelectedItem();
+							  String choice = payPanel.getPaymentMethod();
 
 							  switch (choice) {
 							      case "Credit Card":
@@ -190,10 +191,28 @@ public class Client extends JFrame {
 									  }
 									
 							      break;
-							  case "Cash":
-							
-							      break;
 							  case "Bank Transfer":
+								  
+								  if(!payPanel.bankTransferisEmpty())
+								  {									
+										try {
+											String values[] = payPanel.getAllFieldsBankTransfer();
+											
+											output.writeObject(values);	
+											output.flush();
+											JOptionPane.showMessageDialog(null,"Success, an email has been sent containing order details");
+										} catch (IOException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+								  }
+								  else
+								  {
+									  JOptionPane.showMessageDialog(null,"Missing input on all fields, please fill in information for every field.");
+								  }
+								  
+							      break;
+							  case "":
 							
 							      break;
 							  default:
@@ -228,7 +247,6 @@ public class Client extends JFrame {
 		btnRemoveItem.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 		btnRemoveItem.setBackground(new Color(255, 255, 255));
 			
-		
 		GroupLayout gl_shopPanel = new GroupLayout(shopPanel);
 		gl_shopPanel.setHorizontalGroup(
 			gl_shopPanel.createParallelGroup(Alignment.TRAILING)
@@ -292,7 +310,6 @@ public class Client extends JFrame {
 			public void mouseReleased(MouseEvent arg0) {
 				  DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
 				  int costOfItem = Integer.parseInt(tableModel.getValueAt(shopTable.getSelectedRow(), 2).toString());
-				  
 
 				  String oldCost = lblCostValue.getText();
 				  oldCost = oldCost.substring(0, oldCost.length() - 1);
@@ -301,14 +318,11 @@ public class Client extends JFrame {
 				  totalCost = newCost;
 				  System.out.println(newCost);
 				  lblCostValue.setText(String.valueOf(newCost)+"€");
-				  
 				  tableModel.removeRow(shopTable.getSelectedRow());
-
 			}
 		});
 		
 		shopPanel.setLayout(gl_shopPanel);
-		
 		JPopupMenu categoryMenu = new JPopupMenu();
 		categoryMenu.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		categoryMenu.setBackground(Color.WHITE);
@@ -327,9 +341,8 @@ public class Client extends JFrame {
 
 		btnProducts.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		btnProducts.setBackground(new Color(255, 255, 255));
-		
 		addPopup(btnProducts, categoryMenu);
-		
+
 		JMenuItem mntmDesktop = new JMenuItem("Desktops");
 		mntmDesktop.addMouseListener(new MouseAdapter() {
 			@Override
@@ -351,18 +364,20 @@ public class Client extends JFrame {
 					// Clear panelContainer before adding components
 					panelContainer.removeAll();
 					panelContainer.revalidate();
+					panelContainer.updateUI();
 					for(int i = 0;i<desktops.length;i++)
 					{
 						// for each iteration assign all variables from each row
 						String variables[] = desktops[i].split(",");
 						Desktop desktop = new Desktop(variables[0],variables[1],variables[2],variables[3],variables[4],variables[5],Integer.valueOf(variables[6]),variables[7]);
+					    DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
 						CustomPanel newPane = new CustomPanel(desktop);	
 						panelContainer.add(newPane);
 						
 						// Button Panel
 						JPanel btnPanel = new JPanel();
 						btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-						btnPanel.setBackground(new Color(0, 204, 153));
+						btnPanel.setBackground(new Color(178,254,247));
 						LayoutManager layout = new FlowLayout();
 						btnPanel.setLayout(layout);
 						
@@ -488,7 +503,7 @@ public class Client extends JFrame {
 					// Clear panelContainer before adding components
 					panelContainer.removeAll();
 					panelContainer.revalidate();
-					
+					panelContainer.updateUI();
 					for(int i = 0;i<laptops.length;i++)
 					{
 						// for each iteration assign all variables from each row
@@ -501,7 +516,7 @@ public class Client extends JFrame {
 						// Button Panel
 						JPanel btnPanel = new JPanel();
 						btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-						btnPanel.setBackground(new Color(0, 204, 153));
+						btnPanel.setBackground(new Color(178,254,247));
 						LayoutManager layout = new FlowLayout();
 						btnPanel.setLayout(layout);
 						
@@ -619,7 +634,8 @@ public class Client extends JFrame {
 					// Clear panelContainer before adding components
 					panelContainer.removeAll();
 					panelContainer.revalidate();
-					
+					panelContainer.updateUI();
+
 					for(int i = 0;i<servers.length;i++)
 					{
 						// for each iteration assign all variables from each row
@@ -632,7 +648,7 @@ public class Client extends JFrame {
 						// Button Panel
 						JPanel btnPanel = new JPanel();
 						btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-						btnPanel.setBackground(new Color(0, 204, 153));
+						btnPanel.setBackground(new Color(178,254,247));
 						LayoutManager layout = new FlowLayout();
 						btnPanel.setLayout(layout);
 						
@@ -740,8 +756,9 @@ public class Client extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				
-				panelContainer.removeAll();
-				panelContainer.revalidate();
+				 panelContainer.removeAll();
+				 panelContainer.revalidate();
+				 panelContainer.updateUI();
 				
 				ViewPanel viewPanel = new ViewPanel();
 				panelContainer.add(viewPanel);
@@ -759,8 +776,10 @@ public class Client extends JFrame {
 				
 		      viewPanel.getSearchButton().addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
+				  if(!viewPanel.searchFieldIsEmpty()) {
 					try {
-						output.writeObject(viewPanel.getSearchField());
+						String searchString = ("Fetch"+","+(String) viewPanel.getSearchField());
+						output.writeObject(searchString);
 						output.flush();
 						String result = ((String)input.readObject());
 						
@@ -777,12 +796,15 @@ public class Client extends JFrame {
 							tableModel.addRow(row);
 							
 						}
-					} 
+						
+						} 
 						catch (IOException | ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
+			  }
+				  
 			  }
 			  });
 
@@ -790,36 +812,40 @@ public class Client extends JFrame {
 					@Override
 					public void mouseReleased(MouseEvent arg0) {
 						  DefaultTableModel tableModel = (DefaultTableModel) viewPanel.getOrderTable().getModel();
-		
-						  
+						  // If the table isnt empty
+						  if(tableModel.getRowCount() > 0)
+						  {
 						  // Send request for server to remove
 						  try {
-							output.writeObject(1);
-							output.flush();
+							  String searchString = ("Remove"+","+(String) viewPanel.getSearchField());
+							  output.writeObject(searchString);
+							  output.flush();
+							  String response = ((String)input.readObject());
+							  System.out.println(response);
+							  // receive response
+							  // compare status
+							  if(response.equals("Success"))
+							  {
+								  tableModel.removeRow(viewPanel.getOrderTable().getSelectedRow());
+								  JOptionPane.showMessageDialog(null, "Order has been canceled. \n"
+								  		+ "For any inconvenience please message us at mkhardwareproject@gmail.com");
+							  }
+							  else if(response.equals("Fail")) {
+								  JOptionPane.showMessageDialog(null, "Unable to cancel due to the fact that the order has already been sent from warehouse \n"
+								  		+ "For any inconvenience please message us at mkhardwareproject@gmail.com");
+							  }
 
-						} catch (IOException e) {
+						} catch (IOException | ClassNotFoundException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						  						  
-						  // receive response
-						  String response = "";
-						  
-						  
-						  // compare status
-						  
-						  if(response != "")
-						  {
-							  tableModel.removeRow(viewPanel.getOrderTable().getSelectedRow());
-							  JOptionPane.showMessageDialog(null, "Order has been canceled, a full payback has been issued \n"
-							  		+ "For any inconvenience please message us at mkhardwareproject@gmail.com");
-						  }
-						  else {
-							  JOptionPane.showMessageDialog(null, "Unable to cancel due to the fact that the order has already been sent from warehouse \n"
-							  		+ "For any inconvenience please message us at mkhardwareproject@gmail.com");
-						  }
-
 					}
+						  else
+						  {
+							  JOptionPane.showMessageDialog(null, "No order has been selected.");
+						  }
+						  
+					  }
 				});
 
 			}

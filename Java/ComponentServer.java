@@ -1,50 +1,44 @@
 
 public class ComponentServer extends Product {
-	
+
 	String formFactor;
 	String scalability;
 	String chassi;
-	
-	
-	public ComponentServer(String name, String type, String formFactor, String scalability,String sChassi, String cpu, String ram, int cost, String path){      
-		super(name, ram, cpu, type,cost,path);
+
+	public ComponentServer(String name, String type, String formFactor, String scalability, String sChassi, String cpu,
+			String ram, int cost, String path) {
+		super(name, ram, cpu, type, cost, path);
 		this.setFormFactor(formFactor);
 		this.setScalabilty(scalability);
 		this.setChassi(sChassi);
-
 	}
 
-	public void setChassi(String value)
-	{
+	public void setChassi(String value) {
 		this.chassi = value;
 	}
-	public String getChassi()
-	{
+
+	public String getChassi() {
 		return this.chassi;
 	}
-	public void setScalabilty(String value)
-	{
+
+	public void setScalabilty(String value) {
 		this.scalability = value;
 	}
-	public String getScalability()
-	{
+
+	public String getScalability() {
 		return this.scalability;
 	}
-	
-	public void setFormFactor(String value)
-	{
+
+	public void setFormFactor(String value) {
 		this.formFactor = value;
 	}
-	public String getFormFactor()
-	{
+
+	public String getFormFactor() {
 		return this.formFactor;
 	}
 
-
-	public String toStringSpec()
-	{
+	public String toStringSpec() {
 		return (this.formFactor + " " + this.scalability);
 	}
-
 
 }

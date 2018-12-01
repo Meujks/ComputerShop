@@ -27,14 +27,13 @@ public class ViewPanel extends JPanel {
     
 	public ViewPanel()
 	{
-
 		contentPanel = new JPanel();
 		contentPanel.setPreferredSize(new Dimension(800,300));
-		contentPanel.setBackground(new Color(0, 204, 153));
-	    Border roundedBorder = new LineBorder(new Color(47, 79, 79), 6, true);
+		contentPanel.setBackground(new Color(178,254,247));
+	    Border roundedBorder = new LineBorder(new Color(178,254,247), 3, true);
 	    contentPanel.setLayout(new GridBagLayout());
-	    this.setBorder(roundedBorder);
-		this.setBackground(new Color(0, 204, 153));
+		this.setBorder(roundedBorder);
+		this.setBackground(new Color(178,254,247));
         this.add(contentPanel);
         
         searchField = new JTextField(30);
@@ -99,8 +98,11 @@ public class ViewPanel extends JPanel {
   		contentPanel.add(cancelBtn,gc);
   		
 	}
+	public boolean searchFieldIsEmpty()
+	{
+		return this.searchField.getText().isEmpty();
+	}
 	public Object getSearchField() {
-		// TODO Auto-generated method stub
 		return this.searchField.getText();
 	}
 	public JButton getSearchButton()
