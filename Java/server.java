@@ -18,6 +18,10 @@ public class Server {
 	private ServerSocket server;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
+	private Connection conn;
+	private Statement myStmt;
+	private ResultSet result;
+	private PreparedStatement pstmt;
 
 	public Server() {
 
@@ -25,17 +29,17 @@ public class Server {
 
 	public void startServer() {
 		try {
-			server = new ServerSocket(5000, 100);
+			this.server = new ServerSocket(5000, 100);
 
 			while (true) {
 				try {
-					waitForConnection();
-					setupStreams();
-					whileRunning();
+					this.waitForConnection();
+					this.setupStreams();
+					this.whileRunning();
 				} catch (IOException exc) {
 					System.out.println("Server ended the connection!");
 				} finally {
-					closeServer();
+					this.closeServer();
 				}
 			}
 		} catch (IOException exc) {
@@ -46,15 +50,15 @@ public class Server {
 
 	private void waitForConnection() throws IOException {
 		System.out.println("Server Waiting For Connection..");
-		connection = server.accept();
+		this.connection = server.accept();
 		System.out.println("Server Connected to " + connection.getInetAddress().getHostName());
 
 	}
 
 	private void setupStreams() throws IOException {
-		output = new ObjectOutputStream(connection.getOutputStream());
-		output.flush();
-		input = new ObjectInputStream(connection.getInputStream());
+		this.output = new ObjectOutputStream(connection.getOutputStream());
+		this.output.flush();
+		this.input = new ObjectInputStream(connection.getInputStream());
 		System.out.println("Streams Successfully Setup");
 
 	}
@@ -71,47 +75,47 @@ public class Server {
 
 					switch ((int) request) {
 					case 1:
-						getAllDesktops();
+						this.getAllDesktops();
 						break;
 					case 2:
-						getAllGPU();
+						this.getAllGPU();
 						break;
 					case 3:
-						getAllCPU();
+						this.getAllCPU();
 						break;
 					case 4:
-						getAllRAM();
+						this.getAllRAM();
 						break;
 					case 5:
-						getAllChassis();
+						this.getAllChassis();
 						break;
 					case 6:
-						getAllLaptops();
+						this.getAllLaptops();
 						break;
 					case 7:
-						getAllServers();
+						this.getAllServers();
 						break;
 					case 8:
-						getAllOrders();
+						this.getAllOrders();
 						break;
 					}
 				} else if (request instanceof String[]) {
-					sendOrder((String[]) request);
+					this.sendOrder((String[]) request);
 				} else if (request instanceof String) {
 					String result[] = ((String) request).split(",");
 
 					switch (result[0]) {
 					case "Fetch":
-						getOrder(result[1]);
+						this.getOrder(result[1]);
 						break;
 					case "Remove":
-						removeOrder(result[1]);
+						this.removeOrder(result[1]);
 						break;
 					case "Shipped":
-						changeToShipped(result[1]);
+						this.changeToShipped(result[1]);
 						break;
 					case "NotShipped":
-						changeToNotShipped(result[1]);
+						this.changeToNotShipped(result[1]);
 						break;
 					}
 				}
@@ -125,21 +129,22 @@ public class Server {
 
 	private void getAllOrders() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = this.conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("SELECT * FROM `ordertable`;");
+			this.result = myStmt.executeQuery("SELECT * FROM `ordertable`;");
 			String send = "";
 			while (result.next()) {
-				send += result.getString(1) + "," + result.getString(2) + "," + result.getString(3) + "," + result.getString(5) + "\n";
+				send += result.getString(1) + "," + result.getString(2) + "," + result.getString(3) + ","
+						+ result.getString(5) + "\n";
 			}
-			
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -148,14 +153,13 @@ public class Server {
 
 	private void changeToNotShipped(String orderId) {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
 			// add result from query to result variable
-			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE `ordertable` SET `oStatus`= \"Shipped\" WHERE `oid` = ?;");
-			pstmt.setString(1, orderId);
+			this.pstmt = conn.prepareStatement("UPDATE `ordertable` SET `oStatus`= \"Shipped\" WHERE `oid` = ?;");
+			this.pstmt.setString(1, orderId);
 			String send = "Success";
 
 			int result = pstmt.executeUpdate();
@@ -163,9 +167,9 @@ public class Server {
 				send = "Fail";
 			}
 
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -174,24 +178,24 @@ public class Server {
 
 	private void changeToShipped(String orderId) {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
 			// add result from query to result variable
-			PreparedStatement pstmt = conn.prepareStatement(
-					"UPDATE `ordertable` SET `oStatus`= \"Not Shipped\" WHERE `oid` = ?;");
-			pstmt.setString(1, orderId);
+			this.pstmt = this.conn
+					.prepareStatement("UPDATE `ordertable` SET `oStatus`= \"Not Shipped\" WHERE `oid` = ?;");
+			this.pstmt.setString(1, orderId);
 			String send = "Success";
 
-			int result = pstmt.executeUpdate();
+			int result = this.pstmt.executeUpdate();
 			if (result == 0) {
 				send = "Fail";
 			}
 
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -200,13 +204,13 @@ public class Server {
 
 	private void getAllServers() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = this.conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("SELECT \r\n" + "`Products`.`pName`, `Products`.`pType`,\r\n"
+			this.result = this.myStmt.executeQuery("SELECT \r\n" + "`Products`.`pName`, `Products`.`pType`,\r\n"
 					+ "`Server`.`sFormFactor`,`Server`.`sScalability`,\r\n"
 					+ "CONCAT(`serverChassis`.`sChassName`,' - ',`serverChassis`.`sChassCost`,'€')\r\n"
 					+ "AS 'Chassi', \r\n"
@@ -222,15 +226,16 @@ public class Server {
 					+ "INNER JOIN `Memories`\r\n" + "ON `Memories`.`mid` = `Products`.`mid`;");
 
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + "," + result.getString(2) + "," + result.getString(3) + ","
-						+ result.getString(4) + "," + result.getString(5) + "," + result.getString(6) + ","
-						+ result.getString(7) + "," + result.getString(8) + "," + result.getString(9) + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + "," + this.result.getString(2) + "," + this.result.getString(3) + ","
+						+ this.result.getString(4) + "," + this.result.getString(5) + "," + this.result.getString(6)
+						+ "," + this.result.getString(7) + "," + this.result.getString(8) + ","
+						+ this.result.getString(9) + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -241,13 +246,13 @@ public class Server {
 
 	private void getAllLaptops() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = this.conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("SELECT \r\n" + "`Products`.`pName`,`Products`.`pType`,\r\n"
+			this.result = this.myStmt.executeQuery("SELECT \r\n" + "`Products`.`pName`,`Products`.`pType`,\r\n"
 					+ "CONCAT(`laptopChassis`.`lChassName`,' - ',`laptopChassis`.`lChassCost`,'€')\r\n"
 					+ "AS 'Chassi', \r\n"
 					+ "CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb - ',`Graphics`.`gCost`,'€')\r\n"
@@ -266,32 +271,32 @@ public class Server {
 					+ "ON `Memories`.`mid` = `Products`.`mid`;");
 
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + "," + result.getString(2) + "," + result.getString(3) + ","
-						+ result.getString(4) + "," + result.getString(5) + "," + result.getString(6) + ","
-						+ result.getString(7) + "," + result.getString(8) + "," + result.getString(9) + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + "," + this.result.getString(2) + "," + this.result.getString(3) + ","
+						+ this.result.getString(4) + "," + this.result.getString(5) + "," + this.result.getString(6)
+						+ "," + this.result.getString(7) + "," + this.result.getString(8) + ","
+						+ this.result.getString(9) + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
+
 		} catch (Exception exc) {
 			exc.printStackTrace();
-
 		}
-
 	}
 
 	private void removeOrder(String orderId) {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
 			// add result from query to result variable
-			PreparedStatement pstmt = conn.prepareStatement(
+			this.pstmt = conn.prepareStatement(
 					"DELETE FROM `Ordertable` WHERE `Ordertable`.`oid` = ? AND `OrderTable`.`oStatus` =\"Not Shipped\"; ");
-			pstmt.setString(1, orderId);
+			this.pstmt.setString(1, orderId);
 			String send = "Success";
 
 			int result = pstmt.executeUpdate();
@@ -299,9 +304,9 @@ public class Server {
 				send = "Fail";
 			}
 
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -310,23 +315,23 @@ public class Server {
 
 	private void getOrder(String orderId) {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt
+			this.result = myStmt
 					.executeQuery("SELECT * FROM `ordertable` WHERE `ordertable`.`oid` = '" + orderId + "';");
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + "," + result.getString(2) + "," + result.getString(3) + ","
-						+ result.getString(4) + "," + result.getString(5) + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + "," + this.result.getString(2) + "," + this.result.getString(3) + ","
+						+ this.result.getString(4) + "," + this.result.getString(5) + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -337,23 +342,23 @@ public class Server {
 	private void insertOrder(String orderId, String fName, String lName, String email, String items) {
 
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
 			String oName = fName + " " + lName;
 			// add result from query to result variable
-			PreparedStatement pstmt = conn.prepareStatement(
+			this.pstmt = conn.prepareStatement(
 					"INSERT INTO `OrderTable`(oid,oCustomerName,oCustomerEmail,oItems,oStatus) VALUE (?,?,?,?,?);");
-			pstmt.setString(1, orderId);
-			pstmt.setString(2, oName);
-			pstmt.setString(3, email);
-			pstmt.setString(4, items);
-			pstmt.setString(5, "Not Shipped");
+			this.pstmt.setString(1, orderId);
+			this.pstmt.setString(2, oName);
+			this.pstmt.setString(3, email);
+			this.pstmt.setString(4, items);
+			this.pstmt.setString(5, "Not Shipped");
 
-			pstmt.executeUpdate();
+			this.pstmt.executeUpdate();
 
-			conn.close();
+			this.conn.close();
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -383,9 +388,9 @@ public class Server {
 		System.out.println("Closing Server..");
 
 		try {
-			output.close();
-			input.close();
-			connection.close();
+			this.output.close();
+			this.input.close();
+			this.connection.close();
 
 		} catch (IOException exc) {
 			exc.printStackTrace();
@@ -395,13 +400,13 @@ public class Server {
 
 	public void getAllDesktops() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = this.conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery("SELECT \r\n"
+			this.result = this.myStmt.executeQuery("SELECT \r\n"
 					+ "CONCAT(`Graphics`.`gManufacturer`,' ', `Graphics`.`gName`,' ', `Graphics`.`gMemory`,'Gb - ',`Graphics`.`gCost`,'€')\r\n"
 					+ "AS 'GPU',\r\n" + "CONCAT(`Chassis`.`chassName`,' - ',`Chassis`.`chassCost`,'€')\r\n"
 					+ "AS 'Chassi', \r\n"
@@ -418,15 +423,15 @@ public class Server {
 					+ "INNER JOIN `Memories`\r\n" + "ON `Memories`.`mid` = `Products`.`mid`;");
 
 			String send = "";
-			while (result.next()) {
-				send += result.getString(5) + "," + result.getString(4) + "," + result.getString(3) + ","
-						+ result.getString(6) + "," + result.getString(2) + "," + result.getString(1) + ","
-						+ result.getString(7) + "," + result.getString(8) + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(5) + "," + this.result.getString(4) + "," + this.result.getString(3) + ","
+						+ this.result.getString(6) + "," + this.result.getString(2) + "," + this.result.getString(1)
+						+ "," + this.result.getString(7) + "," + this.result.getString(8) + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -436,22 +441,22 @@ public class Server {
 
 	public void getAllChassis() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = this.conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt
+			this.result = this.myStmt
 					.executeQuery("SELECT `Chassis`.`chassName`, `Chassis`.`chassCost` FROM `Chassis`;");
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + " - " + result.getString(2) + "€" + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + " - " + this.result.getString(2) + "€" + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -460,23 +465,23 @@ public class Server {
 
 	public void getAllRAM() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery(
+			this.result = myStmt.executeQuery(
 					"SELECT `Memories`.`mName`, `Memories`.`mClassification`, `Memories`.`mSize`, `Memories`.`mSpeed`, `Memories`.`mCost` FROM `Memories`;");
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + " " + result.getString(2) + " " + result.getString(3) + "Gb "
-						+ result.getString(4) + "Mhz - " + result.getString(5) + "€" + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + " " + this.result.getString(2) + " " + this.result.getString(3)
+						+ "Gb " + this.result.getString(4) + "Mhz - " + this.result.getString(5) + "€" + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -485,23 +490,23 @@ public class Server {
 
 	public void getAllCPU() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = this.conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery(
+			this.result = this.myStmt.executeQuery(
 					"SELECT `Processors`.`cManufacturer`, `Processors`.`cName`, `Processors`.`cCores`, `Processors`.`cSpeed`, `Processors`.`cCost` FROM `Processors`;");
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + " " + result.getString(2) + " " + result.getString(3) + " "
-						+ result.getString(4) + "Mhz - " + result.getString(5) + "€" + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + " " + this.result.getString(2) + " " + this.result.getString(3) + " "
+						+ this.result.getString(4) + "Mhz - " + this.result.getString(5) + "€" + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();
@@ -510,23 +515,23 @@ public class Server {
 
 	public void getAllGPU() {
 		try {
-			Connection conn = DriverManager.getConnection(
+			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
 					"root", "");
 			// Create a statement for query
-			Statement myStmt = conn.createStatement();
+			this.myStmt = conn.createStatement();
 			// add result from query to result variable
-			ResultSet result = myStmt.executeQuery(
+			this.result = myStmt.executeQuery(
 					"SELECT `Graphics`.`gManufacturer`,`Graphics`.`gName`,`Graphics`.`gMemory`, `Graphics`.`gCost` FROM `Graphics`;");
 			String send = "";
-			while (result.next()) {
-				send += result.getString(1) + " " + result.getString(2) + " " + result.getString(3) + "Gb - "
-						+ result.getString(4) + "€" + "\n";
+			while (this.result.next()) {
+				send += this.result.getString(1) + " " + this.result.getString(2) + " " + this.result.getString(3)
+						+ "Gb - " + this.result.getString(4) + "€" + "\n";
 
 			}
-			output.writeObject(send);
-			output.flush();
-			conn.close();
+			this.output.writeObject(send);
+			this.output.flush();
+			this.conn.close();
 
 		} catch (Exception exc) {
 			exc.printStackTrace();

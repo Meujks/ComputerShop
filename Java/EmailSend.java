@@ -14,21 +14,22 @@ public class EmailSend {
 	private String orderID;
 	private String messageText;
 	private String address, postalCode, OCR;
+
 	private boolean sessionDebug;
 
 	public EmailSend(String userName, String userLastName, String userEmail, String userAddress, String userPostalCode,
 			String holder, String userCredit, String userItems) {
 		try {
-			host = "smtp.gmail.com";
-			user = "mkhardwareproject@gmail.com";
-			pass = "FinalProj123";
-			to = userEmail;
-			from = "mkhardwareproject@gmail.com";
-			subject = "Order Confirmation - MK Hardware";
-			address = userAddress;
-			postalCode = userPostalCode;
-			orderID = generateOrderID();
-			messageText = "Order ID: " + orderID + "\n" + "Name: " + userName + " " + userLastName + "\nAddress: "
+			this.host = "smtp.gmail.com";
+			this.user = "mkhardwareproject@gmail.com";
+			this.pass = "";
+			this.to = userEmail;
+			this.from = "mkhardwareproject@gmail.com";
+			this.subject = "Order Confirmation - MK Hardware";
+			this.address = userAddress;
+			this.postalCode = userPostalCode;
+			this.orderID = generateOrderID();
+			this.messageText = "Order ID: " + orderID + "\n" + "Name: " + userName + " " + userLastName + "\nAddress: "
 					+ userAddress + ", " + userPostalCode + "\nAccount Holder:" + holder
 					+ "\nCredit Card Starting with [XXXX]: " + userCredit + "\nItems:\n" + userItems;
 			sessionDebug = false;
@@ -64,17 +65,17 @@ public class EmailSend {
 	public EmailSend(String userName, String userLastName, String userEmail, String userAddress, String userPostalCode,
 			String userItems) {
 		try {
-			host = "smtp.gmail.com";
-			user = "mkhardwareproject@gmail.com";
-			pass = "FinalProj123";
-			to = userEmail;
-			from = "mkhardwareproject@gmail.com";
-			subject = "Order Confirmation - MK Hardware";
-			address = userAddress;
-			postalCode = userPostalCode;
-			orderID = generateOrderID();
-			OCR = generateOCRNumber();
-			messageText = "Order ID: " + orderID + "\n" + "Name: " + userName + " " + userLastName + "\nAddress: "
+			this.host = "smtp.gmail.com";
+			this.user = "mkhardwareproject@gmail.com";
+			this.pass = "FinalProj123";
+			this.to = userEmail;
+			this.from = "mkhardwareproject@gmail.com";
+			this.subject = "Order Confirmation - MK Hardware";
+			this.address = userAddress;
+			this.postalCode = userPostalCode;
+			this.orderID = generateOrderID();
+			this.OCR = generateOCRNumber();
+			this.messageText = "Order ID: " + orderID + "\n" + "Name: " + userName + " " + userLastName + "\nAddress: "
 					+ userAddress + ", " + userPostalCode + "\nOCR: " + OCR + "\nItems:\n" + userItems;
 			sessionDebug = false;
 			Properties props = System.getProperties();

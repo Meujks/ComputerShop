@@ -16,11 +16,22 @@ public class ComponentPanel extends JPanel {
 	private String selectedElement;
 	private int selectedIndex;
 
+	private String currentCPU;
+	private String currentGPU;
+	private String currentRAM;
+	private String currentCase;
+
+	private JList<String> itemList;
+	private JList<String> compList;
+	private DefaultListModel<String> itemModel;
+	private DefaultListModel<String> compModel;
+	private Border roundedBorder;
+
 	// DESKTOP
 	public ComponentPanel(String GPU[], String CPU[], String RAM[], String Chassi[], String currentName,
 			String currentMemory, String currentCpu, String currentType, String currentChassi, String currentGpu) {
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 		this.setPreferredSize(new Dimension(500, 200));
 		this.setForeground(new Color(178, 254, 247));
 		this.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -29,33 +40,29 @@ public class ComponentPanel extends JPanel {
 		this.setBackground(new Color(178, 254, 247));
 
 		// Objects
-
-		String currentCPU = currentCpu;
-		String currentGPU = currentGpu;
-		String currentRAM = currentMemory;
-		String currentCase = currentChassi;
-
-		DefaultListModel<String> compModel = new DefaultListModel<String>();
-		JList<String> compList = new JList<String>(compModel);
-		compList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		compList.setBackground(new Color(240, 248, 255));
-		compList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		compModel.addElement("Processor");
-		compModel.addElement("Graphics Card");
-		compModel.addElement("Memory");
-		compModel.addElement("Chassi");
-
-		DefaultListModel<String> itemModel = new DefaultListModel<String>();
-		JList<String> itemList = new JList<String>(itemModel);
-		itemList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		itemList.setBackground(new Color(240, 248, 255));
-		itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		itemList.setPreferredSize(new Dimension(200, 200));
-
-		populateList(CPU, itemModel, itemList, currentCpu);
+		this.currentCPU = currentCpu;
+		this.currentGPU = currentGpu;
+		this.currentRAM = currentMemory;
+		this.currentCase = currentChassi;
+		this.compModel = new DefaultListModel<String>();
+		this.compList = new JList<String>(compModel);
+		this.compList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.compList.setBackground(new Color(240, 248, 255));
+		this.compList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.compModel.addElement("Processor");
+		this.compModel.addElement("Graphics Card");
+		this.compModel.addElement("Memory");
+		this.compModel.addElement("Chassi");
+		this.itemModel = new DefaultListModel<String>();
+		this.itemList = new JList<String>(itemModel);
+		this.itemList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.itemList.setBackground(new Color(240, 248, 255));
+		this.itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.itemList.setPreferredSize(new Dimension(200, 200));
+		this.populateList(CPU, itemModel, itemList, currentCpu);
 
 		// Events
-		compList.addListSelectionListener(new ListSelectionListener() {
+		this.compList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				int choice = compList.getSelectedIndex();
 				selectedIndex = compList.getSelectedIndex();
@@ -77,56 +84,51 @@ public class ComponentPanel extends JPanel {
 			}
 		});
 
-		itemList.addListSelectionListener(new ListSelectionListener() {
+		this.itemList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				setSelectedElement(itemList.getSelectedValue());
 			}
 		});
-
-		compList.setSelectedIndex(0);
-
+		
+		this.compList.setSelectedIndex(0);
 		this.add(compList);
 		this.add(itemList);
-
 	}
 
 	// LAPTOP
 	public ComponentPanel(String GPU[], String CPU[], String RAM[], String currentName, String currentMemory,
 			String currentCpu, String currentType, String currentGpu) {
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
+		
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 		this.setPreferredSize(new Dimension(500, 200));
 		this.setForeground(new Color(51, 102, 102));
 		this.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.setBorder(roundedBorder);
 		this.setBackground(new Color(178, 254, 247));
-
+		
 		// Objects
-
-		String currentCPU = currentCpu;
-		String currentGPU = currentGpu;
-		String currentRAM = currentMemory;
-
-		DefaultListModel<String> compModel = new DefaultListModel<String>();
-		JList<String> compList = new JList<String>(compModel);
-		compList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		compList.setBackground(new Color(240, 248, 255));
-		compList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		compModel.addElement("Processor");
-		compModel.addElement("Graphics Card");
-		compModel.addElement("Memory");
-
-		DefaultListModel<String> itemModel = new DefaultListModel<String>();
-		JList<String> itemList = new JList<String>(itemModel);
-		itemList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		itemList.setBackground(new Color(240, 248, 255));
-		itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		itemList.setPreferredSize(new Dimension(200, 200));
-
-		populateList(CPU, itemModel, itemList, currentCpu);
+		this.currentCPU = currentCpu;
+		this.currentGPU = currentGpu;
+		this.currentRAM = currentMemory;
+		this.compModel = new DefaultListModel<String>();
+		this.compList = new JList<String>(compModel);
+		this.compList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.compList.setBackground(new Color(240, 248, 255));
+		this.compList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.compModel.addElement("Processor");
+		this.compModel.addElement("Graphics Card");
+		this.compModel.addElement("Memory");
+		this.itemModel = new DefaultListModel<String>();
+		this.itemList = new JList<String>(itemModel);
+		this.itemList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.itemList.setBackground(new Color(240, 248, 255));
+		this.itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.itemList.setPreferredSize(new Dimension(200, 200));
+		this.populateList(CPU, itemModel, itemList, currentCpu);
 
 		// Events
-		compList.addListSelectionListener(new ListSelectionListener() {
+		this.compList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				int choice = compList.getSelectedIndex();
 				selectedIndex = compList.getSelectedIndex();
@@ -145,14 +147,13 @@ public class ComponentPanel extends JPanel {
 			}
 		});
 
-		itemList.addListSelectionListener(new ListSelectionListener() {
+		this.itemList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				setSelectedElement(itemList.getSelectedValue());
 			}
 		});
 
-		compList.setSelectedIndex(0);
-
+		this.compList.setSelectedIndex(0);
 		this.add(compList);
 		this.add(itemList);
 
@@ -160,8 +161,8 @@ public class ComponentPanel extends JPanel {
 
 	// Server
 	public ComponentPanel(String CPU[], String RAM[], String currentName, String currentMemory, String currentCpu) {
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 		this.setPreferredSize(new Dimension(500, 200));
 		this.setForeground(new Color(51, 102, 102));
 		this.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -170,29 +171,25 @@ public class ComponentPanel extends JPanel {
 		this.setBackground(new Color(178, 254, 247));
 
 		// Objects
-
-		String currentCPU = currentCpu;
-		String currentRAM = currentMemory;
-
-		DefaultListModel<String> compModel = new DefaultListModel<String>();
-		JList<String> compList = new JList<String>(compModel);
-		compList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		compList.setBackground(new Color(240, 248, 255));
-		compList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		compModel.addElement("Processor");
-		compModel.addElement("Memory");
-
-		DefaultListModel<String> itemModel = new DefaultListModel<String>();
-		JList<String> itemList = new JList<String>(itemModel);
-		itemList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		itemList.setBackground(new Color(240, 248, 255));
-		itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		itemList.setPreferredSize(new Dimension(200, 200));
-
-		populateList(CPU, itemModel, itemList, currentCpu);
+		this.currentCPU = currentCpu;
+		this.currentRAM = currentMemory;
+		this.compModel = new DefaultListModel<String>();
+		this.compList = new JList<String>(compModel);
+		this.compList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.compList.setBackground(new Color(240, 248, 255));
+		this.compList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.compModel.addElement("Processor");
+		this.compModel.addElement("Memory");
+		this.itemModel = new DefaultListModel<String>();
+		this.itemList = new JList<String>(itemModel);
+		this.itemList.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.itemList.setBackground(new Color(240, 248, 255));
+		this.itemList.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.itemList.setPreferredSize(new Dimension(200, 200));
+		this.populateList(CPU, itemModel, itemList, currentCpu);
 
 		// Events
-		compList.addListSelectionListener(new ListSelectionListener() {
+		this.compList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				int choice = compList.getSelectedIndex();
 				selectedIndex = compList.getSelectedIndex();
@@ -206,21 +203,19 @@ public class ComponentPanel extends JPanel {
 				}
 			}
 		});
-
-		itemList.addListSelectionListener(new ListSelectionListener() {
+		this.itemList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				setSelectedElement(itemList.getSelectedValue());
 			}
 		});
 
-		compList.setSelectedIndex(0);
-
+		this.compList.setSelectedIndex(0);
 		this.add(compList);
 		this.add(itemList);
-
 	}
 
 	public void populateList(String[] arr, DefaultListModel<String> model, JList<String> list, String currentItem) {
+		
 		model.removeAllElements();
 		for (int i = 0; i < arr.length; i++) {
 			model.addElement(arr[i]);
@@ -232,8 +227,7 @@ public class ComponentPanel extends JPanel {
 	}
 
 	public String getSelectedElement() {
-
-		return selectedElement;
+		return this.selectedElement;
 	}
 
 	public void setSelectedElement(String selectedElement) {
@@ -241,6 +235,6 @@ public class ComponentPanel extends JPanel {
 	}
 
 	public int getSelectedIndex() {
-		return selectedIndex;
+		return this.selectedIndex;
 	}
 }

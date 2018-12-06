@@ -34,7 +34,15 @@ import javax.swing.table.DefaultTableModel;
 
 public class Client extends JFrame {
 
-	private JPanel contentPane;
+	private JPanel contentPane, panel, shopPanel, panelContainer;
+	private JScrollPane mainScrollPane, tableScrollPane;
+	private JLabel icon, lblCostValue, lblShoppingCart, shopCost;
+	private GroupLayout gl_contentPane, gl_shopPanel, gl_panel;
+	private JButton btnCheckout, btnRemoveItem, btnProducts, btnViewOrders;
+	private JPopupMenu categoryMenu;
+	private JMenuItem mntmDesktop, mntmLaptop, mntmServer;
+	private PaymentPanel payPanel;
+	private ImageIcon newImg;
 	private String serverIP;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
@@ -45,39 +53,36 @@ public class Client extends JFrame {
 	public Client(String host) {
 		super("Client - PC Shop");
 
-		serverIP = host;
-		totalCost = 0;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(100, 100, 1366, 768);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(128, 203, 196));
-		contentPane.setPreferredSize(new Dimension(400, 300));
+		this.serverIP = host;
+		this.totalCost = 0;
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setBounds(100, 100, 1366, 768);
+		this.contentPane = new JPanel();
+		this.contentPane.setBackground(new Color(128, 203, 196));
+		this.contentPane.setPreferredSize(new Dimension(400, 300));
 
-		contentPane.setBorder(new LineBorder(new Color(0, 102, 153), 1, true));
-
-		setContentPane(contentPane);
-
+		this.contentPane.setBorder(new LineBorder(new Color(0, 102, 153), 1, true));
+		this.setContentPane(contentPane);
 		this.setVisible(true);
 
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(79, 154, 148), 3, true));
-		panel.setForeground(new Color(79, 154, 148));
+		this.panel = new JPanel();
+		this.panel.setBorder(new LineBorder(new Color(79, 154, 148), 3, true));
+		this.panel.setForeground(new Color(79, 154, 148));
 
-		panel.setBackground(new Color(79, 154, 148));
+		this.panel.setBackground(new Color(79, 154, 148));
 
-		JLabel icon = new JLabel("");
-		icon.setIcon(new ImageIcon(
-				"C:\\Users\\Max\\Documents\\Skola\\Utlandsstudier\\Kurser\\Software Engineering\\Project\\ComputerShop\\Images\\MK.png"));
+		this.icon = new JLabel("");
+		this.icon.setIcon(new ImageIcon(getClass().getResource("/Images/MK.png")));
 
-		JPanel shopPanel = new JPanel();
-		shopPanel.setBorder(new LineBorder(new Color(79, 154, 148), 3, true));
-		shopPanel.setBackground(new Color(79, 154, 148));
+		this.shopPanel = new JPanel();
+		this.shopPanel.setBorder(new LineBorder(new Color(79, 154, 148), 3, true));
+		this.shopPanel.setBackground(new Color(79, 154, 148));
 
-		JScrollPane mainScrollPane = new JScrollPane();
-		mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		this.mainScrollPane = new JScrollPane();
+		this.mainScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		this.gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane
 				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1348, Short.MAX_VALUE)
@@ -94,21 +99,21 @@ public class Client extends JFrame {
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(shopPanel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)));
 
-		JLabel lblCostValue = new JLabel("0");
-		lblCostValue.setFont(new Font("Yu Gothic", Font.BOLD, 16));
+		this.lblCostValue = new JLabel("0");
+		this.lblCostValue.setFont(new Font("Yu Gothic", Font.BOLD, 16));
 
-		JPanel panelContainer = new JPanel();
-		panelContainer.setBorder(null);
-		mainScrollPane.setViewportView(panelContainer);
-		panelContainer.setBackground(new Color(128, 203, 196));
-		panelContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		this.panelContainer = new JPanel();
+		this.panelContainer.setBorder(null);
+		this.mainScrollPane.setViewportView(this.panelContainer);
+		this.panelContainer.setBackground(new Color(128, 203, 196));
+		this.panelContainer.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JButton btnCheckout = new JButton("Proceed to checkout");
-		btnCheckout.setBackground(Color.WHITE);
-		btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnCheckout.setVisible(true);
+		this.btnCheckout = new JButton("Proceed to checkout");
+		this.btnCheckout.setBackground(Color.WHITE);
+		this.btnCheckout.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnCheckout.setVisible(true);
 
-		btnCheckout.addActionListener(new ActionListener() {
+		this.btnCheckout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				panelContainer.removeAll();
@@ -128,9 +133,8 @@ public class Client extends JFrame {
 				for (int i = 0; i < tableModel.getRowCount(); i++) {
 					itemsFromTable += tableModel.getValueAt(i, 3).toString() + "\n";
 				}
-
 				// send items to paymentPanel
-				PaymentPanel payPanel = new PaymentPanel(itemsFromTable);
+				payPanel = new PaymentPanel(itemsFromTable);
 				panelContainer.add(payPanel);
 
 				// Create Email Object which sends a email to recipent
@@ -180,7 +184,6 @@ public class Client extends JFrame {
 								JOptionPane.showMessageDialog(null,
 										"Missing input on all fields, please fill in information for every field.");
 							}
-
 							break;
 						case "":
 
@@ -193,24 +196,24 @@ public class Client extends JFrame {
 			}
 		});
 
-		JLabel lblShoppingCart = new JLabel("");
+		this.lblShoppingCart = new JLabel("");
 
 		// update label for image
-		ImageIcon newImg = new ImageIcon(getClass().getResource("/Images/cart.png"));
-		lblShoppingCart.setIcon(newImg);
-		lblShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 16));
-		lblShoppingCart.setVisible(true);
+		this.newImg = new ImageIcon(getClass().getResource("/Images/cart.png"));
+		this.lblShoppingCart.setIcon(newImg);
+		this.lblShoppingCart.setFont(new Font("Yu Gothic", Font.BOLD, 16));
+		this.lblShoppingCart.setVisible(true);
 
-		JLabel shopCost = new JLabel("Total Cost:");
-		shopCost.setFont(new Font("Yu Gothic", Font.BOLD, 16));
+		this.shopCost = new JLabel("Total Cost:");
+		this.shopCost.setFont(new Font("Yu Gothic", Font.BOLD, 16));
 
-		JScrollPane tableScrollPane = new JScrollPane();
+		this.tableScrollPane = new JScrollPane();
 
-		JButton btnRemoveItem = new JButton("Remove Item");
-		btnRemoveItem.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnRemoveItem.setBackground(new Color(255, 255, 255));
+		this.btnRemoveItem = new JButton("Remove Item");
+		this.btnRemoveItem.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnRemoveItem.setBackground(new Color(255, 255, 255));
 
-		GroupLayout gl_shopPanel = new GroupLayout(shopPanel);
+		this.gl_shopPanel = new GroupLayout(shopPanel);
 		gl_shopPanel.setHorizontalGroup(gl_shopPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_shopPanel.createSequentialGroup().addContainerGap()
 						.addComponent(lblShoppingCart, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
@@ -243,17 +246,17 @@ public class Client extends JFrame {
 												GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
 										.addContainerGap()))));
 
-		shopTable = new JTable() {
+		this.shopTable = new JTable() {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
-		tableScrollPane.setViewportView(shopTable);
-		shopTable.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		shopTable.setModel(
+		this.tableScrollPane.setViewportView(this.shopTable);
+		this.shopTable.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.shopTable.setModel(
 				new DefaultTableModel(new Object[][] {}, new String[] { "Product", "Type", "Cost", "Description" }));
 
-		btnRemoveItem.addMouseListener(new MouseAdapter() {
+		this.btnRemoveItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				DefaultTableModel tableModel = (DefaultTableModel) shopTable.getModel();
@@ -270,14 +273,13 @@ public class Client extends JFrame {
 			}
 		});
 
-		shopPanel.setLayout(gl_shopPanel);
-		JPopupMenu categoryMenu = new JPopupMenu();
-		categoryMenu.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		categoryMenu.setBackground(Color.WHITE);
+		this.shopPanel.setLayout(gl_shopPanel);
+		this.categoryMenu = new JPopupMenu();
+		this.categoryMenu.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.categoryMenu.setBackground(Color.WHITE);
+		this.btnProducts = new JButton("Browse Shop");
 
-		JButton btnProducts = new JButton("Browse Shop");
-
-		btnProducts.addMouseListener(new MouseAdapter() {
+		this.btnProducts.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 
@@ -288,12 +290,12 @@ public class Client extends JFrame {
 			}
 		});
 
-		btnProducts.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		btnProducts.setBackground(new Color(255, 255, 255));
-		addPopup(btnProducts, categoryMenu);
+		this.btnProducts.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.btnProducts.setBackground(new Color(255, 255, 255));
+		addPopup(this.btnProducts, this.categoryMenu);
 
-		JMenuItem mntmDesktop = new JMenuItem("Desktops");
-		mntmDesktop.addMouseListener(new MouseAdapter() {
+		this.mntmDesktop = new JMenuItem("Desktops");
+		this.mntmDesktop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				try {
@@ -355,10 +357,10 @@ public class Client extends JFrame {
 				}
 			}
 		});
-		categoryMenu.add(mntmDesktop);
+		this.categoryMenu.add(mntmDesktop);
 
-		JMenuItem mntmLaptop = new JMenuItem("Laptops");
-		mntmLaptop.addMouseListener(new MouseAdapter() {
+		this.mntmLaptop = new JMenuItem("Laptops");
+		this.mntmLaptop.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				try {
@@ -412,9 +414,9 @@ public class Client extends JFrame {
 				}
 			}
 		});
-		categoryMenu.add(mntmLaptop);
+		this.categoryMenu.add(mntmLaptop);
 
-		JMenuItem mntmServer = new JMenuItem("Servers");
+		this.mntmServer = new JMenuItem("Servers");
 		mntmServer.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -465,10 +467,10 @@ public class Client extends JFrame {
 
 			}
 		});
-		categoryMenu.add(mntmServer);
+		this.categoryMenu.add(mntmServer);
 
-		JButton btnViewOrders = new JButton("View Orders");
-		btnViewOrders.addMouseListener(new MouseAdapter() {
+		this.btnViewOrders = new JButton("View Orders");
+		this.btnViewOrders.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 
@@ -552,9 +554,11 @@ public class Client extends JFrame {
 			}
 		});
 
-		btnViewOrders.setBackground(Color.WHITE);
-		btnViewOrders.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.btnViewOrders.setBackground(Color.WHITE);
+		this.btnViewOrders.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 
+		// Added by request in order to test canceling shipment orders and prove that
+		// program is easily extendible
 		JButton btnSuperUser = new JButton("Super User");
 		btnSuperUser.addMouseListener(new MouseAdapter() {
 			@Override
@@ -735,7 +739,7 @@ public class Client extends JFrame {
 			}
 		});
 
-		GroupLayout gl_panel = new GroupLayout(panel);
+		this.gl_panel = new GroupLayout(this.panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup().addGap(10).addComponent(icon).addGap(29)
 						.addComponent(btnProducts).addGap(28).addComponent(btnViewOrders)
@@ -763,25 +767,25 @@ public class Client extends JFrame {
 
 	public void startClient() {
 		try {
-			connectToServer();
-			setupStreams();
-			whileRunning();
+			this.connectToServer();
+			this.setupStreams();
+			this.whileRunning();
 
 		} catch (EOFException exc) {
 			System.out.println("\n Client Terminated Connection");
 		} catch (IOException ioexc) {
 			ioexc.printStackTrace();
 		} finally {
-			closeClient();
+			this.closeClient();
 		}
 	}
 
 	private void closeClient() {
 		System.out.println("Closing Client \n");
 		try {
-			output.close();
-			input.close();
-			connection.close();
+			this.output.close();
+			this.input.close();
+			this.connection.close();
 
 		} catch (IOException exc) {
 			exc.printStackTrace();
@@ -796,15 +800,15 @@ public class Client extends JFrame {
 	}
 
 	private void setupStreams() throws IOException {
-		output = new ObjectOutputStream(connection.getOutputStream());
-		output.flush();
-		input = new ObjectInputStream(connection.getInputStream());
+		this.output = new ObjectOutputStream(connection.getOutputStream());
+		this.output.flush();
+		this.input = new ObjectInputStream(connection.getInputStream());
 		System.out.println("You are now connected!");
 	}
 
 	private void connectToServer() throws IOException {
 		System.out.println("Attempting Connection..");
-		connection = new Socket(InetAddress.getByName(serverIP), 5000);
+		this.connection = new Socket(InetAddress.getByName(serverIP), 5000);
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {

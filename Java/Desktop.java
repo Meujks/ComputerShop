@@ -11,7 +11,7 @@ public class Desktop extends Product {
 	}
 
 	public String getChassi() {
-		return chassi;
+		return this.chassi;
 	}
 
 	public void setChassi(String chassi) {
@@ -19,7 +19,7 @@ public class Desktop extends Product {
 	}
 
 	public String getGpu() {
-		return gpu;
+		return this.gpu;
 	}
 
 	public void setGpu(String gpu) {

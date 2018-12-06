@@ -40,6 +40,7 @@ public class CustomPanel extends JPanel {
 	private JPanel btnPanel;
 	private JLabel picLabel;
 
+	private JButton cartBtn;
 	private String nameOfProduct;
 	private String gpuOfProduct;
 	private String cpuOfProduct;
@@ -49,12 +50,18 @@ public class CustomPanel extends JPanel {
 	private int costOfProduct;
 	private String pathOfImage;
 
+	private Border roundedBorder;
+	private LayoutManager layout;
+	private JButton customizeBtn;
+	private ComponentPanel compPanel;
+	private JButton changeBtn;
 	// Products
 	private Desktop desktop;
 	private Laptop laptop;
 	private ComponentServer server;
 
-	BufferedImage myPicture;
+	private ImageIcon img;
+	private BufferedImage myPicture;
 
 	// Laptop
 
@@ -77,19 +84,17 @@ public class CustomPanel extends JPanel {
 
 	public CustomPanel(ComponentServer server, JLabel lblCostValue, JPanel panelContainer, TableModel tableModel,
 			String[] processors, String[] memories) {
-		this.server = server;
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 
+		this.server = server;
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 		this.setPreferredSize(new Dimension(300, 350));
 		this.setBackground(new Color(178, 254, 247));
 		this.setForeground(new Color(51, 102, 102));
 		this.setBorder(roundedBorder);
-
 		this.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		// Labels
-
 		this.nameOfProduct = server.getName();
 		this.cpuOfProduct = server.getCpu();
 		this.ramOfProduct = server.getRam();
@@ -100,17 +105,17 @@ public class CustomPanel extends JPanel {
 		this.pathOfImage = server.getPathOfImage();
 		this.chassiOfServer = server.getChassi();
 
-		ImageIcon img = new ImageIcon(getClass().getResource(this.pathOfImage));
-		picLabel = new JLabel(img);
-		lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
-		lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
-		lblFormFactorOfServer = new JLabel("- Form Factor: " + this.formFactorOfServer);
-		lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
-		lblScalabilityOfServer = new JLabel("- Scalability: " + this.scalabilityOfServer);
-		lblChassiOfServer = new JLabel("- Case: " + this.chassiOfServer);
-		lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
+		this.img = new ImageIcon(getClass().getResource(this.pathOfImage));
+		this.picLabel = new JLabel(img);
+		this.lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
+		this.lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
+		this.lblFormFactorOfServer = new JLabel("- Form Factor: " + this.formFactorOfServer);
+		this.lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
+		this.lblScalabilityOfServer = new JLabel("- Scalability: " + this.scalabilityOfServer);
+		this.lblChassiOfServer = new JLabel("- Case: " + this.chassiOfServer);
+		this.lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
 
-		lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
+		this.lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
 
 		this.add(picLabel);
 		this.add(lblNameOfProduct);
@@ -122,19 +127,20 @@ public class CustomPanel extends JPanel {
 		this.add(lblCostOfProduct);
 
 		// Button Panel
-		JPanel btnPanel = new JPanel();
-		btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		btnPanel.setBackground(new Color(178, 254, 247));
-		LayoutManager layout = new FlowLayout();
-		btnPanel.setLayout(layout);
+		this.btnPanel = new JPanel();
+		this.btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.btnPanel.setBackground(new Color(178, 254, 247));
+		this.layout = new FlowLayout();
+		this.btnPanel.setLayout(layout);
 
 		this.add(btnPanel);
 
-		JButton cartBtn = new JButton("Add To Cart");
-		cartBtn.setBackground(Color.WHITE);
-		cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnPanel.add(cartBtn);
-		cartBtn.addActionListener(new ActionListener() {
+		this.cartBtn = new JButton("Add To Cart");
+		this.cartBtn.setBackground(Color.WHITE);
+		this.cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnPanel.add(cartBtn);
+
+		this.cartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				Object[] row = { server.getName(), server.getType(), server.getCost(), server.toString() };
@@ -145,16 +151,14 @@ public class CustomPanel extends JPanel {
 				for (int i = 0; i < tableModel.getRowCount(); i++) {
 					amount += (Integer) tableModel.getValueAt(i, 2);
 				}
-
 				lblCostValue.setText(String.valueOf(amount) + "€");
 			}
-
 		});
 
-		JButton customizeBtn = new JButton("Customize");
-		customizeBtn.setBackground(Color.WHITE);
-		customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnPanel.add(customizeBtn);
+		this.customizeBtn = new JButton("Customize");
+		this.customizeBtn.setBackground(Color.WHITE);
+		this.customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnPanel.add(customizeBtn);
 
 		customizeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -167,12 +171,12 @@ public class CustomPanel extends JPanel {
 
 				// hide the customize button
 				customizeBtn.setVisible(false);
-				ComponentPanel compPanel = new ComponentPanel(processors, memories, server.getName(), server.getRam(),
+				compPanel = new ComponentPanel(processors, memories, server.getName(), server.getRam(),
 						server.getCpu());
 				panelContainer.add(compPanel);
 
 				// Create a button for changing values between compPanel and CustomPanel
-				JButton changeBtn = new JButton("Change");
+				changeBtn = new JButton("Change");
 				changeBtn.setBackground(Color.WHITE);
 				changeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 				compPanel.add(changeBtn);
@@ -192,25 +196,21 @@ public class CustomPanel extends JPanel {
 				});
 			}
 		});
-
 	}
 
 	public CustomPanel(Laptop laptop, JLabel lblCostValue, JPanel panelContainer, TableModel tableModel,
 			String[] graphics, String[] processors, String[] memories) {
 		this.laptop = laptop;
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 
 		this.setPreferredSize(new Dimension(300, 350));
 		this.setForeground(new Color(51, 102, 102));
 		this.setBorder(roundedBorder);
-
 		this.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
 		this.setBackground(new Color(178, 254, 247));
 
 		// Labels
-
 		this.nameOfProduct = laptop.getName();
 		this.cpuOfProduct = laptop.getCpu();
 		this.ramOfProduct = laptop.getRam();
@@ -221,17 +221,17 @@ public class CustomPanel extends JPanel {
 		this.pathOfImage = laptop.getPathOfImage();
 		this.lChassiOfLaptop = laptop.getlChassi();
 
-		ImageIcon img = new ImageIcon(getClass().getResource(this.pathOfImage));
-		picLabel = new JLabel(img);
-		lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
-		lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
-		lblmGpuOfLaptop = new JLabel("- mGPU: " + this.mGpuOfLaptop);
-		lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
-		lblInchesOfLaptop = new JLabel("- Inches: " + this.inchesOfLaptop);
-		lblChassiOfLaptop = new JLabel("- Case: " + this.lChassiOfLaptop);
-		lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
+		this.img = new ImageIcon(getClass().getResource(this.pathOfImage));
+		this.picLabel = new JLabel(img);
+		this.lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
+		this.lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
+		this.lblmGpuOfLaptop = new JLabel("- mGPU: " + this.mGpuOfLaptop);
+		this.lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
+		this.lblInchesOfLaptop = new JLabel("- Inches: " + this.inchesOfLaptop);
+		this.lblChassiOfLaptop = new JLabel("- Case: " + this.lChassiOfLaptop);
+		this.lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
 
-		lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
+		this.lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
 
 		this.add(picLabel);
 		this.add(lblNameOfProduct);
@@ -243,41 +243,37 @@ public class CustomPanel extends JPanel {
 		this.add(lblCostOfProduct);
 
 		// Button Panel
-		JPanel btnPanel = new JPanel();
-		btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		btnPanel.setBackground(new Color(178, 254, 247));
-		LayoutManager layout = new FlowLayout();
-		btnPanel.setLayout(layout);
+		this.btnPanel = new JPanel();
+		this.btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.btnPanel.setBackground(new Color(178, 254, 247));
+		this.layout = new FlowLayout();
+		this.btnPanel.setLayout(layout);
 
 		this.add(btnPanel);
 
-		JButton cartBtn = new JButton("Add To Cart");
-		cartBtn.setBackground(Color.WHITE);
-		cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnPanel.add(cartBtn);
-		cartBtn.addActionListener(new ActionListener() {
+		this.cartBtn = new JButton("Add To Cart");
+		this.cartBtn.setBackground(Color.WHITE);
+		this.cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnPanel.add(cartBtn);
+		this.cartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				Object[] row = { laptop.getName(), laptop.getType(), laptop.getCost(), laptop.toString() };
-
 				((DefaultTableModel) tableModel).addRow(row);
 
 				int amount = 0;
 				for (int i = 0; i < tableModel.getRowCount(); i++) {
 					amount += (Integer) tableModel.getValueAt(i, 2);
 				}
-
 				lblCostValue.setText(String.valueOf(amount) + "€");
 			}
-
 		});
 
-		JButton customizeBtn = new JButton("Customize");
-		customizeBtn.setBackground(Color.WHITE);
-		customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnPanel.add(customizeBtn);
+		this.customizeBtn = new JButton("Customize");
+		this.customizeBtn.setBackground(Color.WHITE);
+		this.customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnPanel.add(customizeBtn);
 
-		customizeBtn.addActionListener(new ActionListener() {
+		this.customizeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				// Remove all desktops apart from the selected from the panel
@@ -288,12 +284,12 @@ public class CustomPanel extends JPanel {
 
 				// hide the customize button
 				customizeBtn.setVisible(false);
-				ComponentPanel compPanel = new ComponentPanel(graphics, processors, memories, laptop.getName(),
-						laptop.getRam(), laptop.getCpu(), laptop.getType(), laptop.getMgpu());
+				compPanel = new ComponentPanel(graphics, processors, memories, laptop.getName(), laptop.getRam(),
+						laptop.getCpu(), laptop.getType(), laptop.getMgpu());
 				panelContainer.add(compPanel);
 
 				// Create a button for changing values between compPanel and CustomPanel
-				JButton changeBtn = new JButton("Change");
+				changeBtn = new JButton("Change");
 				changeBtn.setBackground(Color.WHITE);
 				changeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 				compPanel.add(changeBtn);
@@ -306,7 +302,6 @@ public class CustomPanel extends JPanel {
 						// Store index and name of component being changed
 						int itemIndex = compPanel.getSelectedIndex();
 						String itemValue = compPanel.getSelectedElement();
-
 						// Update the configuration by passing the necessary values
 						updateEventLaptop(itemIndex, itemValue);
 					}
@@ -318,21 +313,17 @@ public class CustomPanel extends JPanel {
 
 	public CustomPanel(Desktop computer, JLabel lblCostValue, JPanel panelContainer, TableModel tableModel,
 			String[] graphics, String[] processors, String[] memories, String[] cases) {
-		// String name, String memory, String cpu, String type,String chassi, String gpu
-		// Styling
-		desktop = computer;
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
+
+		this.desktop = computer;
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
 		this.setPreferredSize(new Dimension(300, 350));
 		this.setForeground(new Color(51, 102, 102));
 		this.setBorder(roundedBorder);
-
 		this.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
 		this.setBackground(new Color(178, 254, 247));
 
 		// Labels
-
 		this.nameOfProduct = desktop.getName();
 		this.gpuOfProduct = desktop.getGpu();
 		this.cpuOfProduct = desktop.getCpu();
@@ -342,16 +333,16 @@ public class CustomPanel extends JPanel {
 		this.costOfProduct = desktop.getCost();
 		this.pathOfImage = desktop.getPathOfImage();
 
-		ImageIcon img = new ImageIcon(getClass().getResource(this.pathOfImage));
-		picLabel = new JLabel(img);
-		lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
-		lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
-		lblGpuOfProduct = new JLabel("- GPU: " + this.gpuOfProduct);
-		lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
-		lblChassiOfProduct = new JLabel("- Chassi: " + this.chassiOfProduct);
-		lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
+		this.img = new ImageIcon(getClass().getResource(this.pathOfImage));
+		this.picLabel = new JLabel(img);
+		this.lblCPUOfProduct = new JLabel("- CPU: " + this.cpuOfProduct);
+		this.lblMemoryOfProduct = new JLabel("- RAM: " + this.ramOfProduct);
+		this.lblGpuOfProduct = new JLabel("- GPU: " + this.gpuOfProduct);
+		this.lblNameOfProduct = new JLabel(" " + this.nameOfProduct + " " + this.typeOfProduct);
+		this.lblChassiOfProduct = new JLabel("- Chassi: " + this.chassiOfProduct);
+		this.lblCostOfProduct = new JLabel("- Cost: " + this.costOfProduct + "€");
 
-		lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
+		this.lblNameOfProduct.setFont(new Font("Yu Gothic", Font.BOLD, 18));
 
 		this.add(picLabel);
 		this.add(lblNameOfProduct);
@@ -362,42 +353,36 @@ public class CustomPanel extends JPanel {
 		this.add(lblCostOfProduct);
 
 		// Button Panel
-		JPanel btnPanel = new JPanel();
-		btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		btnPanel.setBackground(new Color(178, 254, 247));
-		LayoutManager layout = new FlowLayout();
-		btnPanel.setLayout(layout);
+		this.btnPanel = new JPanel();
+		this.btnPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.btnPanel.setBackground(new Color(178, 254, 247));
+		this.layout = new FlowLayout();
+		this.btnPanel.setLayout(layout);
 
 		this.add(btnPanel);
 
-		JButton cartBtn = new JButton("Add To Cart");
-		cartBtn.setBackground(Color.WHITE);
-		cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnPanel.add(cartBtn);
-		cartBtn.addActionListener(new ActionListener() {
+		this.cartBtn = new JButton("Add To Cart");
+		this.cartBtn.setBackground(Color.WHITE);
+		this.cartBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnPanel.add(cartBtn);
+		this.cartBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				Object[] row = { desktop.getName(), desktop.getType(), desktop.getCost(), desktop.toString() };
-
 				((DefaultTableModel) tableModel).addRow(row);
-
 				int amount = 0;
 				for (int i = 0; i < tableModel.getRowCount(); i++) {
 					amount += (Integer) tableModel.getValueAt(i, 2);
 				}
-
 				lblCostValue.setText(String.valueOf(amount) + "€");
 			}
-
 		});
-		JButton customizeBtn = new JButton("Customize");
-		customizeBtn.setBackground(Color.WHITE);
-		customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		btnPanel.add(customizeBtn);
+		this.customizeBtn = new JButton("Customize");
+		this.customizeBtn.setBackground(Color.WHITE);
+		this.customizeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.btnPanel.add(customizeBtn);
 
-		customizeBtn.addActionListener(new ActionListener() {
+		this.customizeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				// Remove all desktops apart from the selected from the panel
 				for (Component cp : panelContainer.getComponents()) {
 					if (cp != customizeBtn.getParent().getParent())
@@ -406,14 +391,14 @@ public class CustomPanel extends JPanel {
 
 				// hide the customize button
 				customizeBtn.setVisible(false);
-				// Create the component tabel with appropriate values
-				ComponentPanel compPanel = new ComponentPanel(graphics, processors, memories, cases, computer.getName(),
+				// Create the component table with appropriate values
+				compPanel = new ComponentPanel(graphics, processors, memories, cases, computer.getName(),
 						computer.getRam(), computer.getCpu(), computer.getType(), computer.getChassi(),
 						computer.getGpu());
 				panelContainer.add(compPanel);
 
 				// Create a button for changing values between compPanel and CustomPanel
-				JButton changeBtn = new JButton("Change");
+				changeBtn = new JButton("Change");
 				changeBtn.setBackground(Color.WHITE);
 				changeBtn.setFont(new Font("Yu Gothic", Font.BOLD, 12));
 				compPanel.add(changeBtn);
@@ -427,15 +412,12 @@ public class CustomPanel extends JPanel {
 						// Store index and name of component being changed
 						int itemIndex = compPanel.getSelectedIndex();
 						String itemValue = compPanel.getSelectedElement();
-
 						// Update the configuration by passing the necessary values
 						updateEventDesktop(itemIndex, itemValue);
 					}
 				});
 			}
-
 		});
-
 	}
 
 	public String addToCartDesktop() {
@@ -503,14 +485,14 @@ public class CustomPanel extends JPanel {
 		switch (itemIndex) {
 		case 0:
 			String costOfOldCpu = formatString(this.laptop.getCpu());
-			calculateCostLaptop(costOfItem, costOfOldCpu);
+			this.calculateCostLaptop(costOfItem, costOfOldCpu);
 			this.laptop.setCpu(itemValue);
 			this.lblCPUOfProduct.setText("- CPU: " + this.laptop.getCpu());
 			this.laptop.setType("Custom");
 			break;
 		case 1:
 			String costOfOldGpu = formatString(this.laptop.getMgpu());
-			calculateCostLaptop(costOfItem, costOfOldGpu);
+			this.calculateCostLaptop(costOfItem, costOfOldGpu);
 			this.laptop.setMgpu(itemValue);
 			this.lblmGpuOfLaptop.setText("- GPU: " + this.laptop.getMgpu());
 			this.laptop.setType("Custom");
@@ -518,11 +500,10 @@ public class CustomPanel extends JPanel {
 			break;
 		case 2:
 			String costOfOldRam = formatString(this.laptop.getRam());
-			calculateCostLaptop(costOfItem, costOfOldRam);
+			this.calculateCostLaptop(costOfItem, costOfOldRam);
 			this.laptop.setRam(itemValue);
 			this.lblMemoryOfProduct.setText("- RAM: " + this.laptop.getRam());
 			this.laptop.setType("Custom");
-
 			break;
 		}
 	}
@@ -534,18 +515,17 @@ public class CustomPanel extends JPanel {
 		switch (itemIndex) {
 		case 0:
 			String costOfOldCpu = formatString(this.server.getCpu());
-			calculateCostServer(costOfItem, costOfOldCpu);
+			this.calculateCostServer(costOfItem, costOfOldCpu);
 			this.server.setCpu(itemValue);
 			this.lblCPUOfProduct.setText("- CPU: " + this.server.getCpu());
 			this.server.setType("Custom");
 			break;
 		case 1:
 			String costOfOldRam = formatString(this.server.getRam());
-			calculateCostServer(costOfItem, costOfOldRam);
+			this.calculateCostServer(costOfItem, costOfOldRam);
 			this.server.setRam(itemValue);
 			this.lblMemoryOfProduct.setText("- RAM: " + this.server.getRam());
 			this.server.setType("Custom");
-
 			break;
 		}
 	}

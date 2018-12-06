@@ -20,82 +20,81 @@ public class SuperUser extends JPanel {
 	private JLabel titleLabel;
 	private GridBagConstraints gc;
 	private JPanel contentPanel;
-	private JButton notShippedToShippedBtn,shippedToNotShippedBtn, cancelBtn, retrieveBtn;
+	private JButton notShippedToShippedBtn, shippedToNotShippedBtn, cancelBtn, retrieveBtn;
 	private JTable orderTable;
 	private JScrollPane orderTablePane;
+	private Border roundedBorder;
 
 	public SuperUser() {
-		contentPanel = new JPanel();
-		contentPanel.setPreferredSize(new Dimension(800, 300));
-		contentPanel.setBackground(new Color(178, 254, 247));
-		Border roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
-		contentPanel.setLayout(new GridBagLayout());
+		this.contentPanel = new JPanel();
+		this.contentPanel.setPreferredSize(new Dimension(800, 300));
+		this.contentPanel.setBackground(new Color(178, 254, 247));
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
+		this.contentPanel.setLayout(new GridBagLayout());
 		this.setBorder(roundedBorder);
 		this.setBackground(new Color(178, 254, 247));
 		this.add(contentPanel);
 
-		
 		// Buttons
-		
-		setRetrieveBtn(new JButton("Retrieve Table"));
-		getRetrieveBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		getRetrieveBtn().setBackground(new Color(255, 255, 255));
-		
-		setCancelBtn(new JButton("Cancel the order"));
-		getCancelBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		getCancelBtn().setBackground(new Color(255, 255, 255));
-		
-		setShippedToNotShippedBtn(new JButton("Change to Shipped"));
-		getShippedToNotShippedBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		getShippedToNotShippedBtn().setBackground(new Color(255, 255, 255));
-		
-		setNotShippedToShippedBtn(new JButton("Change to Not Shipped"));
-		getNotShippedToShippedBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		getNotShippedToShippedBtn().setBackground(new Color(255, 255, 255));
+
+		this.setRetrieveBtn(new JButton("Retrieve Table"));
+		this.getRetrieveBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.getRetrieveBtn().setBackground(new Color(255, 255, 255));
+
+		this.setCancelBtn(new JButton("Cancel the order"));
+		this.getCancelBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.getCancelBtn().setBackground(new Color(255, 255, 255));
+
+		this.setShippedToNotShippedBtn(new JButton("Change to Shipped"));
+		this.getShippedToNotShippedBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.getShippedToNotShippedBtn().setBackground(new Color(255, 255, 255));
+
+		this.setNotShippedToShippedBtn(new JButton("Change to Not Shipped"));
+		this.getNotShippedToShippedBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.getNotShippedToShippedBtn().setBackground(new Color(255, 255, 255));
 
 		// Table
-		orderTablePane = new JScrollPane();
-		orderTablePane.setPreferredSize(new Dimension(300, 50));
-		setOrderTable(new JTable() {
+		this.orderTablePane = new JScrollPane();
+		this.orderTablePane.setPreferredSize(new Dimension(300, 50));
+		this.setOrderTable(new JTable() {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		});
-		orderTablePane.setViewportView(getOrderTable());
-		getOrderTable().setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		getOrderTable().setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Order ID", "Customer", "Email", "Status" }));
+		this.orderTablePane.setViewportView(getOrderTable());
+		this.getOrderTable().setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.getOrderTable().setModel(
+				new DefaultTableModel(new Object[][] {}, new String[] { "Order ID", "Customer", "Email", "Status" }));
 
 		// GridContstraints
 		this.gc = new GridBagConstraints();
 		this.gc.fill = GridBagConstraints.HORIZONTAL;
 		this.gc.insets = new Insets(10, 10, 10, 10);
 
-		gc.gridx = 1;
-		gc.gridy = 0;
-		contentPanel.add(orderTablePane, gc);
-		
-		gc.gridx = 2;
-		gc.gridy = 0;
-		contentPanel.add(retrieveBtn, gc);
+		this.gc.gridx = 1;
+		this.gc.gridy = 0;
+		this.contentPanel.add(orderTablePane, gc);
 
-		gc.gridx = 0;
-		gc.gridy = 4;
-		contentPanel.add(cancelBtn, gc);
-		
-		gc.gridx = 1;
-		gc.gridy = 4;
-		contentPanel.add(notShippedToShippedBtn, gc);
-		
-		gc.gridx = 2;
-		gc.gridy = 4;
-		contentPanel.add(shippedToNotShippedBtn, gc);
+		this.gc.gridx = 2;
+		this.gc.gridy = 0;
+		this.contentPanel.add(retrieveBtn, gc);
 
+		this.gc.gridx = 0;
+		this.gc.gridy = 4;
+		this.contentPanel.add(cancelBtn, gc);
+
+		this.gc.gridx = 1;
+		this.gc.gridy = 4;
+		this.contentPanel.add(notShippedToShippedBtn, gc);
+
+		this.gc.gridx = 2;
+		this.gc.gridy = 4;
+		this.contentPanel.add(shippedToNotShippedBtn, gc);
 
 	}
 
 	public JButton getCancelBtn() {
-		return cancelBtn;
+		return this.cancelBtn;
 	}
 
 	public void setCancelBtn(JButton cancelBtn) {
@@ -103,7 +102,7 @@ public class SuperUser extends JPanel {
 	}
 
 	public JTable getOrderTable() {
-		return orderTable;
+		return this.orderTable;
 	}
 
 	public void setOrderTable(JTable orderTable) {
@@ -111,7 +110,7 @@ public class SuperUser extends JPanel {
 	}
 
 	public JButton getShippedToNotShippedBtn() {
-		return shippedToNotShippedBtn;
+		return this.shippedToNotShippedBtn;
 	}
 
 	public void setShippedToNotShippedBtn(JButton shippedToNotShippedBtn) {
@@ -119,7 +118,7 @@ public class SuperUser extends JPanel {
 	}
 
 	public JButton getNotShippedToShippedBtn() {
-		return notShippedToShippedBtn;
+		return this.notShippedToShippedBtn;
 	}
 
 	public void setNotShippedToShippedBtn(JButton notShippedToShippedBtn) {
@@ -127,7 +126,7 @@ public class SuperUser extends JPanel {
 	}
 
 	public JButton getRetrieveBtn() {
-		return retrieveBtn;
+		return this.retrieveBtn;
 	}
 
 	public void setRetrieveBtn(JButton retrieveBtn) {

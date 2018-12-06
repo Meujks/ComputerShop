@@ -16,108 +16,110 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class ViewPanel extends JPanel {
-	
+
 	private JTextField searchField;
-	private JLabel searchLabel,titleLabel;
-    private GridBagConstraints gc;
-    private JPanel contentPanel;
-    private JButton searchBtn, cancelBtn;
-    private JTable orderTable;
-    private JScrollPane orderTablePane;
-    
-	public ViewPanel()
-	{
-		contentPanel = new JPanel();
-		contentPanel.setPreferredSize(new Dimension(800,300));
-		contentPanel.setBackground(new Color(178,254,247));
-	    Border roundedBorder = new LineBorder(new Color(178,254,247), 3, true);
-	    contentPanel.setLayout(new GridBagLayout());
+	private JLabel searchLabel, titleLabel;
+	private GridBagConstraints gc;
+	private JPanel contentPanel;
+	private JButton searchBtn, cancelBtn;
+	private JTable orderTable;
+	private JScrollPane orderTablePane;
+	private Border roundedBorder;
+
+	public ViewPanel() {
+		
+		this.contentPanel = new JPanel();
+		this.contentPanel.setPreferredSize(new Dimension(800, 300));
+		this.contentPanel.setBackground(new Color(178, 254, 247));
+		this.roundedBorder = new LineBorder(new Color(178, 254, 247), 3, true);
+		this.contentPanel.setLayout(new GridBagLayout());
 		this.setBorder(roundedBorder);
-		this.setBackground(new Color(178,254,247));
-        this.add(contentPanel);
-        
-        searchField = new JTextField(30);
-	    searchLabel = new JLabel("Input Order ID:");
-	    searchLabel.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-	    
-	    titleLabel = new JLabel("Search for orders");
-	    titleLabel.setFont(new Font("Yu Gothic", Font.BOLD, 24));
-        // Labels
-	    
-	    // Buttons
-		searchBtn = new JButton("Search");
-		searchBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		searchBtn.setBackground(new Color(255, 255, 255));
-		
-		setCancelBtn(new JButton("Cancel the order"));
-		getCancelBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		getCancelBtn().setBackground(new Color(255, 255, 255));
-		
-		// Table 
-		orderTablePane = new JScrollPane();
-		orderTablePane.setPreferredSize(new Dimension(300,50));
-		setOrderTable(new JTable(){
-			public boolean isCellEditable(int row, int column){
+		this.setBackground(new Color(178, 254, 247));
+		this.add(contentPanel);
+
+		this.searchField = new JTextField(30);
+		this.searchLabel = new JLabel("Input Order ID:");
+		this.searchLabel.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+
+		this.titleLabel = new JLabel("Search for orders");
+		this.titleLabel.setFont(new Font("Yu Gothic", Font.BOLD, 24));
+		// Labels
+
+		// Buttons
+		this.searchBtn = new JButton("Search");
+		this.searchBtn.setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.searchBtn.setBackground(new Color(255, 255, 255));
+
+		this.setCancelBtn(new JButton("Cancel the order"));
+		this.getCancelBtn().setFont(new Font("Yu Gothic", Font.BOLD, 14));
+		this.getCancelBtn().setBackground(new Color(255, 255, 255));
+
+		// Table
+		this.orderTablePane = new JScrollPane();
+		this.orderTablePane.setPreferredSize(new Dimension(300, 50));
+		this.setOrderTable(new JTable() {
+			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		});
-		orderTablePane.setViewportView(getOrderTable());
-		getOrderTable().setFont(new Font("Yu Gothic", Font.BOLD, 12));
-		getOrderTable().setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Order ID", "Customer", "Email", "Items","Status"
-			}
-		));
-        
-	    // GridContstraints
-	    this.gc = new GridBagConstraints();
-        this.gc.fill = GridBagConstraints.HORIZONTAL;
-        this.gc.insets = new Insets(10, 10, 10, 10);
-        
-        // Search
-        gc.gridx = 0;
-        gc.gridy = 1;
-        contentPanel.add(searchLabel,gc);
-  		
-  		gc.gridx = 1;
-  		gc.gridy = 1;
-  		contentPanel.add(searchField,gc);
-  		
-  		gc.gridx = 2;
-  		gc.gridy = 1;
-  		contentPanel.add(searchBtn,gc);
-  		
-  		gc.gridx = 1;
-  		gc.gridy = 2;
-  		contentPanel.add(orderTablePane,gc);
-  		
-  		gc.gridx = 1;
-  		gc.gridy = 3;
-  		contentPanel.add(cancelBtn,gc);
-  		
+		
+		this.orderTablePane.setViewportView(getOrderTable());
+		this.getOrderTable().setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		this.getOrderTable().setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "Order ID", "Customer", "Email", "Items", "Status" }));
+
+		// GridContstraints
+		this.gc = new GridBagConstraints();
+		this.gc.fill = GridBagConstraints.HORIZONTAL;
+		this.gc.insets = new Insets(10, 10, 10, 10);
+
+		// Search
+		this.gc.gridx = 0;
+		this.gc.gridy = 1;
+		this.contentPanel.add(searchLabel, gc);
+
+		this.gc.gridx = 1;
+		this.gc.gridy = 1;
+		this.contentPanel.add(searchField, gc);
+
+		this.gc.gridx = 2;
+		this.gc.gridy = 1;
+		this.contentPanel.add(searchBtn, gc);
+
+		this.gc.gridx = 1;
+		this.gc.gridy = 2;
+		this.contentPanel.add(orderTablePane, gc);
+
+		this.gc.gridx = 1;
+		this.gc.gridy = 3;
+		this.contentPanel.add(cancelBtn, gc);
+
 	}
-	public boolean searchFieldIsEmpty()
-	{
+
+	public boolean searchFieldIsEmpty() {
 		return this.searchField.getText().isEmpty();
 	}
+
 	public Object getSearchField() {
 		return this.searchField.getText();
 	}
-	public JButton getSearchButton()
-	{
+
+	public JButton getSearchButton() {
 		return this.searchBtn;
 	}
+
 	public JTable getOrderTable() {
-		return orderTable;
+		return this.orderTable;
 	}
+
 	public void setOrderTable(JTable orderTable) {
 		this.orderTable = orderTable;
 	}
+
 	public JButton getCancelBtn() {
-		return cancelBtn;
+		return this.cancelBtn;
 	}
+
 	public void setCancelBtn(JButton cancelBtn) {
 		this.cancelBtn = cancelBtn;
 	}

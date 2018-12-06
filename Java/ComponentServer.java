@@ -1,9 +1,9 @@
 
 public class ComponentServer extends Product {
 
-	String formFactor;
-	String scalability;
-	String chassi;
+	private String formFactor;
+	private String scalability;
+	private String chassi;
 
 	public ComponentServer(String name, String type, String formFactor, String scalability, String sChassi, String cpu,
 			String ram, int cost, String path) {

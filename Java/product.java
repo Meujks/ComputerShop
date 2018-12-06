@@ -6,8 +6,7 @@ public abstract class Product {
 	private String cpu;
 	private String type;
 	private int cost;
-	String pathOfImage;
-
+	private String pathOfImage;
 	public abstract String toStringSpec();
 
 	public Product(String name, String ram, String cpu, String type, int cost, String path) {
@@ -20,7 +19,7 @@ public abstract class Product {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -28,7 +27,7 @@ public abstract class Product {
 	}
 
 	public String getRam() {
-		return ram;
+		return this.ram;
 	}
 
 	public void setRam(String ram) {
@@ -36,7 +35,7 @@ public abstract class Product {
 	}
 
 	public String getCpu() {
-		return cpu;
+		return this.cpu;
 	}
 
 	public void setCpu(String cpu) {
@@ -44,7 +43,7 @@ public abstract class Product {
 	}
 
 	public String getType() {
-		return type;
+		return this.type;
 	}
 
 	public void setType(String type) {
@@ -52,7 +51,7 @@ public abstract class Product {
 	}
 
 	public int getCost() {
-		return cost;
+		return this.cost;
 	}
 
 	public void setCost(int cost) {
@@ -68,7 +67,7 @@ public abstract class Product {
 	}
 
 	public String toString() {
-		return (this.name + " " + this.type + " " + this.cpu + " " + this.ram + " " + this.cost) + " " + toStringSpec();
+		return (this.name + " " + this.type + " " + this.cpu + " " + this.ram + " " + this.cost) + " " + this.toStringSpec();
 	}
 
 }

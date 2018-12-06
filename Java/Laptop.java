@@ -14,7 +14,7 @@ public class Laptop extends Product {
 	}
 
 	public String getInches() {
-		return inches;
+		return this.inches;
 	}
 
 	public void setInches(String inches) {
@@ -22,7 +22,7 @@ public class Laptop extends Product {
 	}
 
 	public String getMgpu() {
-		return mgpu;
+		return this.mgpu;
 	}
 
 	public void setMgpu(String mgpu) {
@@ -34,7 +34,7 @@ public class Laptop extends Product {
 	}
 
 	public String getlChassi() {
-		return lChassi;
+		return this.lChassi;
 	}
 
 	public void setlChassi(String lChassi) {
