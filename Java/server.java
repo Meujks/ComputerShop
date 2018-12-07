@@ -22,6 +22,7 @@ public class Server {
 	private Statement myStmt;
 	private ResultSet result;
 	private PreparedStatement pstmt;
+	private EmailSend emailObject;
 
 	public Server() {
 
@@ -174,6 +175,29 @@ public class Server {
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
+		try {
+			this.conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"root", "");
+			// Create a statement for query
+			this.myStmt = conn.createStatement();
+			// add result from query to result variable
+			this.result = myStmt
+					.executeQuery("SELECT * FROM `ordertable` WHERE `ordertable`.`oid` = '" + orderId + "';");
+			String send = "";
+			while (this.result.next()) {
+				send += this.result.getString(1) + "," + this.result.getString(2) + "," + this.result.getString(3) + ","
+						+ this.result.getString(4) + "," + this.result.getString(5) + "\n";
+
+			}
+			String variables[] = send.split(",");
+			emailObject = new EmailSend(variables[1], variables[2], variables[3], orderId);
+
+			this.conn.close();
+
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
 	}
 
 	private void changeToShipped(String orderId) {
@@ -288,6 +312,31 @@ public class Server {
 	}
 
 	private void removeOrder(String orderId) {
+
+		String variables[] = null;
+		String send = "Success";
+		try {
+			this.conn = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+					"root", "");
+			// Create a statement for query
+			this.myStmt = conn.createStatement();
+			// add result from query to result variable
+			this.result = myStmt
+					.executeQuery("SELECT * FROM `ordertable` WHERE `ordertable`.`oid` = '" + orderId + "';");
+			String msg = "";
+			while (this.result.next()) {
+				msg += this.result.getString(1) + "," + this.result.getString(2) + "," + this.result.getString(3) + ","
+						+ this.result.getString(4) + "," + this.result.getString(5) + "\n";
+
+			}
+			variables = msg.split(",");
+
+			this.conn.close();
+
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
 		try {
 			this.conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/ShopDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
@@ -297,8 +346,6 @@ public class Server {
 			this.pstmt = conn.prepareStatement(
 					"DELETE FROM `Ordertable` WHERE `Ordertable`.`oid` = ? AND `OrderTable`.`oStatus` =\"Not Shipped\"; ");
 			this.pstmt.setString(1, orderId);
-			String send = "Success";
-
 			int result = pstmt.executeUpdate();
 			if (result == 0) {
 				send = "Fail";
@@ -311,6 +358,12 @@ public class Server {
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
+
+		if (send == "Success") {
+			emailObject = new EmailSend(variables[1], variables[2], orderId);
+
+		}
+
 	}
 
 	private void getOrder(String orderId) {
@@ -373,12 +426,12 @@ public class Server {
 			String cardString = values[6];
 
 			cardString = cardString.substring(0, Math.min(cardString.length(), 4));
-			EmailSend emailObject = new EmailSend(values[0], values[1], values[2], values[3], values[4], values[5],
+			this.emailObject = new EmailSend(values[0], values[1], values[2], values[3], values[4], values[5],
 					cardString, values[7]);
 			String orderId = emailObject.getOrderID();
 			insertOrder(orderId, values[0], values[1], values[2], values[7]);
 		} else if (values.length == 6) {
-			EmailSend emailObject = new EmailSend(values[0], values[1], values[2], values[3], values[4], values[5]);
+			this.emailObject = new EmailSend(values[0], values[1], values[2], values[3], values[4], values[5]);
 			String orderId = emailObject.getOrderID();
 			insertOrder(orderId, values[0], values[1], values[2], values[5]);
 		}

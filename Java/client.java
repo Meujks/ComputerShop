@@ -41,7 +41,10 @@ public class Client extends JFrame {
 	private JButton btnCheckout, btnRemoveItem, btnProducts, btnViewOrders;
 	private JPopupMenu categoryMenu;
 	private JMenuItem mntmDesktop, mntmLaptop, mntmServer;
+
+	private CustomPanel newPane;
 	private PaymentPanel payPanel;
+	private ViewPanel viewPanel;
 	private ImageIcon newImg;
 	private String serverIP;
 	private ObjectInputStream input;
@@ -347,8 +350,8 @@ public class Client extends JFrame {
 						String memories[] = RAM.split("\\r?\\n");
 						String cases[] = Chassi.split("\\r?\\n");
 
-						CustomPanel newPane = new CustomPanel(desktop, lblCostValue, panelContainer, tableModel,
-								graphics, processors, memories, cases);
+						newPane = new CustomPanel(desktop, lblCostValue, panelContainer, tableModel, graphics,
+								processors, memories, cases);
 						panelContainer.add(newPane);
 					}
 				} catch (IOException | ClassNotFoundException e1) {
@@ -403,8 +406,8 @@ public class Client extends JFrame {
 						// retrieve the cost of all items
 						// Create the component tabel with appropriate values
 
-						CustomPanel newPane = new CustomPanel(laptop, lblCostValue, panelContainer, tableModel,
-								graphics, processors, memories);
+						newPane = new CustomPanel(laptop, lblCostValue, panelContainer, tableModel, graphics,
+								processors, memories);
 						panelContainer.add(newPane);
 					}
 
@@ -455,8 +458,8 @@ public class Client extends JFrame {
 						String processors[] = CPU.split("\\r?\\n");
 						String memories[] = RAM.split("\\r?\\n");
 
-						CustomPanel newPane = new CustomPanel(server, lblCostValue, panelContainer, tableModel,
-								processors, memories);
+						newPane = new CustomPanel(server, lblCostValue, panelContainer, tableModel, processors,
+								memories);
 						panelContainer.add(newPane);
 					}
 
@@ -477,7 +480,7 @@ public class Client extends JFrame {
 				panelContainer.removeAll();
 				panelContainer.revalidate();
 				panelContainer.updateUI();
-				ViewPanel viewPanel = new ViewPanel();
+				viewPanel = new ViewPanel();
 				panelContainer.add(viewPanel);
 
 				// Buttons
@@ -579,7 +582,6 @@ public class Client extends JFrame {
 							DefaultTableModel tableModel = (DefaultTableModel) superPanel.getOrderTable().getModel();
 
 							String result = ((String) input.readObject());
-
 							String rows[] = result.split("\\r?\\n");
 
 							while (tableModel.getRowCount() > 0) {

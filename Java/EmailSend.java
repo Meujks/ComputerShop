@@ -67,7 +67,7 @@ public class EmailSend {
 		try {
 			this.host = "smtp.gmail.com";
 			this.user = "mkhardwareproject@gmail.com";
-			this.pass = "FinalProj123";
+			this.pass = "";
 			this.to = userEmail;
 			this.from = "mkhardwareproject@gmail.com";
 			this.subject = "Order Confirmation - MK Hardware";
@@ -107,6 +107,88 @@ public class EmailSend {
 		}
 	}
 
+	// Cancel order
+	public EmailSend(String userName, String userEmail,String userOrderId) {
+		try {
+			this.host = "smtp.gmail.com";
+			this.user = "mkhardwareproject@gmail.com";
+			this.pass = "";
+			this.to = userEmail;
+			this.from = "mkhardwareproject@gmail.com";
+			this.subject = "Order Canceled - MK Hardware";
+			this.orderID = userOrderId;
+			this.messageText = "Order ID: " + userOrderId + "\n" + "Name: " + userName + "\n" + "Order Status: Your order has been canceled ";
+			sessionDebug = false;
+			Properties props = System.getProperties();
+
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", host);
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.required", "true");
+			props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+			Session mailSession = Session.getDefaultInstance(props, null);
+			mailSession.setDebug(sessionDebug);
+			Message msg = new MimeMessage(mailSession);
+			msg.setFrom(new InternetAddress(from));
+			InternetAddress[] address = { new InternetAddress(to) };
+			msg.setRecipients(Message.RecipientType.TO, address);
+			msg.setSubject(subject);
+			msg.setSentDate(new Date());
+			msg.setText(messageText);
+
+			Transport transport = mailSession.getTransport("smtp");
+			transport.connect(host, user, pass);
+			transport.sendMessage(msg, msg.getAllRecipients());
+			transport.close();
+			System.out.println("Order has been canceled");
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+	}
+	
+	// Change to shipped order
+		public EmailSend(String userName, String userEmail,String userItems ,String userOrderId) {
+			try {
+				this.host = "smtp.gmail.com";
+				this.user = "mkhardwareproject@gmail.com";
+				this.pass = "";
+				this.to = userEmail;
+				this.from = "mkhardwareproject@gmail.com";
+				this.subject = "Order Shipped - MK Hardware";
+				this.orderID = userOrderId;
+				this.messageText = "Order ID: " + userOrderId + "\n" + "Name: " + userName + "\nItems:\n" + userItems + "\n"+ "Order Status: Your order has been shipped ";
+				sessionDebug = false;
+				Properties props = System.getProperties();
+
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", host);
+				props.put("mail.smtp.port", "587");
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.required", "true");
+				props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+				Session mailSession = Session.getDefaultInstance(props, null);
+				mailSession.setDebug(sessionDebug);
+				Message msg = new MimeMessage(mailSession);
+				msg.setFrom(new InternetAddress(from));
+				InternetAddress[] address = { new InternetAddress(to) };
+				msg.setRecipients(Message.RecipientType.TO, address);
+				msg.setSubject(subject);
+				msg.setSentDate(new Date());
+				msg.setText(messageText);
+
+				Transport transport = mailSession.getTransport("smtp");
+				transport.connect(host, user, pass);
+				transport.sendMessage(msg, msg.getAllRecipients());
+				transport.close();
+				System.out.println("Order has been shipped");
+			} catch (Exception ex) {
+				System.out.println(ex);
+			}
+		}
+	
 	public String generateOrderID() {
 		String characters = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder randomString = new StringBuilder();
