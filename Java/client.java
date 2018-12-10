@@ -64,11 +64,9 @@ public class Client extends JFrame {
 		this.contentPane = new JPanel();
 		this.contentPane.setBackground(new Color(128, 203, 196));
 		this.contentPane.setPreferredSize(new Dimension(400, 300));
-
 		this.contentPane.setBorder(new LineBorder(new Color(0, 102, 153), 1, true));
 		this.setContentPane(contentPane);
 		this.setVisible(true);
-
 		this.panel = new JPanel();
 		this.panel.setBorder(new LineBorder(new Color(79, 154, 148), 3, true));
 		this.panel.setForeground(new Color(79, 154, 148));

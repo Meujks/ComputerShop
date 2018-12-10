@@ -11,7 +11,6 @@ class customPanelTest {
 
 	@Test
 	void testFormatString() {
-
 		String testString = "6gb - 300 €";
 		testString = formatString(testString);
 		String expectedString = "300";
